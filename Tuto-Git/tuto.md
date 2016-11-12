@@ -85,7 +85,7 @@ La fenêtre située au milieu de l'écran représente l'arborescence des commits
 
 Y sont représentés un historique, avec noms et commentaires, de tous les changements effectués sur le code. Y apparaissent aussi toutes les branches ouvertes et mergés de l'arborescence. Vous ne pouvez travailler que sur une branche à la fois, et vos fichiers locaux seront automatiquement adaptés en conséquence lorsque vous faites "Pull".
 Pour quelques notions sur les branches et l'arborescence: regarder la vidéo d'introduction de 2 minutes publiée par gitkraken (en anglais): https://www.youtube.com/watch?v=j1rP21RcbH0  
-Si tous ça n'est pas clair, je devrais pouvoir a peu prés gérer les différentes branches de notre dépôt, donc tout vas bien. Le plus important a comprendre restant comment commiter et pusher votre code.  
+Si tous ça n'est pas clair, je devrais pouvoir a peu prés gérer les différentes branches de notre dépôt, donc tout vas bien. Le plus important à comprendre restant comment commiter et pusher votre code.  
 
 Apparaissent en grisé et en haut de l'écran, précédé de la mention WIP, les changements effectués par d'autres personnes, qui ont été publiés dans le dépôt, et que vous n'avez pas encore synchronisés avec vos fichiers locaux, ou les changements que vous avez effectués, et qui n'ont pas encore été pris en compte:
 

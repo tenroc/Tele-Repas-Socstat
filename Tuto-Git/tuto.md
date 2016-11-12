@@ -36,18 +36,18 @@ Gitkraken est un client graphique pour Git.
 Un login est demandé la première fois que vous ouvrez le programme, il est possible de s'identifier via le compte github que vous venez de créer en cliquant sur l'option *login with github*.  
 Une fois que vous vous êtes identifiés, il vous faut générer une clé ssh. Cliquez sur les trois lignes en haut à droite de la fenêtre, puis sur "préférences". Une fois dans les préférences, cliquez sur "authentification", puis github.com, entrez de nouveau vos identifiants github en cliquant sur "connect to github" si besoin, puis cliquez sur "Generate SSH key and add to GitHub".  
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen1.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen1.png)
 
 Une fois la clé ssh ajoutée a votre compte Github, vous pouvez quitter les préférences.  
 Une fois revenus sur l'écran principal, cliquez sur "File", puis sur "Clone repo".  
 Allez sur l'onglet Github, puis, cliquez sur Télé-repas-socstat (qui apparaît normalement si je vous ai ajouté en tant que collaborateurs, sinon vous pouvez normalement ajouter manuellement l'url du dépôt: https://github.com/tenroc/Tele-Repas-Socstat). Vous pouvez aussi modifier le chemin du dossier clone du dépôt qui sera créé sur votre machine dans le champ "Where to clone to" et "Full path".
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen2.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen2.png)
 
 Confirmez en cliquant sur "clone the repo!", Attendez la fin du clonage, puis cliquez sur le bandeau qui viens d'apparaître: "Open now".  
 Ce qui dois apparaître à l'écran doit a peu près ressembler à ça:
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen3.png)
 
 **Git**
 
@@ -71,7 +71,7 @@ La modification par deux contributeurs différents d'un même bout de script peu
 
 Les changements que vous effectuez sont signifiés de la manière suivante (il faut cliquer sur la ligne WIP de la fenêtre principale pour que le tiroir s'affiche):
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen4.png)
 
 Le tiroir situé à droite de l'écran vous indique, de haut en bas:  
 
@@ -81,7 +81,7 @@ Le tiroir situé à droite de l'écran vous indique, de haut en bas:
 
 La fenêtre située au milieu de l'écran représente l'arborescence des commits:
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen5.png)
 
 Y sont représentés un historique, avec noms et commentaires, de tous les changements effectués sur le code. Y apparaissent aussi toutes les branches ouvertes et mergés de l'arborescence. Vous ne pouvez travailler que sur une branche à la fois, et vos fichiers locaux seront automatiquement adaptés en conséquence lorsque vous faites "Pull".
 Pour quelques notions sur les branches et l'arborescence: regarder la vidéo d'introduction de 2 minutes publiée par gitkraken (en anglais): https://www.youtube.com/watch?v=j1rP21RcbH0  
@@ -89,19 +89,19 @@ Si tous ça n'est pas clair, je devrais pouvoir a peu prés gérer les différen
 
 Apparaissent en grisé et en haut de l'écran, précédé de la mention WIP, les changements effectués par d'autres personnes, qui ont été publiés dans le dépôt, et que vous n'avez pas encore synchronisés avec vos fichiers locaux, ou les changements que vous avez effectués, et qui n'ont pas encore été pris en compte:
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen6.png)
 
 Les icones à gauche des dernières lignes vous indiquent ou prennent place les changements, l'ordinateur pour les changements que vous avez effectués en local, la seconde icône pour les changements qui ont été effectués dans le dépôt. Lorsque les deux icônes apparaissent simultanément sur la dernière ligne, vos fichiers locaux sont synchrones avec ceux sur le dépôt.
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen7.png)
 
 Si vous cliquez sur un commit dans l'arborescence: vous aurez accès au commentaire associé, ainsi qu'au nom de la personne qui l'a publié.
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen8.png)
 
 Enfin, les icones en haut de l'écran vous permettent, de gauche à droite:  
 
-![ScreenShot](https://github.com/tenroc/Git-tuto-soctsat/blob/master/screenshots/screen3.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/screen9.png)
 
 * D'annuler le dernier commit que vous avez réalisé
 * De le restaurer
@@ -117,4 +117,9 @@ WIP
 
 Si tout ça vous paraît affreusement compliqué, ou qu'il y a quelque chose qui n'est pas clair, écrivez moi un mail, ou ouvrez un bug report sur github.  
 Si vous n'avez absolument rien capté, sachez qu'il est aussi possible que j'administre (ou quelqu'un d'autre) le dépôt, et donc que tous les changements soient validés avant d'être pris en compte, ça demande tout de même d'intégrer les bases décrites plus haut, mais ça évite que qui que ce soit fasse une bêtise. ça pourrait aussi éventuellement permettre de reviewer le code avant de l'accepter.  
-Le tuto est dans le dépôt github du cours, et est écrit en markdown, vous pouvez le modifier comme vous voulez.
+Le tuto est dans le dépôt github du cours, et est écrit en markdown, vous pouvez le modifier comme vous voulez.  
+
+Quelques ressources supplémentaires:  
+
+* https://guides.github.com/activities/hello-world/
+* http://stackoverflow.com/questions/tagged/github <- pour obtenir de l'aide

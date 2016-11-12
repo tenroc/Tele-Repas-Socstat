@@ -1,0 +1,1702 @@
+---
+title: "Réconciliation BDD"
+author: "Timothée"
+date: "4 novembre 2016"
+output: html_document
+---
+
+
+On définit l'environnement
+
+```{r}
+setwd("/Users/Timothee/Documents/EHEESS/Enquete Stat")
+```
+
+On importe la première bdd (enquête téléphonique ehess) et on fait tourner le code fourni par LimeSurvey.
+
+```{r, echo=FALSE}
+#$Rev: 10193 $ all.
+data <- read.csv("data enq tel/survey_596798_R_data_file(1).csv", quote = "'\"", na.strings=c("", "\"\""), stringsAsFactors=FALSE)
+
+# LimeSurvey Field type: F
+data[, 1] <- as.numeric(data[, 1])
+attributes(data)$variable.labels[1] <- "id"
+names(data)[1] <- "id"
+
+# LimeSurvey Field type: A
+data[, 2] <- as.character(data[, 2])
+attributes(data)$variable.labels[2] <- "token"
+names(data)[2] <- "token"
+
+# LimeSurvey Field type: DATETIME23.2
+data[, 3] <- as.character(data[, 3])
+attributes(data)$variable.labels[3] <- "submitdate"
+names(data)[3] <- "submitdate"
+
+#Field hidden
+
+# LimeSurvey Field type: A
+data[, 4] <- as.character(data[, 4])
+attributes(data)$variable.labels[4] <- "startlanguage"
+names(data)[4] <- "startlanguage"
+
+# LimeSurvey Field type: DATETIME23.2
+data[, 5] <- as.character(data[, 5])
+attributes(data)$variable.labels[5] <- "startdate"
+names(data)[5] <- "startdate"
+
+# LimeSurvey Field type: DATETIME23.2
+data[, 6] <- as.character(data[, 6])
+attributes(data)$variable.labels[6] <- "datestamp"
+names(data)[6] <- "datestamp"
+
+# LimeSurvey Field type: F
+data[, 7] <- as.numeric(data[, 7])
+attributes(data)$variable.labels[7] <- "Numéro d\'enquêteur :"
+names(data)[7] <- "NB1"
+
+# LimeSurvey Field type: F
+data[, 8] <- as.numeric(data[, 8])
+attributes(data)$variable.labels[8] <- "Hier, à partir de 18h, combien de fois avez-vous mangé quelque chose ?	Par exemple : un fruit, des biscuits apéritifs,un repas, des confiseries,etc..."
+data[, 8] <- factor(data[, 8], levels=c(1,2,3),labels=c("1 fois", "2 fois", "3 fois ou plus"))
+names(data)[8] <- "A1"
+
+# LimeSurvey Field type: A
+data[, 9] <- as.character(data[, 9])
+attributes(data)$variable.labels[9] <- "[Prise alimentaire] [Heure] À quelle heure a eu lieu votre prise alimentaire ?"
+names(data)[9] <- "A2_1_1"
+
+# LimeSurvey Field type: A
+data[, 10] <- as.character(data[, 10])
+attributes(data)$variable.labels[10] <- "[Prise alimentaire] [Minute] À quelle heure a eu lieu votre prise alimentaire ?"
+names(data)[10] <- "A2_1_2"
+
+# LimeSurvey Field type: A
+data[, 11] <- as.character(data[, 11])
+attributes(data)$variable.labels[11] <- "[Prise alimentaire] [Heure] À quelle heure a eu lieu votre prise alimentaire principale (celle que vous considérez comme la plus importante)?"
+names(data)[11] <- "A2_bis_1_1"
+
+# LimeSurvey Field type: A
+data[, 12] <- as.character(data[, 12])
+attributes(data)$variable.labels[12] <- "[Prise alimentaire] [Minute] À quelle heure a eu lieu votre prise alimentaire principale (celle que vous considérez comme la plus importante)?"
+names(data)[12] <- "A2_bis_1_2"
+
+# LimeSurvey Field type: F
+data[, 13] <- as.numeric(data[, 13])
+attributes(data)$variable.labels[13] <- "Combien de temps a-t-elle duré?"
+data[, 13] <- factor(data[, 13], levels=c(1,2,3,4,5),labels=c("Moins de 10 min", "11 à 20 min", "21 à 30 min", "Moins d'1h", "Plus d’1h"))
+names(data)[13] <- "A3"
+
+# LimeSurvey Field type: F
+data[, 14] <- as.numeric(data[, 14])
+attributes(data)$variable.labels[14] <- "Qui a préparé ce que vous avez mangé ?"
+data[, 14] <- factor(data[, 14], levels=c(1,2,3,4),labels=c("Je l’ai préparé", "Une autre personne du foyer l’a préparé", "Plat à emporter ou livraison à domicile", "Restaurant ou autre repas extérieur au domicile"))
+names(data)[14] <- "A4"
+
+# LimeSurvey Field type: A
+data[, 15] <- as.character(data[, 15])
+attributes(data)$variable.labels[15] <- "Combien de temps vous a pris la préparation approximativement ?"
+data[, 15] <- factor(data[, 15], levels=c("A1","A2","A3","A4"),labels=c("Moins de 10 minutes", "11 à 20 minutes", "21 à 30 minutes", "Plus de 30 minutes"))
+names(data)[15] <- "A5"
+
+# LimeSurvey Field type: A
+data[, 16] <- as.character(data[, 16])
+attributes(data)$variable.labels[16] <- "Veuillez lister tout ce que vous avez mangé à cette occasion :"
+names(data)[16] <- "A6"
+
+# LimeSurvey Field type: F
+data[, 17] <- as.numeric(data[, 17])
+attributes(data)$variable.labels[17] <- "Considérez-vous que c’était un repas ?"
+data[, 17] <- factor(data[, 17], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[17] <- "A7"
+
+# LimeSurvey Field type: F
+data[, 18] <- as.numeric(data[, 18])
+attributes(data)$variable.labels[18] <- "Pouvez-vous me dire où vous étiez à ce moment-là?"
+data[, 18] <- factor(data[, 18], levels=c(1,2,3,4,5,6),labels=c("Chez vous", "Au travail", "Dans les transports ou en marchant", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+names(data)[18] <- "A8"
+
+# LimeSurvey Field type: A
+data[, 19] <- as.character(data[, 19])
+attributes(data)$variable.labels[19] <- "[Autre] Pouvez-vous me dire où vous étiez à ce moment-là?"
+names(data)[19] <- "A8_other"
+
+# LimeSurvey Field type: F
+data[, 20] <- as.numeric(data[, 20])
+attributes(data)$variable.labels[20] <- "Est-ce que vous étiez à table?"
+data[, 20] <- factor(data[, 20], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[20] <- "A9"
+
+# LimeSurvey Field type: F
+data[, 21] <- as.numeric(data[, 21])
+attributes(data)$variable.labels[21] <- "Dans quelle pièce vous-trouviez-vous?"
+data[, 21] <- factor(data[, 21], levels=c(1,2,3,4),labels=c("Cuisine", "Salon / Salle de séjour", "Chambre", "Mon logement a une seule pièce"))
+names(data)[21] <- "A10"
+
+# LimeSurvey Field type: A
+data[, 22] <- as.character(data[, 22])
+attributes(data)$variable.labels[22] <- "[Autre] Dans quelle pièce vous-trouviez-vous?"
+names(data)[22] <- "A10_other"
+
+# LimeSurvey Field type: F
+data[, 23] <- as.numeric(data[, 23])
+attributes(data)$variable.labels[23] <- "[Non, je ne faisais rien d’autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 23] <- factor(data[, 23], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[23] <- "A11_1"
+
+# LimeSurvey Field type: F
+data[, 24] <- as.numeric(data[, 24])
+attributes(data)$variable.labels[24] <- "[Oui, je discutais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 24] <- factor(data[, 24], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[24] <- "A11_2"
+
+# LimeSurvey Field type: F
+data[, 25] <- as.numeric(data[, 25])
+attributes(data)$variable.labels[25] <- "[Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console) ] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 25] <- factor(data[, 25], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[25] <- "A11_3"
+
+# LimeSurvey Field type: F
+data[, 26] <- as.numeric(data[, 26])
+attributes(data)$variable.labels[26] <- "[Oui, je lisais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 26] <- factor(data[, 26], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[26] <- "A11_4"
+
+# LimeSurvey Field type: F
+data[, 27] <- as.numeric(data[, 27])
+attributes(data)$variable.labels[27] <- "[Je ne sais pas] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 27] <- factor(data[, 27], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[27] <- "A11_5"
+
+# LimeSurvey Field type: A
+data[, 28] <- as.character(data[, 28])
+attributes(data)$variable.labels[28] <- "[Autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+names(data)[28] <- "A11_other"
+
+# LimeSurvey Field type: F
+data[, 29] <- as.numeric(data[, 29])
+attributes(data)$variable.labels[29] <- "Quelqu’un était-il avec vous pendant que vous mangiez?"
+data[, 29] <- factor(data[, 29], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[29] <- "A12"
+
+# LimeSurvey Field type: F
+data[, 30] <- as.numeric(data[, 30])
+attributes(data)$variable.labels[30] <- "[Ami(s)] Avec qui étiez-vous ? "
+data[, 30] <- factor(data[, 30], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[30] <- "A13_1"
+
+# LimeSurvey Field type: F
+data[, 31] <- as.numeric(data[, 31])
+attributes(data)$variable.labels[31] <- "[Collègue(s)] Avec qui étiez-vous?"
+data[, 31] <- factor(data[, 31], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[31] <- "A13_2"
+
+# LimeSurvey Field type: F
+data[, 32] <- as.numeric(data[, 32])
+attributes(data)$variable.labels[32] <- "[Famille] Avec qui étiez-vous?"
+data[, 32] <- factor(data[, 32], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[32] <- "A13_3"
+
+# LimeSurvey Field type: F
+data[, 33] <- as.numeric(data[, 33])
+attributes(data)$variable.labels[33] <- "[Conjoint] Avec qui étiez-vous?"
+data[, 33] <- factor(data[, 33], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[33] <- "A13_4"
+
+# LimeSurvey Field type: F
+data[, 34] <- as.numeric(data[, 34])
+attributes(data)$variable.labels[34] <- "[ Enfants] Avec qui étiez-vous?"
+data[, 34] <- factor(data[, 34], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[34] <- "A13_5"
+
+# LimeSurvey Field type: A
+data[, 35] <- as.character(data[, 35])
+attributes(data)$variable.labels[35] <- "[Autre] Avec qui étiez-vous?"
+names(data)[35] <- "A13_other"
+
+# LimeSurvey Field type: F
+data[, 36] <- as.numeric(data[, 36])
+attributes(data)$variable.labels[36] <- "Cette ou ces personne(s) avec vous mangeaient-elles ?"
+data[, 36] <- factor(data[, 36], levels=c(1,2,3),labels=c("Oui toutes", "Oui certaines", "Non, aucune"))
+names(data)[36] <- "A14"
+
+# LimeSurvey Field type: F
+data[, 37] <- as.numeric(data[, 37])
+attributes(data)$variable.labels[37] <- "Les personne(s) qui étaient avec vous regardaient-elles un écran ?"
+data[, 37] <- factor(data[, 37], levels=c(1,2,3),labels=c("Oui, toutes", "Oui, certaines", "Non, aucune"))
+names(data)[37] <- "A15"
+
+# LimeSurvey Field type: F
+data[, 38] <- as.numeric(data[, 38])
+attributes(data)$variable.labels[38] <- "Parmi ces personnes qui regardaient un écran, certaines regardaient-elles le même écran que vous? (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console)"
+data[, 38] <- factor(data[, 38], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[38] <- "A16"
+
+# LimeSurvey Field type: A
+data[, 39] <- as.character(data[, 39])
+attributes(data)$variable.labels[39] <- "[Prise alimentaire] [Heure] 	Nous allons maintenant évoquer rapidement votre autre prise alimentaire de la soirée.	A quelle heure a-t-elle eu lieu?"
+names(data)[39] <- "A17_SQ001_SQ001"
+
+# LimeSurvey Field type: A
+data[, 40] <- as.character(data[, 40])
+attributes(data)$variable.labels[40] <- "[Prise alimentaire] [Minute] 	Nous allons maintenant évoquer rapidement votre autre prise alimentaire de la soirée.	A quelle heure a-t-elle eu lieu ?"
+names(data)[40] <- "A17_SQ001_SQ002"
+
+# LimeSurvey Field type: A
+data[, 41] <- as.character(data[, 41])
+attributes(data)$variable.labels[41] <- "[Prise alimentaire] [Heure] 	Nous allons maintenant évoquer rapidement vos autres prises alimentaires de la soirée. Commençons par celle que vous avez pris le plus tôt dans la soirée (à partir de 18h).	 A quelle heure a-t-elle eu lieu ?"
+names(data)[41] <- "A17_bis_SQ001_SQ001"
+
+# LimeSurvey Field type: A
+data[, 42] <- as.character(data[, 42])
+attributes(data)$variable.labels[42] <- "[Prise alimentaire] [Minute] 	Nous allons maintenant évoquer rapidement vos autres prises alimentaires de la soirée. Commençons par celle que vous avez pris le plus tôt dans la soirée (à partir de 18h).	A quelle heure a-t-elle eu lieu ?"
+names(data)[42] <- "A17_bis_SQ001_SQ002"
+
+# LimeSurvey Field type: F
+data[, 43] <- as.numeric(data[, 43])
+attributes(data)$variable.labels[43] <- "Combien de temps a-t-elle duré?"
+data[, 43] <- factor(data[, 43], levels=c(1,2,3,4,5),labels=c("Moins de 10 min", "11 à 20 min", "21 à 30 min", "31 min à 1h", "Plus d’1h"))
+names(data)[43] <- "A18"
+
+# LimeSurvey Field type: A
+data[, 44] <- as.character(data[, 44])
+attributes(data)$variable.labels[44] <- "Qu’est-ce que vous avez mangé?"
+names(data)[44] <- "A19"
+
+# LimeSurvey Field type: F
+data[, 45] <- as.numeric(data[, 45])
+attributes(data)$variable.labels[45] <- "Pouvez-vous me dire où vous étiez à ce moment-là?"
+data[, 45] <- factor(data[, 45], levels=c(1,2,3,4,5,6),labels=c("Chez vous", "Au travail", "Dans les transports, en marchant etc.", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+names(data)[45] <- "A20"
+
+# LimeSurvey Field type: F
+data[, 46] <- as.numeric(data[, 46])
+attributes(data)$variable.labels[46] <- "[Autre] Pouvez-vous me dire où vous étiez à ce moment-là ?"
+names(data)[46] <- "A20_other"
+
+# LimeSurvey Field type: F
+data[, 47] <- as.numeric(data[, 47])
+attributes(data)$variable.labels[47] <- "[Non, je ne faisais rien d’autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 47] <- factor(data[, 47], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[47] <- "A21_1"
+
+# LimeSurvey Field type: F
+data[, 48] <- as.numeric(data[, 48])
+attributes(data)$variable.labels[48] <- "[Oui, je discutais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 48] <- factor(data[, 48], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[48] <- "A21_2"
+
+# LimeSurvey Field type: F
+data[, 49] <- as.numeric(data[, 49])
+attributes(data)$variable.labels[49] <- "[Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/Smartphone, Console)] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 49] <- factor(data[, 49], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[49] <- "A21_3"
+
+# LimeSurvey Field type: F
+data[, 50] <- as.numeric(data[, 50])
+attributes(data)$variable.labels[50] <- "[Oui, je lisais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 50] <- factor(data[, 50], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[50] <- "A21_4"
+
+# LimeSurvey Field type: F
+data[, 51] <- as.numeric(data[, 51])
+attributes(data)$variable.labels[51] <- "[Je ne sais pas] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 51] <- factor(data[, 51], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[51] <- "A21_5"
+
+# LimeSurvey Field type: A
+data[, 52] <- as.character(data[, 52])
+attributes(data)$variable.labels[52] <- "[Autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+names(data)[52] <- "A21_other"
+
+# LimeSurvey Field type: A
+data[, 53] <- as.character(data[, 53])
+attributes(data)$variable.labels[53] <- "[Prise alimentaire] [Heure] 	Nous allons maintenant parler de votre dernière prise alimentaire de la soirée. S’il s’agit de votre prise principale, parlez-nous de l’avant dernière.	À quelle heure a-t-elle eu lieu ?"
+names(data)[53] <- "A22_SQ001_SQ001"
+
+# LimeSurvey Field type: A
+data[, 54] <- as.character(data[, 54])
+attributes(data)$variable.labels[54] <- "[Prise alimentaire] [Minute] 	Nous allons maintenant parler de votre dernière prise alimentaire de la soirée. S’il s’agit de votre prise principale, parlez-nous de l’avant dernière.	À quelle heure a-t-elle eu lieu?"
+names(data)[54] <- "A22_SQ001_SQ002"
+
+# LimeSurvey Field type: F
+data[, 55] <- as.numeric(data[, 55])
+attributes(data)$variable.labels[55] <- "Combien de temps a-t-elle duré?"
+data[, 55] <- factor(data[, 55], levels=c(1,2,3,4,5),labels=c("Moins de 10 min", "11 à 20 min", "21 à 30 min", "31 à 1h", "Plus d’1h"))
+names(data)[55] <- "A23"
+
+# LimeSurvey Field type: A
+data[, 56] <- as.character(data[, 56])
+attributes(data)$variable.labels[56] <- "Qu’est-ce que vous avez mangé?"
+names(data)[56] <- "A24"
+
+# LimeSurvey Field type: F
+data[, 57] <- as.numeric(data[, 57])
+attributes(data)$variable.labels[57] <- "Pouvez-vous me dire où vous étiez à ce moment-là ? "
+data[, 57] <- factor(data[, 57], levels=c(1,2,3,4,5,6),labels=c("Chez vous", "Au travail", "Dans les transports, en marchant etc.", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+names(data)[57] <- "A25"
+
+# LimeSurvey Field type: F
+data[, 58] <- as.numeric(data[, 58])
+attributes(data)$variable.labels[58] <- "[Autre] Pouvez-vous me dire où vous étiez à ce moment-là?"
+names(data)[58] <- "A25_other"
+
+# LimeSurvey Field type: F
+data[, 59] <- as.numeric(data[, 59])
+attributes(data)$variable.labels[59] <- "[Non, je ne faisais rien d’autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 59] <- factor(data[, 59], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[59] <- "A26_5"
+
+# LimeSurvey Field type: F
+data[, 60] <- as.numeric(data[, 60])
+attributes(data)$variable.labels[60] <- "[Oui, je discutais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 60] <- factor(data[, 60], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[60] <- "A26_1"
+
+# LimeSurvey Field type: F
+data[, 61] <- as.numeric(data[, 61])
+attributes(data)$variable.labels[61] <- "[Oui, je regardais un écran (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console)] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 61] <- factor(data[, 61], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[61] <- "A26_2"
+
+# LimeSurvey Field type: F
+data[, 62] <- as.numeric(data[, 62])
+attributes(data)$variable.labels[62] <- "[Oui, je lisais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 62] <- factor(data[, 62], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[62] <- "A26_3"
+
+# LimeSurvey Field type: F
+data[, 63] <- as.numeric(data[, 63])
+attributes(data)$variable.labels[63] <- "[Je ne sais pas] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 63] <- factor(data[, 63], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[63] <- "A26_6"
+
+# LimeSurvey Field type: A
+data[, 64] <- as.character(data[, 64])
+attributes(data)$variable.labels[64] <- "[Autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+names(data)[64] <- "A26_other"
+
+# LimeSurvey Field type: F
+data[, 65] <- as.numeric(data[, 65])
+attributes(data)$variable.labels[65] <- "Vous avez mentionné avoir regardé un écran pendant votre prise alimentaire principale. 	Avez-vous utilisé ce/ces écran(s) pendant la majeure partie du temps?"
+data[, 65] <- factor(data[, 65], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[65] <- "R1_1"
+
+# LimeSurvey Field type: F
+data[, 66] <- as.numeric(data[, 66])
+attributes(data)$variable.labels[66] <- "Sur une échelle de 1 à 5, quelle attention portiez-vous à l\'écran (1 Aucune attention – 5 Toute votre attention) ?"
+data[, 66] <- factor(data[, 66], levels=c(1,2,3,4,5),labels=c("1 - Aucune attention", "2", "3", "4", "5 - Toute mon attention"))
+names(data)[66] <- "r2_1"
+
+# LimeSurvey Field type: F
+data[, 67] <- as.numeric(data[, 67])
+attributes(data)$variable.labels[67] <- "Vous êtes-vous interrompue au moins 10 minutes pendant l\'usage de cet écran ?"
+data[, 67] <- factor(data[, 67], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[67] <- "r6_1"
+
+# LimeSurvey Field type: F
+data[, 68] <- as.numeric(data[, 68])
+attributes(data)$variable.labels[68] <- "Vous avez mentionné avoir regardé un écran pendant la deuxième prise alimentaire. 	Avez-vous utilisé ce/ces écran(s) pendant la majeure partie du temps?"
+data[, 68] <- factor(data[, 68], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[68] <- "R1_2"
+
+# LimeSurvey Field type: A
+data[, 69] <- as.character(data[, 69])
+attributes(data)$variable.labels[69] <- "Sur une échelle de 1 à 5, quelle attention portiez-vous à l\'écran (1 Aucune attention – 5 Toute votre attention) ?"
+data[, 69] <- factor(data[, 69], levels=c("A1","A5","A4","A3","A2"),labels=c("1 - Aucune attention", "2", "3", "4", "5 - Toute mon attention"))
+names(data)[69] <- "r2_2"
+
+# LimeSurvey Field type: F
+data[, 70] <- as.numeric(data[, 70])
+attributes(data)$variable.labels[70] <- "Vous êtes-vous interrompue au moins 10 minutes pendant l\'usage de cet écran ?"
+data[, 70] <- factor(data[, 70], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[70] <- "r6_2"
+
+# LimeSurvey Field type: F
+data[, 71] <- as.numeric(data[, 71])
+attributes(data)$variable.labels[71] <- "Vous avez mentionné avoir regardé un écran pendant la troisème prise alimentaire.	Avez-vous utilisé ce/ces écran(s) pendant la majeure partie du temps?"
+data[, 71] <- factor(data[, 71], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[71] <- "R1_3"
+
+# LimeSurvey Field type: F
+data[, 72] <- as.numeric(data[, 72])
+attributes(data)$variable.labels[72] <- "Sur une échelle de 1 à 5, quelle attention portiez-vous à l\'écran (1 Aucune attention – 5 Toute votre attention) ?"
+data[, 72] <- factor(data[, 72], levels=c(1,2,3,4,5),labels=c("1", "2", "3", "4", "5"))
+names(data)[72] <- "r2_3"
+
+# LimeSurvey Field type: F
+data[, 73] <- as.numeric(data[, 73])
+attributes(data)$variable.labels[73] <- "Vous êtes vous interrompue au moins dix minutes pendant l\'utilisation de cet écran ?"
+data[, 73] <- factor(data[, 73], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[73] <- "r6_3"
+
+# LimeSurvey Field type: F
+data[, 74] <- as.numeric(data[, 74])
+attributes(data)$variable.labels[74] <- "[Télévision] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 74] <- factor(data[, 74], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[74] <- "r3_1"
+
+# LimeSurvey Field type: F
+data[, 75] <- as.numeric(data[, 75])
+attributes(data)$variable.labels[75] <- "[Téléphone portable/smartphone] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 75] <- factor(data[, 75], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[75] <- "r3_2"
+
+# LimeSurvey Field type: F
+data[, 76] <- as.numeric(data[, 76])
+attributes(data)$variable.labels[76] <- "[Tablette] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 76] <- factor(data[, 76], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[76] <- "r3_3"
+
+# LimeSurvey Field type: F
+data[, 77] <- as.numeric(data[, 77])
+attributes(data)$variable.labels[77] <- "[Ordinateur] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 77] <- factor(data[, 77], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[77] <- "r3_4"
+
+# LimeSurvey Field type: F
+data[, 78] <- as.numeric(data[, 78])
+attributes(data)$variable.labels[78] <- "[Console] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 78] <- factor(data[, 78], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[78] <- "r3_5"
+
+# LimeSurvey Field type: F
+data[, 79] <- as.numeric(data[, 79])
+attributes(data)$variable.labels[79] <- "[Autre] Quel(s) écran(s) utilisiez-vous hier soir ? "
+names(data)[79] <- "r3_other"
+
+# LimeSurvey Field type: F
+data[, 80] <- as.numeric(data[, 80])
+attributes(data)$variable.labels[80] <- "[Site internet d’information, blog, livres électroniques, forums] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 80] <- factor(data[, 80], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[80] <- "r4_1"
+
+# LimeSurvey Field type: F
+data[, 81] <- as.numeric(data[, 81])
+attributes(data)$variable.labels[81] <- "[Journal télévisé] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 81] <- factor(data[, 81], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[81] <- "r4_15"
+
+# LimeSurvey Field type: F
+data[, 82] <- as.numeric(data[, 82])
+attributes(data)$variable.labels[82] <- "[Programme TV en direct ] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 82] <- factor(data[, 82], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[82] <- "r4_4"
+
+# LimeSurvey Field type: F
+data[, 83] <- as.numeric(data[, 83])
+attributes(data)$variable.labels[83] <- "[Programme TV en différé ou replay] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 83] <- factor(data[, 83], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[83] <- "r4_5"
+
+# LimeSurvey Field type: F
+data[, 84] <- as.numeric(data[, 84])
+attributes(data)$variable.labels[84] <- "[Contenu audiovisuel sur Internet (Youtube, Twitch, Dailymotion, actualités Facebook)] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 84] <- factor(data[, 84], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[84] <- "r4_7"
+
+# LimeSurvey Field type: F
+data[, 85] <- as.numeric(data[, 85])
+attributes(data)$variable.labels[85] <- "[Travail] Que faisiez-vous sur ce/ces écran(s) ?"
+data[, 85] <- factor(data[, 85], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[85] <- "r4_9"
+
+# LimeSurvey Field type: F
+data[, 86] <- as.numeric(data[, 86])
+attributes(data)$variable.labels[86] <- "[Téléchargement] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 86] <- factor(data[, 86], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[86] <- "r4_10"
+
+# LimeSurvey Field type: F
+data[, 87] <- as.numeric(data[, 87])
+attributes(data)$variable.labels[87] <- "[Films/séries en streaming] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 87] <- factor(data[, 87], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[87] <- "r4_12"
+
+# LimeSurvey Field type: F
+data[, 88] <- as.numeric(data[, 88])
+attributes(data)$variable.labels[88] <- "[Réseaux sociaux (Twitter, Instagram, Facebook) ] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 88] <- factor(data[, 88], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[88] <- "r4_13"
+
+# LimeSurvey Field type: F
+data[, 89] <- as.numeric(data[, 89])
+attributes(data)$variable.labels[89] <- "[Discussion audio et video (Skype, Facetime)] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 89] <- factor(data[, 89], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[89] <- "r4_2"
+
+# LimeSurvey Field type: F
+data[, 90] <- as.numeric(data[, 90])
+attributes(data)$variable.labels[90] <- "[Discussion instantanée (Messenger Facebook, SMS, messagerie instantanée, Snapchat, Whatsapp...) ] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 90] <- factor(data[, 90], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[90] <- "r4_14"
+
+# LimeSurvey Field type: A
+data[, 91] <- as.character(data[, 91])
+attributes(data)$variable.labels[91] <- "[Autre] Que faisiez-vous sur ce/ces écran(s) ? "
+names(data)[91] <- "r4_other"
+
+# LimeSurvey Field type: F
+data[, 92] <- as.numeric(data[, 92])
+attributes(data)$variable.labels[92] <- "Avec combien de personne étiez-vous en contact à travers ce/ces écrans (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console) ? "
+data[, 92] <- factor(data[, 92], levels=c(1,2,3,4,5,6),labels=c("Aucune", "1", "2", "3-5", "5-10", "10 et +"))
+names(data)[92] <- "r5"
+
+# LimeSurvey Field type: A
+data[, 93] <- as.character(data[, 93])
+attributes(data)$variable.labels[93] <- "Etes-vous satisfait(e) de votre connexion internet ?"
+data[, 93] <- factor(data[, 93], levels=c("A3","A1","A2"),labels=c("Vous n'avez pas internet à la maison", "Oui", "Non"))
+names(data)[93] <- "E1"
+
+# LimeSurvey Field type: A
+data[, 94] <- as.character(data[, 94])
+attributes(data)$variable.labels[94] <- "Dans votre ménage, combien y a-t-il de téléphones portables de type smartphone ?"
+data[, 94] <- factor(data[, 94], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[94] <- "E2"
+
+# LimeSurvey Field type: A
+data[, 95] <- as.character(data[, 95])
+attributes(data)$variable.labels[95] <- "Vous personnellement, combien en utilisez-vous ?"
+data[, 95] <- factor(data[, 95], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[95] <- "E2_a"
+
+# LimeSurvey Field type: A
+data[, 96] <- as.character(data[, 96])
+attributes(data)$variable.labels[96] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 96] <- factor(data[, 96], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[96] <- "E2_b"
+
+# LimeSurvey Field type: A
+data[, 97] <- as.character(data[, 97])
+attributes(data)$variable.labels[97] <- "Dans votre ménage, combien y a-t-il de téléphones portables non smartphone ?"
+data[, 97] <- factor(data[, 97], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[97] <- "E3"
+
+# LimeSurvey Field type: A
+data[, 98] <- as.character(data[, 98])
+attributes(data)$variable.labels[98] <- "Vous personnellement, combien en utilisez-vous ?"
+data[, 98] <- factor(data[, 98], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[98] <- "E3_a"
+
+# LimeSurvey Field type: A
+data[, 99] <- as.character(data[, 99])
+attributes(data)$variable.labels[99] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 99] <- factor(data[, 99], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[99] <- "E3_b"
+
+# LimeSurvey Field type: A
+data[, 100] <- as.character(data[, 100])
+attributes(data)$variable.labels[100] <- "Dans votre ménage, combien y a-t-il de tablettes ?"
+data[, 100] <- factor(data[, 100], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[100] <- "E4"
+
+# LimeSurvey Field type: A
+data[, 101] <- as.character(data[, 101])
+attributes(data)$variable.labels[101] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 101] <- factor(data[, 101], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[101] <- "E4_a"
+
+# LimeSurvey Field type: A
+data[, 102] <- as.character(data[, 102])
+attributes(data)$variable.labels[102] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 102] <- factor(data[, 102], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[102] <- "E4_b"
+
+# LimeSurvey Field type: A
+data[, 103] <- as.character(data[, 103])
+attributes(data)$variable.labels[103] <- "Dans votre ménage, combien y a-t-il de télévisions ?"
+data[, 103] <- factor(data[, 103], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[103] <- "E5"
+
+# LimeSurvey Field type: A
+data[, 104] <- as.character(data[, 104])
+attributes(data)$variable.labels[104] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 104] <- factor(data[, 104], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[104] <- "E5_a"
+
+# LimeSurvey Field type: A
+data[, 105] <- as.character(data[, 105])
+attributes(data)$variable.labels[105] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 105] <- factor(data[, 105], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[105] <- "E5_b"
+
+# LimeSurvey Field type: A
+data[, 106] <- as.character(data[, 106])
+attributes(data)$variable.labels[106] <- "Dans votre ménage, combien y a-t-il de consoles de jeux ?"
+data[, 106] <- factor(data[, 106], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[106] <- "E6"
+
+# LimeSurvey Field type: A
+data[, 107] <- as.character(data[, 107])
+attributes(data)$variable.labels[107] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 107] <- factor(data[, 107], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[107] <- "E6_a"
+
+# LimeSurvey Field type: A
+data[, 108] <- as.character(data[, 108])
+attributes(data)$variable.labels[108] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 108] <- factor(data[, 108], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[108] <- "E6_b"
+
+# LimeSurvey Field type: A
+data[, 109] <- as.character(data[, 109])
+attributes(data)$variable.labels[109] <- "Dans votre ménage, combien y a-t-il d\'ordinateurs portables ?"
+data[, 109] <- factor(data[, 109], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[109] <- "E7"
+
+# LimeSurvey Field type: A
+data[, 110] <- as.character(data[, 110])
+attributes(data)$variable.labels[110] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 110] <- factor(data[, 110], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[110] <- "E7_a"
+
+# LimeSurvey Field type: A
+data[, 111] <- as.character(data[, 111])
+attributes(data)$variable.labels[111] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 111] <- factor(data[, 111], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[111] <- "E7_b"
+
+# LimeSurvey Field type: A
+data[, 112] <- as.character(data[, 112])
+attributes(data)$variable.labels[112] <- "Dans votre ménage, combien y a-t-il d\'ordinateurs fixes ?"
+data[, 112] <- factor(data[, 112], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[112] <- "E8"
+
+# LimeSurvey Field type: A
+data[, 113] <- as.character(data[, 113])
+attributes(data)$variable.labels[113] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 113] <- factor(data[, 113], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[113] <- "E8_a"
+
+# LimeSurvey Field type: A
+data[, 114] <- as.character(data[, 114])
+attributes(data)$variable.labels[114] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 114] <- factor(data[, 114], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[114] <- "E8_b"
+
+# LimeSurvey Field type: F
+data[, 115] <- as.numeric(data[, 115])
+attributes(data)$variable.labels[115] <- "En général, combien de soirées passez-vous chez vous sur une semaine ?"
+data[, 115] <- factor(data[, 115], levels=c(1,2,3,4),labels=c("1", "2", "3 à 5", "Plus de 5"))
+names(data)[115] <- "H1"
+
+# LimeSurvey Field type: F
+data[, 116] <- as.numeric(data[, 116])
+attributes(data)$variable.labels[116] <- "Considérez-vous que la soirée d’hier était une soirée inhabituelle ?"
+data[, 116] <- factor(data[, 116], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[116] <- "H2"
+
+# LimeSurvey Field type: F
+data[, 117] <- as.numeric(data[, 117])
+attributes(data)$variable.labels[117] <- "Habituellement, prenez-vous votre repas du soir en regardant un écran : "
+data[, 117] <- factor(data[, 117], levels=c(1,2,3,4),labels=c("Jamais ou rarement", "1 à 3 fois par semaine", "3 à 5 fois par semaine", "A chaque fois ou presque"))
+names(data)[117] <- "HA3"
+
+# LimeSurvey Field type: F
+data[, 118] <- as.numeric(data[, 118])
+attributes(data)$variable.labels[118] <- "[Avec des amis] 	Habituellement, vous prenez votre repas du soir...	(Plusieurs réponses possibles)"
+data[, 118] <- factor(data[, 118], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[118] <- "HA4_1"
+
+# LimeSurvey Field type: F
+data[, 119] <- as.numeric(data[, 119])
+attributes(data)$variable.labels[119] <- "[Avec votre famille ou conjoint(e)] 	Habituellement, vous prenez votre repas du soir...	(Plusieurs réponses possibles)"
+data[, 119] <- factor(data[, 119], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[119] <- "HA4_2"
+
+# LimeSurvey Field type: F
+data[, 120] <- as.numeric(data[, 120])
+attributes(data)$variable.labels[120] <- "[Seul(e)] 	Habituellement, vous prenez votre repas du soir...	(Plusieurs réponses possibles)"
+data[, 120] <- factor(data[, 120], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[120] <- "HA4_3"
+
+# LimeSurvey Field type: F
+data[, 121] <- as.numeric(data[, 121])
+attributes(data)$variable.labels[121] <- "Vous êtes : "
+data[, 121] <- factor(data[, 121], levels=c(1,2),labels=c("Femme", "Homme"))
+names(data)[121] <- "D13"
+
+# LimeSurvey Field type: F
+data[, 122] <- as.numeric(data[, 122])
+attributes(data)$variable.labels[122] <- "Quel âge avez-vous ? "
+names(data)[122] <- "D1"
+
+# LimeSurvey Field type: A
+data[, 123] <- as.character(data[, 123])
+attributes(data)$variable.labels[123] <- "Quel est le nom de votre commune ?"
+names(data)[123] <- "D2"
+
+# LimeSurvey Field type: F
+data[, 124] <- as.numeric(data[, 124])
+attributes(data)$variable.labels[124] <- "Quel est le diplôme le plus élevé que vous ayez obtenu ?"
+data[, 124] <- factor(data[, 124], levels=c(1,2,3,4,5,6,7,8,9),labels=c("Certificat d’études primaires", "BEPC, brevet", "CAP, BEP", "Baccalauréat, BP", "Deug, DUT, BTS, diplômes des professions sociales ou de la santé", "Licence, Bac+3", "Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.", "Aucun diplôme", "Refus"))
+names(data)[124] <- "D3"
+
+# LimeSurvey Field type: A
+data[, 125] <- as.character(data[, 125])
+attributes(data)$variable.labels[125] <- "[Autre] Quel est le diplôme le plus élevé que vous ayez obtenu ?"
+names(data)[125] <- "D3_other"
+
+# LimeSurvey Field type: F
+data[, 126] <- as.numeric(data[, 126])
+attributes(data)$variable.labels[126] <- "Actuellement, quelle est votre situation ?"
+data[, 126] <- factor(data[, 126], levels=c(1,2,3,6,7,8,9),labels=c("Emploi à plein temps", "Emploi à temps partiel", "Etudiant sans emploi", "Etudiant avec emploi", "Au foyer", "En recherche d'emploi", "A la retraite"))
+names(data)[126] <- "D4"
+
+# LimeSurvey Field type: A
+data[, 127] <- as.character(data[, 127])
+attributes(data)$variable.labels[127] <- "[Autre] Actuellement, quelle est votre situation ?"
+names(data)[127] <- "D4_other"
+
+# LimeSurvey Field type: A
+data[, 128] <- as.character(data[, 128])
+attributes(data)$variable.labels[128] <- "Quelle est votre profession ou la dernière que vous ayez exercée ? "
+names(data)[128] <- "D5"
+
+# LimeSurvey Field type: F
+data[, 129] <- as.numeric(data[, 129])
+attributes(data)$variable.labels[129] <- "Qui compose votre foyer ?"
+data[, 129] <- factor(data[, 129], levels=c(1,2,3,4,5),labels=c("Vous uniquement", "Vous et un ou plusieurs enfant(s)", "Vous et votre conjoint(e) (sans enfant)", "Vous et votre conjoint(e), avec un ou plusieurs enfant(s)", "Vos parents et éventuels frères et sœurs"))
+names(data)[129] <- "D6"
+
+# LimeSurvey Field type: A
+data[, 130] <- as.character(data[, 130])
+attributes(data)$variable.labels[130] <- "[Autre] Qui compose votre foyer ?"
+names(data)[130] <- "D6_other"
+
+# LimeSurvey Field type: F
+data[, 131] <- as.numeric(data[, 131])
+attributes(data)$variable.labels[131] <- "Actuellement, quelle est la situation de votre conjoint ? "
+data[, 131] <- factor(data[, 131], levels=c(1,2,6,7,3,4,5),labels=c("Emploi à plein temps", "Emploi à temps partiel", "Etudiant avec emploi", "Etudiant sans emploi", "Au foyer", "En recherche d’emploi", "A la retraite"))
+names(data)[131] <- "D7"
+
+# LimeSurvey Field type: A
+data[, 132] <- as.character(data[, 132])
+attributes(data)$variable.labels[132] <- "[Autre] Actuellement, quelle est la situation de votre conjoint ? "
+names(data)[132] <- "D7_other"
+
+# LimeSurvey Field type: A
+data[, 133] <- as.character(data[, 133])
+attributes(data)$variable.labels[133] <- "Quelle est cette profession ? "
+names(data)[133] <- "D8"
+
+# LimeSurvey Field type: F
+data[, 134] <- as.numeric(data[, 134])
+attributes(data)$variable.labels[134] <- "Quel est le diplôme le plus élevé de votre conjoint ?"
+data[, 134] <- factor(data[, 134], levels=c(1,2,3,4,5,6,7,8,9),labels=c("Certificat d’études primaires", "BEPC, brevet", "CAP, BEP", "Baccalauréat, BP", "Deug, DUT, BTS, diplômes des professions sociales ou de la santé", "Licence, Bac+3", "Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.", "Aucun diplôme", "Refus"))
+names(data)[134] <- "D3_bis"
+
+# LimeSurvey Field type: A
+data[, 135] <- as.character(data[, 135])
+attributes(data)$variable.labels[135] <- "[Autre] Quel est le diplôme le plus élevé de votre conjoint ?"
+names(data)[135] <- "D3_bis_other"
+
+# LimeSurvey Field type: A
+data[, 136] <- as.character(data[, 136])
+attributes(data)$variable.labels[136] <- "Combien d’enfants vivent avec vous au moins la moitié du temps? "
+data[, 136] <- factor(data[, 136], levels=c("A1","A2","A3","A4"),labels=c("Aucun", "1", "2", "3 ou plus"))
+names(data)[136] <- "D9"
+
+# LimeSurvey Field type: F
+data[, 137] <- as.numeric(data[, 137])
+attributes(data)$variable.labels[137] <- "Quel âge a votre enfant ?"
+names(data)[137] <- "D10_bis"
+
+# LimeSurvey Field type: F
+data[, 138] <- as.numeric(data[, 138])
+attributes(data)$variable.labels[138] <- "Quel âge a le plus jeune ?"
+names(data)[138] <- "D10"
+
+# LimeSurvey Field type: F
+data[, 139] <- as.numeric(data[, 139])
+attributes(data)$variable.labels[139] <- "Quel âge a le plus âgé?"
+names(data)[139] <- "D11"
+
+# LimeSurvey Field type: F
+data[, 140] <- as.numeric(data[, 140])
+attributes(data)$variable.labels[140] <- "Quel est le revenu mensuel moyen de votre ménage ? (en revenu net)"
+data[, 140] <- factor(data[, 140], levels=c(1,2,3,4,5,6,7,8,9,10,98,99),labels=c("De 0 à 1 100€ /mois  (soit 0 à 14 000 € par an)", "De 1 100 à 1 400€ /mois  (soit 14 000 à 17 000 € par an)", "De 1 400 à 1 700€ /mois  (soit 17 000 à 21 000 € par an)", "De 1 700 à 2 000€ /mois  (soit 21 000 à 25 000 € par an)", "De 2 000 à 2 500€ /mois  (soit 25 000 à 30 000 € par an)", "De 2 500 à 2 900€ /mois  (soit 30 000 à 35 000 € par an)", "De 2 900 à 3 400€ /mois  (soit 35 000 à 41 000 € par an)", "De 3 400 à 4 100€ /mois  (soit 41 000 à 50 000 € par an)", "De 4 100 à 5 300€ /mois  (soit 50 000 à 63 000 € par an)", "5 300€ et plus /mois  (soit 63 000 € et plus par an)", "Refus", "Ne sait pas"))
+names(data)[140] <- "D12"
+
+# LimeSurvey Field type: A
+data[, 141] <- as.character(data[, 141])
+attributes(data)$variable.labels[141] <- "Avez-vous un commentaire à ajouter ?"
+names(data)[141] <- "D14"
+
+```
+
+On stocke la première bdd dans un nouvel objet enq.tel
+
+```{r}
+enq.tel <- data
+data$id_f <- 1:282
+```
+
+On importe la deuxième bdd (panel) et on fait tourner le code fourni par LimeSurvey.
+
+```{r}
+rm(data)
+#$Rev: 10193 $ complete.
+data <- read.csv("data panel respondi/survey_753593_R_data_file.csv", quote = "'\"", na.strings=c("", "\"\""), stringsAsFactors=FALSE)
+
+# LimeSurvey Field type: F
+data[, 1] <- as.numeric(data[, 1])
+attributes(data)$variable.labels[1] <- "id"
+names(data)[1] <- "id"
+
+# LimeSurvey Field type: A
+data[, 2] <- as.character(data[, 2])
+attributes(data)$variable.labels[2] <- "token"
+names(data)[2] <- "token"
+
+# LimeSurvey Field type: DATETIME23.2
+data[, 3] <- as.character(data[, 3])
+attributes(data)$variable.labels[3] <- "submitdate"
+names(data)[3] <- "submitdate"
+
+#Field hidden
+
+# LimeSurvey Field type: A
+data[, 4] <- as.character(data[, 4])
+attributes(data)$variable.labels[4] <- "startlanguage"
+names(data)[4] <- "startlanguage"
+
+# LimeSurvey Field type: DATETIME23.2
+data[, 5] <- as.character(data[, 5])
+attributes(data)$variable.labels[5] <- "startdate"
+names(data)[5] <- "startdate"
+
+# LimeSurvey Field type: DATETIME23.2
+data[, 6] <- as.character(data[, 6])
+attributes(data)$variable.labels[6] <- "datestamp"
+names(data)[6] <- "datestamp"
+
+# LimeSurvey Field type: A
+data[, 7] <- as.character(data[, 7])
+attributes(data)$variable.labels[7] <- "refurl"
+names(data)[7] <- "refurl"
+
+# LimeSurvey Field type: F
+data[, 8] <- as.numeric(data[, 8])
+attributes(data)$variable.labels[8] <- ""
+names(data)[8] <- "tic"
+
+# LimeSurvey Field type: F
+data[, 9] <- as.numeric(data[, 9])
+attributes(data)$variable.labels[9] <- "Hier, à partir de 18h, combien de fois avez-vous mangé quelque chose ?	Par exemple : un fruit, des biscuits apéritifs, un repas, des confiseries, etc..."
+data[, 9] <- factor(data[, 9], levels=c(1,2,3),labels=c("1 fois", "2 fois", "3 fois ou plus"))
+names(data)[9] <- "A1"
+
+# LimeSurvey Field type: A
+data[, 10] <- as.character(data[, 10])
+attributes(data)$variable.labels[10] <- "[Prise alimentaire] [Heure] À quelle heure a eu lieu votre prise alimentaire  ?"
+names(data)[10] <- "A2_1_1"
+
+# LimeSurvey Field type: A
+data[, 11] <- as.character(data[, 11])
+attributes(data)$variable.labels[11] <- "[Prise alimentaire] [Minute] À quelle heure a eu lieu votre prise alimentaire  ?"
+names(data)[11] <- "A2_1_2"
+
+# LimeSurvey Field type: A
+data[, 12] <- as.character(data[, 12])
+attributes(data)$variable.labels[12] <- "[Prise alimentaire] [Heure] À quelle heure a eu lieu votre prise alimentaire principale (celle que vous considérez comme la plus importante) ?"
+names(data)[12] <- "A2_bis_1_1"
+
+# LimeSurvey Field type: A
+data[, 13] <- as.character(data[, 13])
+attributes(data)$variable.labels[13] <- "[Prise alimentaire] [Minute] À quelle heure a eu lieu votre prise alimentaire principale (celle que vous considérez comme la plus importante) ?"
+names(data)[13] <- "A2_bis_1_2"
+
+# LimeSurvey Field type: F
+data[, 14] <- as.numeric(data[, 14])
+attributes(data)$variable.labels[14] <- "Combien de temps a-t-elle duré ?" 
+data[, 14] <- factor(data[, 14], levels=c(1,2,3,4,5),labels=c("Moins de 10 min", "11 à 20 min", "21 à 30 min", "Moins d'1h", "Plus d’1h"))
+names(data)[14] <- "A3"
+
+# LimeSurvey Field type: F
+data[, 15] <- as.numeric(data[, 15])
+attributes(data)$variable.labels[15] <- "Qui a préparé ce que vous avez mangé ?"
+data[, 15] <- factor(data[, 15], levels=c(1,2,3,4),labels=c("Je l’ai préparé", "Une autre personne du foyer l’a préparé", "Plat à emporter ou livraison à domicile", "Restaurant ou autre repas extérieur au domicile"))
+names(data)[15] <- "A4"
+
+# LimeSurvey Field type: A
+data[, 16] <- as.character(data[, 16])
+attributes(data)$variable.labels[16] <- "Combien de temps vous a pris la préparation approximativement ?"
+data[, 16] <- factor(data[, 16], levels=c("A1","A2","A3","A4"),labels=c("Moins de 10 minutes", "11 à 20 minutes", "21 à 30 minutes", "Plus de 30 minutes"))
+names(data)[16] <- "A5"
+
+# LimeSurvey Field type: A
+data[, 17] <- as.character(data[, 17])
+attributes(data)$variable.labels[17] <- "Veuillez lister tout ce que vous avez mangé à cette occasion :"
+names(data)[17] <- "A6"
+
+# LimeSurvey Field type: F
+data[, 18] <- as.numeric(data[, 18])
+attributes(data)$variable.labels[18] <- "Considérez-vous que c’était un repas ?"
+data[, 18] <- factor(data[, 18], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[18] <- "A7"
+
+# LimeSurvey Field type: F
+data[, 19] <- as.numeric(data[, 19])
+attributes(data)$variable.labels[19] <- "Pouvez-vous me dire où vous étiez à ce moment-là ? "
+data[, 19] <- factor(data[, 19], levels=c(1,2,3,4,5,6),labels=c("Chez vous", "Au travail", "Dans les transports ou en marchant", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+names(data)[19] <- "A8"
+
+# LimeSurvey Field type: A
+data[, 20] <- as.character(data[, 20])
+attributes(data)$variable.labels[20] <- "[Autre] Pouvez-vous me dire où vous étiez à ce moment-là ? "
+names(data)[20] <- "A8_other"
+
+# LimeSurvey Field type: F
+data[, 21] <- as.numeric(data[, 21])
+attributes(data)$variable.labels[21] <- "Est-ce que vous étiez à table ? "
+data[, 21] <- factor(data[, 21], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[21] <- "A9"
+
+# LimeSurvey Field type: F
+data[, 22] <- as.numeric(data[, 22])
+attributes(data)$variable.labels[22] <- "Dans quelle pièce vous-trouviez-vous ?"
+data[, 22] <- factor(data[, 22], levels=c(1,2,3,4),labels=c("Cuisine", "Salon / Salle de séjour", "Chambre", "Mon logement a une seule pièce"))
+names(data)[22] <- "A10"
+
+# LimeSurvey Field type: A
+data[, 23] <- as.character(data[, 23])
+attributes(data)$variable.labels[23] <- "[Autre] Dans quelle pièce vous-trouviez-vous ?"
+names(data)[23] <- "A10_other"
+
+# LimeSurvey Field type: F
+data[, 24] <- as.numeric(data[, 24])
+attributes(data)$variable.labels[24] <- "[Non, je ne faisais rien d’autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ? "
+data[, 24] <- factor(data[, 24], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[24] <- "A11_1"
+
+# LimeSurvey Field type: F
+data[, 25] <- as.numeric(data[, 25])
+attributes(data)$variable.labels[25] <- "[Oui, je discutais] Est-ce que vous faisiez quelque chose d’autre en mangeant ? "
+data[, 25] <- factor(data[, 25], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[25] <- "A11_2"
+
+# LimeSurvey Field type: F
+data[, 26] <- as.numeric(data[, 26])
+attributes(data)$variable.labels[26] <- "[Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console) ] Est-ce que vous faisiez quelque chose d’autre en mangeant ? "
+data[, 26] <- factor(data[, 26], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[26] <- "A11_3"
+
+# LimeSurvey Field type: F
+data[, 27] <- as.numeric(data[, 27])
+attributes(data)$variable.labels[27] <- "[Oui, je lisais] Est-ce que vous faisiez quelque chose d’autre en mangeant ? "
+data[, 27] <- factor(data[, 27], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[27] <- "A11_4"
+
+# LimeSurvey Field type: F
+data[, 28] <- as.numeric(data[, 28])
+attributes(data)$variable.labels[28] <- "[Je ne sais pas] Est-ce que vous faisiez quelque chose d’autre en mangeant ? "
+data[, 28] <- factor(data[, 28], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[28] <- "A11_5"
+
+# LimeSurvey Field type: A
+data[, 29] <- as.character(data[, 29])
+attributes(data)$variable.labels[29] <- "[Autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ? "
+names(data)[29] <- "A11_other"
+
+# LimeSurvey Field type: F
+data[, 30] <- as.numeric(data[, 30])
+attributes(data)$variable.labels[30] <- "Quelqu’un était-il avec vous pendant que vous mangiez ? "
+data[, 30] <- factor(data[, 30], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[30] <- "A12"
+
+# LimeSurvey Field type: F
+data[, 31] <- as.numeric(data[, 31])
+attributes(data)$variable.labels[31] <- "[Ami(s)] Avec qui étiez-vous ? "
+data[, 31] <- factor(data[, 31], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[31] <- "A13_1"
+
+# LimeSurvey Field type: F
+data[, 32] <- as.numeric(data[, 32])
+attributes(data)$variable.labels[32] <- "[Collègue(s)] Avec qui étiez-vous ? "
+data[, 32] <- factor(data[, 32], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[32] <- "A13_2"
+
+# LimeSurvey Field type: F
+data[, 33] <- as.numeric(data[, 33])
+attributes(data)$variable.labels[33] <- "[Famille] Avec qui étiez-vous ? "
+data[, 33] <- factor(data[, 33], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[33] <- "A13_3"
+
+# LimeSurvey Field type: F
+data[, 34] <- as.numeric(data[, 34])
+attributes(data)$variable.labels[34] <- "[Conjoint] Avec qui étiez-vous ? "
+data[, 34] <- factor(data[, 34], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[34] <- "A13_4"
+
+# LimeSurvey Field type: F
+data[, 35] <- as.numeric(data[, 35])
+attributes(data)$variable.labels[35] <- "[ Enfants] Avec qui étiez-vous ? "
+data[, 35] <- factor(data[, 35], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[35] <- "A13_5"
+
+# LimeSurvey Field type: A
+data[, 36] <- as.character(data[, 36])
+attributes(data)$variable.labels[36] <- "[Autre] Avec qui étiez-vous ? "
+names(data)[36] <- "A13_other"
+
+# LimeSurvey Field type: F
+data[, 37] <- as.numeric(data[, 37])
+attributes(data)$variable.labels[37] <- "Cette ou ces personne(s) avec vous mangeaient-elles ?"
+data[, 37] <- factor(data[, 37], levels=c(1,2,3),labels=c("Oui toutes", "Oui certaines", "Non, aucune"))
+names(data)[37] <- "A14"
+
+# LimeSurvey Field type: F
+data[, 38] <- as.numeric(data[, 38])
+attributes(data)$variable.labels[38] <- "Les personne(s) qui étaient avec vous regardaient-elles un écran ?"
+data[, 38] <- factor(data[, 38], levels=c(1,2,3),labels=c("Oui, toutes", "Oui, certaines", "Non, aucune"))
+names(data)[38] <- "A15"
+
+# LimeSurvey Field type: F
+data[, 39] <- as.numeric(data[, 39])
+attributes(data)$variable.labels[39] <- "Parmi ces personnes qui regardaient un écran, certaines regardaient-elles le même écran que vous ? (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console)"
+data[, 39] <- factor(data[, 39], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[39] <- "A16"
+
+# LimeSurvey Field type: A
+data[, 40] <- as.character(data[, 40])
+attributes(data)$variable.labels[40] <- "[Prise alimentaire] [Heure] 	Nous allons maintenant évoquer rapidement votre autre prise alimentaire de la soirée.	A quelle heure a-t-elle eu lieu ?"
+names(data)[40] <- "A17_SQ001_SQ001"
+
+# LimeSurvey Field type: A
+data[, 41] <- as.character(data[, 41])
+attributes(data)$variable.labels[41] <- "[Prise alimentaire] [Minute] 	Nous allons maintenant évoquer rapidement votre autre prise alimentaire de la soirée.	A quelle heure a-t-elle eu lieu ?"
+names(data)[41] <- "A17_SQ001_SQ002"
+
+# LimeSurvey Field type: A
+data[, 42] <- as.character(data[, 42])
+attributes(data)$variable.labels[42] <- "[Prise alimentaire] [Heure] 	Nous allons maintenant évoquer rapidement vos autres prises alimentaires de la soirée. Commençons par celle que vous avez pris le plus tôt dans la soirée (à partir de 18h).	 A quelle heure a-t-elle eu lieu ?"
+names(data)[42] <- "A17_bis_SQ001_SQ001"
+
+# LimeSurvey Field type: A
+data[, 43] <- as.character(data[, 43])
+attributes(data)$variable.labels[43] <- "[Prise alimentaire] [Minute] 	Nous allons maintenant évoquer rapidement vos autres prises alimentaires de la soirée. Commençons par celle que vous avez pris le plus tôt dans la soirée (à partir de 18h).	 A quelle heure a-t-elle eu lieu ?"
+names(data)[43] <- "A17_bis_SQ001_SQ002"
+
+# LimeSurvey Field type: F
+data[, 44] <- as.numeric(data[, 44])
+attributes(data)$variable.labels[44] <- "Combien de temps a-t-elle duré ? "
+data[, 44] <- factor(data[, 44], levels=c(1,2,3,4,5),labels=c("Moins de 10 min", "11 à 20 min", "21 à 30 min", "31 min à 1h", "Plus d’1h"))
+names(data)[44] <- "A18"
+
+# LimeSurvey Field type: A
+data[, 45] <- as.character(data[, 45])
+attributes(data)$variable.labels[45] <- "Qu’est-ce que vous avez mangé ? "
+names(data)[45] <- "A19"
+
+# LimeSurvey Field type: F
+data[, 46] <- as.numeric(data[, 46])
+attributes(data)$variable.labels[46] <- "Pouvez-vous me dire où vous étiez à ce moment-là ? "
+data[, 46] <- factor(data[, 46], levels=c(1,2,3,4,5,6),labels=c("Chez vous", "Au travail", "Dans les transports, en marchant etc.", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+names(data)[46] <- "A20"
+
+# LimeSurvey Field type: A
+data[, 47] <- as.character(data[, 47])
+attributes(data)$variable.labels[47] <- "[Autre] Pouvez-vous me dire où vous étiez à ce moment-là ? "
+names(data)[47] <- "A20_other"
+
+# LimeSurvey Field type: F
+data[, 48] <- as.numeric(data[, 48])
+attributes(data)$variable.labels[48] <- "[Non, je ne faisais rien d’autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 48] <- factor(data[, 48], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[48] <- "A21_1"
+
+# LimeSurvey Field type: F
+data[, 49] <- as.numeric(data[, 49])
+attributes(data)$variable.labels[49] <- "[Oui, je discutais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 49] <- factor(data[, 49], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[49] <- "A21_2"
+
+# LimeSurvey Field type: F
+data[, 50] <- as.numeric(data[, 50])
+attributes(data)$variable.labels[50] <- "[Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/Smartphone, Console)] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 50] <- factor(data[, 50], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[50] <- "A21_3"
+
+# LimeSurvey Field type: F
+data[, 51] <- as.numeric(data[, 51])
+attributes(data)$variable.labels[51] <- "[Oui, je lisais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 51] <- factor(data[, 51], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[51] <- "A21_4"
+
+# LimeSurvey Field type: F
+data[, 52] <- as.numeric(data[, 52])
+attributes(data)$variable.labels[52] <- "[Je ne sais pas] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 52] <- factor(data[, 52], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[52] <- "A21_5"
+
+# LimeSurvey Field type: A
+data[, 53] <- as.character(data[, 53])
+attributes(data)$variable.labels[53] <- "[Autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+names(data)[53] <- "A21_other"
+
+# LimeSurvey Field type: A
+data[, 54] <- as.character(data[, 54])
+attributes(data)$variable.labels[54] <- "[Prise alimentaire] [Heure] 	Nous allons maintenant parler de votre dernière prise alimentaire de la soirée. S’il s’agit de votre prise principale, parlez-nous de l’avant dernière.	À quelle heure a-t-elle eu lieu ?"
+names(data)[54] <- "A22_SQ001_SQ001"
+
+# LimeSurvey Field type: A
+data[, 55] <- as.character(data[, 55])
+attributes(data)$variable.labels[55] <- "[Prise alimentaire] [Minute] 	Nous allons maintenant parler de votre dernière prise alimentaire de la soirée. S’il s’agit de votre prise principale, parlez-nous de l’avant dernière.	À quelle heure a-t-elle eu lieu ?"
+names(data)[55] <- "A22_SQ001_SQ002"
+
+# LimeSurvey Field type: F
+data[, 56] <- as.numeric(data[, 56])
+attributes(data)$variable.labels[56] <- "Combien de temps a-t-elle duré ?"
+data[, 56] <- factor(data[, 56], levels=c(1,2,3,4,5),labels=c("Moins de 10 min", "11 à 20 min", "21 à 30 min", "31 à 1h", "Plus d’1h"))
+names(data)[56] <- "A23"
+
+# LimeSurvey Field type: A
+data[, 57] <- as.character(data[, 57])
+attributes(data)$variable.labels[57] <- "Qu’est-ce que vous avez mangé ?"
+names(data)[57] <- "A24"
+
+# LimeSurvey Field type: F
+data[, 58] <- as.numeric(data[, 58])
+attributes(data)$variable.labels[58] <- "Pouvez-vous me dire où vous étiez à ce moment-là ? "
+data[, 58] <- factor(data[, 58], levels=c(1,2,3,4,5,6),labels=c("Chez vous", "Au travail", "Dans les transports, en marchant etc.", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+names(data)[58] <- "A25"
+
+# LimeSurvey Field type: F
+data[, 59] <- as.numeric(data[, 59])
+attributes(data)$variable.labels[59] <- "[Autre] Pouvez-vous me dire où vous étiez à ce moment-là ? "
+names(data)[59] <- "A25_other"
+
+# LimeSurvey Field type: F
+data[, 60] <- as.numeric(data[, 60])
+attributes(data)$variable.labels[60] <- "[Non, je ne faisais rien d’autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 60] <- factor(data[, 60], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[60] <- "A26_5"
+
+# LimeSurvey Field type: F
+data[, 61] <- as.numeric(data[, 61])
+attributes(data)$variable.labels[61] <- "[Oui, je discutais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 61] <- factor(data[, 61], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[61] <- "A26_1"
+
+# LimeSurvey Field type: F
+data[, 62] <- as.numeric(data[, 62])
+attributes(data)$variable.labels[62] <- "[Oui, je regardais un écran (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console)] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 62] <- factor(data[, 62], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[62] <- "A26_2"
+
+# LimeSurvey Field type: F
+data[, 63] <- as.numeric(data[, 63])
+attributes(data)$variable.labels[63] <- "[Oui, je lisais] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 63] <- factor(data[, 63], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[63] <- "A26_3"
+
+# LimeSurvey Field type: F
+data[, 64] <- as.numeric(data[, 64])
+attributes(data)$variable.labels[64] <- "[Je ne sais pas] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+data[, 64] <- factor(data[, 64], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[64] <- "A26_6"
+
+# LimeSurvey Field type: A
+data[, 65] <- as.character(data[, 65])
+attributes(data)$variable.labels[65] <- "[Autre] Est-ce que vous faisiez quelque chose d’autre en mangeant ?"
+names(data)[65] <- "A26_other"
+
+# LimeSurvey Field type: F
+data[, 66] <- as.numeric(data[, 66])
+attributes(data)$variable.labels[66] <- "Vous avez mentionné avoir regardé un écran pendant votre prise alimentaire principale. 	Avez-vous utilisé ce/ces écran(s) pendant la majeure partie du temps?"
+data[, 66] <- factor(data[, 66], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[66] <- "R1_1"
+
+# LimeSurvey Field type: F
+data[, 67] <- as.numeric(data[, 67])
+attributes(data)$variable.labels[67] <- "Sur une échelle de 1 à 5, quelle attention portiez-vous à l\'écran (1 Aucune attention – 5 Toute votre attention) ?"
+data[, 67] <- factor(data[, 67], levels=c(1,2,3,4,5),labels=c("1 - Aucune attention", "2", "3", "4", "5 - Toute mon attention"))
+names(data)[67] <- "r2_1"
+
+# LimeSurvey Field type: F
+data[, 68] <- as.numeric(data[, 68])
+attributes(data)$variable.labels[68] <- "Vous êtes-vous interrompue au moins 10 minutes pendant l\'usage de cet écran ? "
+data[, 68] <- factor(data[, 68], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[68] <- "r6_1"
+
+# LimeSurvey Field type: F
+data[, 69] <- as.numeric(data[, 69])
+attributes(data)$variable.labels[69] <- "Vous avez mentionné avoir regardé un écran pendant la deuxième prise alimentaire. 	Avez-vous utilisé ce/ces écran(s) pendant la majeure partie du temps?"
+data[, 69] <- factor(data[, 69], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[69] <- "R1_2"
+
+# LimeSurvey Field type: A
+data[, 70] <- as.character(data[, 70])
+attributes(data)$variable.labels[70] <- "Sur une échelle de 1 à 5, quelle attention portiez-vous à l\'écran (1 Aucune attention – 5 Toute votre attention) ?"
+data[, 70] <- factor(data[, 70], levels=c("A1","A5","A4","A3","A2"),labels=c("1 - Aucune attention", "2", "3", "4", "5 - Toute mon attention"))
+names(data)[70] <- "r2_2"
+
+# LimeSurvey Field type: F
+data[, 71] <- as.numeric(data[, 71])
+attributes(data)$variable.labels[71] <- "Vous êtes-vous interrompue au moins 10 minutes pendant l\'usage de cet écran ?"
+data[, 71] <- factor(data[, 71], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[71] <- "r6_2"
+
+# LimeSurvey Field type: F
+data[, 72] <- as.numeric(data[, 72])
+attributes(data)$variable.labels[72] <- "Vous avez mentionné avoir regardé un écran pendant la troisème prise alimentaire. 	Avez-vous utilisé ce/ces écran(s) pendant la majeure partie du temps?"
+data[, 72] <- factor(data[, 72], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[72] <- "R1_3"
+
+# LimeSurvey Field type: F
+data[, 73] <- as.numeric(data[, 73])
+attributes(data)$variable.labels[73] <- "Sur une échelle de 1 à 5, quelle attention portiez-vous à l\'écran (1 Aucune attention – 5 Toute votre attention) ?"
+data[, 73] <- factor(data[, 73], levels=c(1,2,3,4,5),labels=c("1", "2", "3", "4", "5"))
+names(data)[73] <- "r2_3"
+
+# LimeSurvey Field type: F
+data[, 74] <- as.numeric(data[, 74])
+attributes(data)$variable.labels[74] <- "Vous êtes vous interrompue au moins dix minutes pendant l\'utilisation de cet écran ?"
+data[, 74] <- factor(data[, 74], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[74] <- "r6_3"
+
+# LimeSurvey Field type: F
+data[, 75] <- as.numeric(data[, 75])
+attributes(data)$variable.labels[75] <- "[Télévision] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 75] <- factor(data[, 75], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[75] <- "r3_1"
+
+# LimeSurvey Field type: F
+data[, 76] <- as.numeric(data[, 76])
+attributes(data)$variable.labels[76] <- "[Téléphone portable/smartphone] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 76] <- factor(data[, 76], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[76] <- "r3_2"
+
+# LimeSurvey Field type: F
+data[, 77] <- as.numeric(data[, 77])
+attributes(data)$variable.labels[77] <- "[Tablette] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 77] <- factor(data[, 77], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[77] <- "r3_3"
+
+# LimeSurvey Field type: F
+data[, 78] <- as.numeric(data[, 78])
+attributes(data)$variable.labels[78] <- "[Ordinateur] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 78] <- factor(data[, 78], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[78] <- "r3_4"
+
+# LimeSurvey Field type: F
+data[, 79] <- as.numeric(data[, 79])
+attributes(data)$variable.labels[79] <- "[Console] Quel(s) écran(s) utilisiez-vous hier soir ? "
+data[, 79] <- factor(data[, 79], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[79] <- "r3_5"
+
+# LimeSurvey Field type: A
+data[, 80] <- as.character(data[, 80])
+attributes(data)$variable.labels[80] <- "[Autre] Quel(s) écran(s) utilisiez-vous hier soir ? "
+names(data)[80] <- "r3_other"
+
+# LimeSurvey Field type: F
+data[, 81] <- as.numeric(data[, 81])
+attributes(data)$variable.labels[81] <- "[Site internet d’information, blog, livres électroniques, forums] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 81] <- factor(data[, 81], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[81] <- "r4_1"
+
+# LimeSurvey Field type: F
+data[, 82] <- as.numeric(data[, 82])
+attributes(data)$variable.labels[82] <- "[Journal télévisé] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 82] <- factor(data[, 82], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[82] <- "r4_15"
+
+# LimeSurvey Field type: F
+data[, 83] <- as.numeric(data[, 83])
+attributes(data)$variable.labels[83] <- "[Programme TV en direct ] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 83] <- factor(data[, 83], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[83] <- "r4_4"
+
+# LimeSurvey Field type: F
+data[, 84] <- as.numeric(data[, 84])
+attributes(data)$variable.labels[84] <- "[Programme TV en différé ou replay] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 84] <- factor(data[, 84], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[84] <- "r4_5"
+
+# LimeSurvey Field type: F
+data[, 85] <- as.numeric(data[, 85])
+attributes(data)$variable.labels[85] <- "[Contenu audiovisuel sur Internet (Youtube, Twitch, Dailymotion, actualités Facebook)] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 85] <- factor(data[, 85], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[85] <- "r4_7"
+
+# LimeSurvey Field type: F
+data[, 86] <- as.numeric(data[, 86])
+attributes(data)$variable.labels[86] <- "[Travail] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 86] <- factor(data[, 86], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[86] <- "r4_9"
+
+# LimeSurvey Field type: F
+data[, 87] <- as.numeric(data[, 87])
+attributes(data)$variable.labels[87] <- "[Téléchargement] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 87] <- factor(data[, 87], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[87] <- "r4_10"
+
+# LimeSurvey Field type: F
+data[, 88] <- as.numeric(data[, 88])
+attributes(data)$variable.labels[88] <- "[Films/séries en streaming] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 88] <- factor(data[, 88], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[88] <- "r4_12"
+
+# LimeSurvey Field type: F
+data[, 89] <- as.numeric(data[, 89])
+attributes(data)$variable.labels[89] <- "[Réseaux sociaux (Twitter, Instagram, Facebook) ] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 89] <- factor(data[, 89], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[89] <- "r4_13"
+
+# LimeSurvey Field type: F
+data[, 90] <- as.numeric(data[, 90])
+attributes(data)$variable.labels[90] <- "[Discussion audio et video (Skype, Facetime)] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 90] <- factor(data[, 90], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[90] <- "r4_2"
+
+# LimeSurvey Field type: F
+data[, 91] <- as.numeric(data[, 91])
+attributes(data)$variable.labels[91] <- "[Discussion instantanée (Messenger Facebook, SMS, messagerie instantanée, Snapchat, Whatsapp...) ] Que faisiez-vous sur ce/ces écran(s) ? "
+data[, 91] <- factor(data[, 91], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[91] <- "r4_14"
+
+# LimeSurvey Field type: A
+data[, 92] <- as.character(data[, 92])
+attributes(data)$variable.labels[92] <- "[Autre] Que faisiez-vous sur ce/ces écran(s) ? "
+names(data)[92] <- "r4_other"
+
+# LimeSurvey Field type: F
+data[, 93] <- as.numeric(data[, 93])
+attributes(data)$variable.labels[93] <- "Avec combien de personne étiez-vous en contact à travers ce/ces écrans (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console) ? "
+data[, 93] <- factor(data[, 93], levels=c(1,2,3,4,5,6),labels=c("Aucune", "1", "2", "3-5", "5-10", "10 et +"))
+names(data)[93] <- "r5"
+
+# LimeSurvey Field type: A
+data[, 94] <- as.character(data[, 94])
+attributes(data)$variable.labels[94] <- "Etes-vous satisfait(e) de votre connexion internet ?"
+data[, 94] <- factor(data[, 94], levels=c("A3","A1","A2"),labels=c("Vous n'avez pas internet à la maison", "Oui", "Non"))
+names(data)[94] <- "E1"
+
+# LimeSurvey Field type: A
+data[, 95] <- as.character(data[, 95])
+attributes(data)$variable.labels[95] <- "Dans votre ménage, combien y a-t-il de téléphones portables de type smartphone ?"
+data[, 95] <- factor(data[, 95], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[95] <- "E2"
+
+# LimeSurvey Field type: A
+data[, 96] <- as.character(data[, 96])
+attributes(data)$variable.labels[96] <- "Vous personnellement, combien en utilisez-vous ?"
+data[, 96] <- factor(data[, 96], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[96] <- "E2_a"
+
+# LimeSurvey Field type: A
+data[, 97] <- as.character(data[, 97])
+attributes(data)$variable.labels[97] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 97] <- factor(data[, 97], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[97] <- "E2_b"
+
+# LimeSurvey Field type: A
+data[, 98] <- as.character(data[, 98])
+attributes(data)$variable.labels[98] <- "Dans votre ménage, combien y a-t-il de téléphones portables non smartphone ?"
+data[, 98] <- factor(data[, 98], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[98] <- "E3"
+
+# LimeSurvey Field type: A
+data[, 99] <- as.character(data[, 99])
+attributes(data)$variable.labels[99] <- "Vous personnellement, combien en utilisez-vous ?"
+data[, 99] <- factor(data[, 99], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[99] <- "E3_a"
+
+# LimeSurvey Field type: A
+data[, 100] <- as.character(data[, 100])
+attributes(data)$variable.labels[100] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 100] <- factor(data[, 100], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[100] <- "E3_b"
+
+# LimeSurvey Field type: A
+data[, 101] <- as.character(data[, 101])
+attributes(data)$variable.labels[101] <- "Dans votre ménage, combien y a-t-il de tablettes ?"
+data[, 101] <- factor(data[, 101], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[101] <- "E4"
+
+# LimeSurvey Field type: A
+data[, 102] <- as.character(data[, 102])
+attributes(data)$variable.labels[102] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 102] <- factor(data[, 102], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[102] <- "E4_a"
+
+# LimeSurvey Field type: A
+data[, 103] <- as.character(data[, 103])
+attributes(data)$variable.labels[103] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 103] <- factor(data[, 103], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[103] <- "E4_b"
+
+# LimeSurvey Field type: A
+data[, 104] <- as.character(data[, 104])
+attributes(data)$variable.labels[104] <- "Dans votre ménage, combien y a-t-il de télévisions ?"
+data[, 104] <- factor(data[, 104], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[104] <- "E5"
+
+# LimeSurvey Field type: A
+data[, 105] <- as.character(data[, 105])
+attributes(data)$variable.labels[105] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 105] <- factor(data[, 105], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[105] <- "E5_a"
+
+# LimeSurvey Field type: A
+data[, 106] <- as.character(data[, 106])
+attributes(data)$variable.labels[106] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 106] <- factor(data[, 106], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[106] <- "E5_b"
+
+# LimeSurvey Field type: A
+data[, 107] <- as.character(data[, 107])
+attributes(data)$variable.labels[107] <- "Dans votre ménage, combien y a-t-il de consoles de jeux ?"
+data[, 107] <- factor(data[, 107], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[107] <- "E6"
+
+# LimeSurvey Field type: A
+data[, 108] <- as.character(data[, 108])
+attributes(data)$variable.labels[108] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 108] <- factor(data[, 108], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[108] <- "E6_a"
+
+# LimeSurvey Field type: A
+data[, 109] <- as.character(data[, 109])
+attributes(data)$variable.labels[109] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 109] <- factor(data[, 109], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[109] <- "E6_b"
+
+# LimeSurvey Field type: A
+data[, 110] <- as.character(data[, 110])
+attributes(data)$variable.labels[110] <- "Dans votre ménage, combien y a-t-il d\'ordinateurs portables ?"
+data[, 110] <- factor(data[, 110], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[110] <- "E7"
+
+# LimeSurvey Field type: A
+data[, 111] <- as.character(data[, 111])
+attributes(data)$variable.labels[111] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 111] <- factor(data[, 111], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[111] <- "E7_a"
+
+# LimeSurvey Field type: A
+data[, 112] <- as.character(data[, 112])
+attributes(data)$variable.labels[112] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 112] <- factor(data[, 112], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[112] <- "E7_b"
+
+# LimeSurvey Field type: A
+data[, 113] <- as.character(data[, 113])
+attributes(data)$variable.labels[113] <- "Dans votre ménage, combien y a-t-il d\'ordinateurs fixes ?"
+data[, 113] <- factor(data[, 113], levels=c("A1","A4","A3","A2"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[113] <- "E8"
+
+# LimeSurvey Field type: A
+data[, 114] <- as.character(data[, 114])
+attributes(data)$variable.labels[114] <- "Vous personnellement, combien en utilisez-vous ? "
+data[, 114] <- factor(data[, 114], levels=c("A1","A2","A3","A4"),labels=c("0", "1", "2", "3 ou plus"))
+names(data)[114] <- "E8_a"
+
+# LimeSurvey Field type: A
+data[, 115] <- as.character(data[, 115])
+attributes(data)$variable.labels[115] <- "Et vous personnellement, à quelle fréquence l’utilisez vous ? "
+data[, 115] <- factor(data[, 115], levels=c("A1","A2","A3","A4"),labels=c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+names(data)[115] <- "E8_b"
+
+# LimeSurvey Field type: F
+data[, 116] <- as.numeric(data[, 116])
+attributes(data)$variable.labels[116] <- "En général, combien de soirées passez-vous chez vous sur une semaine ?"
+data[, 116] <- factor(data[, 116], levels=c(1,2,3,4),labels=c("1", "2", "3 à 5", "Plus de 5"))
+names(data)[116] <- "H1"
+
+# LimeSurvey Field type: F
+data[, 117] <- as.numeric(data[, 117])
+attributes(data)$variable.labels[117] <- "Considérez-vous que la soirée d’hier était une soirée inhabituelle ?"
+data[, 117] <- factor(data[, 117], levels=c(1,2),labels=c("Oui", "Non"))
+names(data)[117] <- "H2"
+
+# LimeSurvey Field type: F
+data[, 118] <- as.numeric(data[, 118])
+attributes(data)$variable.labels[118] <- "Habituellement, prenez-vous votre repas du soir en regardant un écran : "
+data[, 118] <- factor(data[, 118], levels=c(1,2,3,4),labels=c("Jamais ou rarement", "1 à 3 fois par semaine", "3 à 5 fois par semaine", "A chaque fois ou presque"))
+names(data)[118] <- "HA3"
+
+# LimeSurvey Field type: F
+data[, 119] <- as.numeric(data[, 119])
+attributes(data)$variable.labels[119] <- "[Avec des amis] 	Habituellement, vous prenez votre repas du soir...	(Plusieurs réponses possibles)"
+data[, 119] <- factor(data[, 119], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[119] <- "HA4_1"
+
+# LimeSurvey Field type: F
+data[, 120] <- as.numeric(data[, 120])
+attributes(data)$variable.labels[120] <- "[Avec votre famille ou conjoint(e)] 	Habituellement, vous prenez votre repas du soir...	(Plusieurs réponses possibles)"
+data[, 120] <- factor(data[, 120], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[120] <- "HA4_2"
+
+# LimeSurvey Field type: F
+data[, 121] <- as.numeric(data[, 121])
+attributes(data)$variable.labels[121] <- "[Seul(e)] 	Habituellement, vous prenez votre repas du soir...	(Plusieurs réponses possibles)"
+data[, 121] <- factor(data[, 121], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[121] <- "HA4_3"
+
+# LimeSurvey Field type: F
+data[, 122] <- as.numeric(data[, 122])
+attributes(data)$variable.labels[122] <- "Vous êtes : "
+data[, 122] <- factor(data[, 122], levels=c(1,2),labels=c("Femme", "Homme"))
+names(data)[122] <- "D13"
+
+# LimeSurvey Field type: F
+data[, 123] <- as.numeric(data[, 123])
+attributes(data)$variable.labels[123] <- "Quel âge avez-vous ? "
+names(data)[123] <- "D1"
+
+# LimeSurvey Field type: A
+data[, 124] <- as.character(data[, 124])
+attributes(data)$variable.labels[124] <- "Quel est le nom de votre commune ?"
+names(data)[124] <- "D2"
+
+# LimeSurvey Field type: F
+data[, 125] <- as.numeric(data[, 125])
+attributes(data)$variable.labels[125] <- "Quel est le diplôme le plus élevé que vous ayez obtenu ?"
+data[, 125] <- factor(data[, 125], levels=c(1,2,3,4,5,6,7,8,9),labels=c("Certificat d’études primaires", "BEPC, brevet", "CAP, BEP", "Baccalauréat, BP", "Deug, DUT, BTS, diplômes des professions sociales ou de la santé", "Licence, Bac+3", "Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.", "Aucun diplôme", "Refus"))
+names(data)[125] <- "D3"
+
+# LimeSurvey Field type: A
+data[, 126] <- as.character(data[, 126])
+attributes(data)$variable.labels[126] <- "[Autre] Quel est le diplôme le plus élevé que vous ayez obtenu ?"
+names(data)[126] <- "D3_other"
+
+# LimeSurvey Field type: F
+data[, 127] <- as.numeric(data[, 127])
+attributes(data)$variable.labels[127] <- "Actuellement, quelle est votre situation ?"
+data[, 127] <- factor(data[, 127], levels=c(1,2,3,6,7,8,9,5,4),labels=c("Emploi à plein temps", "Emploi à temps partiel", "Etudiant sans emploi", "Etudiant avec emploi", "Au foyer", "En recherche d'emploi", "A la retraite", "Non, à la retraite", "Non, en recherche d’emploi"))
+names(data)[127] <- "D4"
+
+# LimeSurvey Field type: A
+data[, 128] <- as.character(data[, 128])
+attributes(data)$variable.labels[128] <- "[Autre] Actuellement, quelle est votre situation ?"
+names(data)[128] <- "D4_other"
+
+# LimeSurvey Field type: A
+data[, 129] <- as.character(data[, 129])
+attributes(data)$variable.labels[129] <- "Quelle est votre profession ou la dernière que vous ayez exercée ? "
+names(data)[129] <- "D5"
+
+# LimeSurvey Field type: F
+data[, 130] <- as.numeric(data[, 130])
+attributes(data)$variable.labels[130] <- "Qui compose votre foyer ?"
+data[, 130] <- factor(data[, 130], levels=c(1,2,3,4,5),labels=c("Vous uniquement", "Vous et un ou plusieurs enfant(s)", "Vous et votre conjoint(e) (sans enfant)", "Vous et votre conjoint(e), avec un ou plusieurs enfant(s)", "Vos parents et éventuels frères et sœurs"))
+names(data)[130] <- "D6"
+
+# LimeSurvey Field type: A
+data[, 131] <- as.character(data[, 131])
+attributes(data)$variable.labels[131] <- "[Autre] Qui compose votre foyer ?"
+names(data)[131] <- "D6_other"
+
+# LimeSurvey Field type: F
+data[, 132] <- as.numeric(data[, 132])
+attributes(data)$variable.labels[132] <- "Actuellement, quelle est la situation de votre conjoint ? "
+data[, 132] <- factor(data[, 132], levels=c(1,2,6,7,3,4,5),labels=c("Emploi à plein temps", "Emploi à temps partiel", "Etudiant avec emploi", "Etudiant sans emploi", "Au foyer", "En recherche d’emploi", "A la retraite"))
+names(data)[132] <- "D7"
+
+# LimeSurvey Field type: A
+data[, 133] <- as.character(data[, 133])
+attributes(data)$variable.labels[133] <- "[Autre] Actuellement, quelle est la situation de votre conjoint ? "
+names(data)[133] <- "D7_other"
+
+# LimeSurvey Field type: A
+data[, 134] <- as.character(data[, 134])
+attributes(data)$variable.labels[134] <- "Quelle est cette profession ? "
+names(data)[134] <- "D8"
+
+# LimeSurvey Field type: F
+data[, 135] <- as.numeric(data[, 135])
+attributes(data)$variable.labels[135] <- "Quel est le diplôme le plus élevé de votre conjoint ?"
+data[, 135] <- factor(data[, 135], levels=c(1,2,3,4,5,6,7,8,9),labels=c("Certificat d’études primaires", "BEPC, brevet", "CAP, BEP", "Baccalauréat, BP", "Deug, DUT, BTS, diplômes des professions sociales ou de la santé", "Licence, Bac+3", "Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.", "Aucun diplôme", "Refus"))
+names(data)[135] <- "D3_bis"
+
+# LimeSurvey Field type: F
+data[, 136] <- as.numeric(data[, 136])
+attributes(data)$variable.labels[136] <- "[Autre] Quel est le diplôme le plus élevé de votre conjoint ?"
+names(data)[136] <- "D3_bis_other"
+
+# LimeSurvey Field type: A
+data[, 137] <- as.character(data[, 137])
+attributes(data)$variable.labels[137] <- "Combien d’enfants vivent avec vous au moins la moitié du temps? "
+data[, 137] <- factor(data[, 137], levels=c("A1","A2","A3","A4"),labels=c("Aucun", "1", "2", "3 ou plus"))
+names(data)[137] <- "D9"
+
+# LimeSurvey Field type: F
+data[, 138] <- as.numeric(data[, 138])
+attributes(data)$variable.labels[138] <- "Quel âge a votre enfant ?"
+names(data)[138] <- "D10_bis"
+
+# LimeSurvey Field type: F
+data[, 139] <- as.numeric(data[, 139])
+attributes(data)$variable.labels[139] <- "Quel âge a le plus jeune ?"
+names(data)[139] <- "D10"
+
+# LimeSurvey Field type: F
+data[, 140] <- as.numeric(data[, 140])
+attributes(data)$variable.labels[140] <- "Quel âge a le plus âgé?"
+names(data)[140] <- "D11"
+
+# LimeSurvey Field type: F
+data[, 141] <- as.numeric(data[, 141])
+attributes(data)$variable.labels[141] <- "Quel est le revenu mensuel moyen de votre ménage ? (en revenu net)"
+data[, 141] <- factor(data[, 141], levels=c(1,2,3,4,5,6,7,8,9,10,98,99),labels=c("De 0 à 1 100€ /mois  (soit 0 à 14 000 € par an)", "De 1 100 à 1 400€ /mois  (soit 14 000 à 17 000 € par an)", "De 1 400 à 1 700€ /mois  (soit 17 000 à 21 000 € par an)", "De 1 700 à 2 000€ /mois  (soit 21 000 à 25 000 € par an)", "De 2 000 à 2 500€ /mois  (soit 25 000 à 30 000 € par an)", "De 2 500 à 2 900€ /mois  (soit 30 000 à 35 000 € par an)", "De 2 900 à 3 400€ /mois  (soit 35 000 à 41 000 € par an)", "De 3 400 à 4 100€ /mois  (soit 41 000 à 50 000 € par an)", "De 4 100 à 5 300€ /mois  (soit 50 000 à 63 000 € par an)", "5 300€ et plus /mois  (soit 63 000 € et plus par an)", "Refus", "Ne sait pas"))
+names(data)[141] <- "D12"
+
+# LimeSurvey Field type: A
+data[, 142] <- as.character(data[, 142])
+attributes(data)$variable.labels[142] <- "Avez-vous un commentaire à ajouter ?"
+names(data)[142] <- "D14"
+
+# LimeSurvey Field type: F
+data[, 143] <- as.numeric(data[, 143])
+attributes(data)$variable.labels[143] <- "[Je souhaite recevoir les résultats de l\'enquête] Si vous le souhaitez, cochez cette case pour recevoir les résultats de l’enquête quand les étudiants auront fini de les analyser."
+data[, 143] <- factor(data[, 143], levels=c(1,0),labels=c("Oui", "Non sélectionné"))
+names(data)[143] <- "D15_A1"
+
+
+
+```
+
+On crée trois variables :
+-id_r qui contient l'identifiant unique
+-dummy.tel qui prend la valeur 1 pour les individus de l'enquête tel et 0 pour les individus du pannel
+-dummy.pannel qui prend la valeur 1 pour les individus de l'enquête panel et 0 pour les individus de l'enquête tel
+
+```{r}
+enq.panel <- data
+enq.tel$id_r <- 1:nrow(enq.tel)
+enq.panel$id_r <- (nrow(enq.tel)+1):(nrow(enq.tel)+nrow(enq.panel))
+enq.tel$dummy.tel <- as.vector(matrix(1, nrow(enq.tel), 1))
+enq.panel$dummy.tel <- as.vector(matrix(0, nrow(enq.panel), 1))
+enq.tel$dummy.panel <- as.vector(matrix(0, nrow(enq.tel), 1))
+enq.panel$dummy.panel <- as.vector(matrix(1, nrow(enq.panel), 1))
+```
+
+```{r}
+##On cherche les colonnes qui ne matchent pas. On identifie leur numéro, puis on cherche le label auquel elle corresponde (car le nom de la variable est insuffisant pour voir à quoi elles correspondent)#
+which(colnames(enq.tel)%in%colnames(enq.panel)==FALSE)
+colnames(enq.tel)[which(colnames(enq.tel)%in%colnames(enq.panel)==FALSE)]
+attributes(enq.tel)$variable.labels[which(colnames(enq.tel)%in%colnames(enq.panel)==FALSE)]
+#La première colonne qui ne matche pas est NB1, i.e numéro d'enquêteur, donc ce n'est pas grave#
+which(colnames(enq.panel)%in%colnames(enq.tel)==FALSE)
+colnames(enq.panel)[which(colnames(enq.panel)%in%colnames(enq.tel)==FALSE)]
+attributes(enq.panel)$variable.labels[which(colnames(enq.panel)%in%colnames(enq.tel)==FALSE)]
+#Les colonnes qui ne matchent pas sont les variables spécifiques à l'enquête panel, il n'y a donc pas de raison de penser qu'il y aura un problème au moment de coller les variables qui figurent dans les deux bdd#
+
+
+#On fusionne les 2 BDD et on met la colonne identifiant (141) id_r en première colonne#
+enq.final <- merge(enq.panel,enq.tel, all.x=TRUE, all.y=TRUE)
+enq.final <- enq.final[,c(141,1:140,142:147)]
+
+#On remet les étiquettes (bien pratiques)#
+attributes(enq.final)$variable.labels <- attributes(enq.panel)$variable.labels [match(colnames(enq.final),colnames(enq.panel))]
+
+#On prépare les export#
+write.csv(enq.final,file ="enq final.csv")
+etiquettes <- attributes(enq.final)$variable.labels 
+write.csv(etiquettes, file="etiquettes.csv")
+
+```
+

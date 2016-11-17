@@ -9,6 +9,9 @@ enq.final$X <- NULL
 ####
 
 ####
+
+#test#
+
 #A1 : Hier, à partir de 18h...#
 colnames(enq.final)[8]
 attributes(enq.final)$variable.labels[8]

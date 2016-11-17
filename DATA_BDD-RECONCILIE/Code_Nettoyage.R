@@ -1,5 +1,4 @@
 ##Importation BDD + Etiquettes##
-setwd("C:/Users/Marie Plessz/Google Drive/Socstat Enquete Quanti/Socstat Enquete Quanti partage/2-TeleRepas/_Data/BDD réconciliée/BDD")
 enq.final <- read.csv("enq final.csv", encoding = "UTF-8")
 etiquettes <- read.csv("etiquettes.csv", encoding = "UTF-8")
 etiquettes <- as.character(etiquettes$x)

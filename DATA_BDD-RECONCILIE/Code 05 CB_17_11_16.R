@@ -1,6 +1,6 @@
 ##Importation BDD + Etiquettes##
-setwd("C:/Users/amaury/Documents/cours/M2/Enquete")
-enq.final <- read.csv("enq final.csv")
+setwd("C:/Users/USUARIO/Desktop/M2/Enquête Statistique 3")
+enq.final <- read.csv("enq final.csv", encoding = "UTF-8")
 etiquettes <- read.csv("etiquettes.csv", encoding = "UTF-8")
 etiquettes <- as.character(etiquettes$x)
 attributes(enq.final)$variable.labels <- etiquettes
@@ -1448,6 +1448,362 @@ enq.final$r5_re <- as.factor(enq.final$r5_re)
 table(enq.final$r5_re)
 
 
-write.csv(enq.final,file ="enq_final_16.11.16_ad.csv")
+##write.csv(enq.final,file ="enq_final_16.11.16_ad.csv")
 
+#################################
+###### Parti 3: Equipement ######
+#################################
 
+#E1#
+colnames(enq.final)[94]
+attributes(enq.final)$variable.labels[94]
+typeof(enq.final$E1)
+class(enq.final$E1)
+table(enq.final$E1)
+sum(is.na(enq.final$E1))
+
+enq.final$E1_re <- enq.final$E1
+
+#E2#
+colnames(enq.final)[95]
+attributes(enq.final)$variable.labels[95]
+typeof(enq.final$E2)
+class(enq.final$E2)
+table(enq.final$E2)
+sum(is.na(enq.final$E2))
+
+enq.final$E2_re <- enq.final$E2
+
+#E2_a#
+colnames(enq.final)[96]
+attributes(enq.final)$variable.labels[96]
+typeof(enq.final$E2_a)
+class(enq.final$E2_a)
+table(enq.final$E2_a)
+sum(is.na(enq.final$E2_a))
+
+enq.final$E2_a_re <- enq.final$E2_a
+
+#E2_b#
+colnames(enq.final)[97]
+attributes(enq.final)$variable.labels[97]
+typeof(enq.final$E2_b)
+class(enq.final$E2_b)
+table(enq.final$E2_b)
+sum(is.na(enq.final$E2_b))
+
+enq.final$E2_b_re <- enq.final$E2_b
+
+#E3#
+colnames(enq.final)[98]
+attributes(enq.final)$variable.labels[98]
+typeof(enq.final$E3)
+class(enq.final$E3)
+table(enq.final$E3)
+sum(is.na(enq.final$E3))
+
+enq.final$E3_re <- enq.final$E3
+
+#E3_a#
+colnames(enq.final)[99]
+attributes(enq.final)$variable.labels[99]
+typeof(enq.final$E3_a)
+class(enq.final$E3_a)
+table(enq.final$E3_a)
+sum(is.na(enq.final$E3_a))
+
+enq.final$E3_a_re <- enq.final$E3_a
+
+#E3_b#
+colnames(enq.final)[100]
+attributes(enq.final)$variable.labels[100]
+typeof(enq.final$E3_b)
+class(enq.final$E3_b)
+table(enq.final$E3_b)
+sum(is.na(enq.final$E3_b))
+
+enq.final$E3_b_re <- enq.final$E3_b
+
+#E4#
+colnames(enq.final)[101]
+attributes(enq.final)$variable.labels[101]
+typeof(enq.final$E4)
+class(enq.final$E4)
+table(enq.final$E4)
+sum(is.na(enq.final$E4))
+
+enq.final$E4_re <- enq.final$E4
+
+#E4_a#
+colnames(enq.final)[102]
+attributes(enq.final)$variable.labels[102]
+typeof(enq.final$E4_a)
+class(enq.final$E4_a)
+table(enq.final$E4_a)
+sum(is.na(enq.final$E4_a))
+
+enq.final$E4_a_re <- enq.final$E4_a
+
+#E4_b#
+colnames(enq.final)[103]
+attributes(enq.final)$variable.labels[103]
+typeof(enq.final$E4_b)
+class(enq.final$E4_b)
+table(enq.final$E4_b)
+sum(is.na(enq.final$E4_b))
+
+enq.final$E4_b_re <- enq.final$E4_b
+
+#E5#
+colnames(enq.final)[104]
+attributes(enq.final)$variable.labels[104]
+typeof(enq.final$E5)
+class(enq.final$E5)
+table(enq.final$E5)
+sum(is.na(enq.final$E5))
+
+enq.final$E5_re <- enq.final$E5
+
+#E5_a#
+colnames(enq.final)[105]
+attributes(enq.final)$variable.labels[105]
+typeof(enq.final$E5_a)
+class(enq.final$E5_a)
+table(enq.final$E5_a)
+sum(is.na(enq.final$E5_a))
+
+enq.final$E5_a_re <- enq.final$E5_a
+
+#E5_b#
+colnames(enq.final)[106]
+attributes(enq.final)$variable.labels[106]
+typeof(enq.final$E5_b)
+class(enq.final$E5_b)
+table(enq.final$E5_b)
+sum(is.na(enq.final$E5_b))
+
+enq.final$E5_b_re <- enq.final$E5_b
+
+#E6#
+colnames(enq.final)[107]
+attributes(enq.final)$variable.labels[107]
+typeof(enq.final$E6)
+class(enq.final$E6)
+table(enq.final$E6)
+sum(is.na(enq.final$E6))
+
+enq.final$E6_re <- enq.final$E6
+
+#E6_a#
+colnames(enq.final)[108]
+attributes(enq.final)$variable.labels[108]
+typeof(enq.final$E6_a)
+class(enq.final$E6_a)
+table(enq.final$E6_a)
+sum(is.na(enq.final$E6_a))
+
+enq.final$E6_a_re <- enq.final$E6_a
+
+#E6_b#
+colnames(enq.final)[109]
+attributes(enq.final)$variable.labels[109]
+typeof(enq.final$E6_b)
+class(enq.final$E6_b)
+table(enq.final$E6_b)
+sum(is.na(enq.final$E6_b))
+
+enq.final$E6_b_re <- enq.final$E6_b
+
+#E7#
+colnames(enq.final)[110]
+attributes(enq.final)$variable.labels[110]
+typeof(enq.final$E7)
+class(enq.final$E7)
+table(enq.final$E7)
+sum(is.na(enq.final$E7))
+
+enq.final$E7_re <- enq.final$E7
+
+#E7_a#
+colnames(enq.final)[111]
+attributes(enq.final)$variable.labels[111]
+typeof(enq.final$E7_a)
+class(enq.final$E7_a)
+table(enq.final$E7_a)
+sum(is.na(enq.final$E7_a))
+
+enq.final$E7_a_re <- enq.final$E7_a
+
+#E7_b#
+colnames(enq.final)[112]
+attributes(enq.final)$variable.labels[112]
+typeof(enq.final$E7_b)
+class(enq.final$E7_b)
+table(enq.final$E7_b)
+sum(is.na(enq.final$E7_b))
+
+enq.final$E7_b_re <- enq.final$E7_b
+
+#E8#
+colnames(enq.final)[113]
+attributes(enq.final)$variable.labels[113]
+typeof(enq.final$E8)
+class(enq.final$E8)
+table(enq.final$E8)
+sum(is.na(enq.final$E8))
+
+enq.final$E8_re <- enq.final$E8
+
+#E8_a#
+colnames(enq.final)[114]
+attributes(enq.final)$variable.labels[114]
+typeof(enq.final$E8_a)
+class(enq.final$E8_a)
+table(enq.final$E8_a)
+sum(is.na(enq.final$E8_a))
+
+enq.final$E8_a_re <- enq.final$E8_a
+
+#E8_b#
+colnames(enq.final)[115]
+attributes(enq.final)$variable.labels[115]
+typeof(enq.final$E8_b)
+class(enq.final$E8_b)
+table(enq.final$E8_b)
+sum(is.na(enq.final$E8_b))
+
+enq.final$E8_b_re <- enq.final$E8_b
+
+###################################
+##Ordonner selon le questionnaire##
+###################################
+
+str(enq.final[,228:249])
+
+#E1_re#
+colnames(enq.final)[228]
+class(enq.final$E1_re)
+table(enq.final$E1_re)
+enq.final$E1_re <- factor(enq.final$E1_re,levels = c("Vous n'avez pas internet à la maison", "Oui", "Non"))
+table(enq.final$E1_re)
+
+#E2_re#
+colnames(enq.final)[229]
+class(enq.final$E2_re)
+table(enq.final$E2_re) ##Déjà ordonnée selon le questionaire
+
+#E2_a_re#
+colnames(enq.final)[230]
+class(enq.final$E2_a_re)
+table(enq.final$E2_a_re) ##Déjà ordonnée selon le questionaire
+
+#E2_b_re#
+colnames(enq.final)[231]
+class(enq.final$E2_b_re)
+table(enq.final$E2_b_re)
+enq.final$E2_b_re <- factor(enq.final$E2_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E2_b_re)
+
+#E3_re#
+colnames(enq.final)[232]
+class(enq.final$E3_re)
+table(enq.final$E3_re) ##Déjà ordonnée selon le questionaire
+
+#E3_a_re#
+colnames(enq.final)[233]
+class(enq.final$E3_a_re)
+table(enq.final$E3_a_re) ##Déjà ordonnée selon le questionaire
+
+#E3_b_re#
+colnames(enq.final)[234]
+class(enq.final$E3_b_re)
+table(enq.final$E3_b_re)
+enq.final$E3_b_re <- factor(enq.final$E3_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E3_b_re)
+
+#E4_re#
+colnames(enq.final)[235]
+class(enq.final$E4_re)
+table(enq.final$E4_re) ##Déjà ordonnée selon le questionaire
+
+#E4_a_re#
+colnames(enq.final)[236]
+class(enq.final$E4_a_re)
+table(enq.final$E4_a_re) ##Déjà ordonnée selon le questionaire
+
+#E4_b_re#
+colnames(enq.final)[237]
+class(enq.final$E4_b_re)
+table(enq.final$E4_b_re)
+enq.final$E4_b_re <- factor(enq.final$E4_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E4_b_re)
+
+#E5_re#
+colnames(enq.final)[238]
+class(enq.final$E5_re)
+table(enq.final$E5_re) ##Déjà ordonnée selon le questionaire
+
+#E5_a_re#
+colnames(enq.final)[239]
+class(enq.final$E5_a_re)
+table(enq.final$E5_a_re) ##Déjà ordonnée selon le questionaire
+
+#E5_b_re#
+colnames(enq.final)[240]
+class(enq.final$E5_b_re)
+table(enq.final$E5_b_re)
+enq.final$E5_b_re <- factor(enq.final$E5_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E5_b_re)
+
+#E6_re#
+colnames(enq.final)[241]
+class(enq.final$E6_re)
+table(enq.final$E6_re) ##Déjà ordonnée selon le questionaire
+
+#E6_a_re#
+colnames(enq.final)[242]
+class(enq.final$E6_a_re)
+table(enq.final$E6_a_re) ##Déjà ordonnée selon le questionaire
+
+#E6_b_re#
+colnames(enq.final)[243]
+class(enq.final$E6_b_re)
+table(enq.final$E6_b_re)
+enq.final$E6_b_re <- factor(enq.final$E6_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E6_b_re)
+
+#E7_re#
+colnames(enq.final)[244]
+class(enq.final$E7_re)
+table(enq.final$E7_re) ##Déjà ordonnée selon le questionaire
+
+#E7_a_re#
+colnames(enq.final)[245]
+class(enq.final$E7_a_re)
+table(enq.final$E7_a_re) ##Déjà ordonnée selon le questionaire
+
+#E7_b_re#
+colnames(enq.final)[246]
+class(enq.final$E7_b_re)
+table(enq.final$E7_b_re)
+enq.final$E7_b_re <- factor(enq.final$E7_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E7_b_re)
+
+#E8_re#
+colnames(enq.final)[247]
+class(enq.final$E8_re)
+table(enq.final$E8_re) ##Déjà ordonnée selon le questionaire
+
+#E8_a_re#
+colnames(enq.final)[248]
+class(enq.final$E8_a_re)
+table(enq.final$E8_a_re) ##Déjà ordonnée selon le questionaire
+
+#E8_b_re#
+colnames(enq.final)[249]
+class(enq.final$E8_b_re)
+table(enq.final$E8_b_re)
+enq.final$E8_b_re <- factor(enq.final$E8_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
+table(enq.final$E8_b_re)
+
+write.csv(enq.final,file ="enq_final_17.11.16_cb.csv")

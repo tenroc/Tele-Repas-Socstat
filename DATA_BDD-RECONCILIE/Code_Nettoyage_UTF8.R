@@ -1865,3 +1865,516 @@ class(enq.final$E8_b_re)
 table(enq.final$E8_b_re)
 enq.final$E8_b_re <- factor(enq.final$E8_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E8_b_re)
+
+##########################################"#
+###### Partie 3: Socio-démo/habitudes ######
+############################################
+#PARTIE SEBASTIEN
+
+####
+#H1 : En général, combien de soirées passez-vous chez vous sur une semaine ?#
+colnames(enq.final)[115]
+attributes(enq.final)$variable.labels[115]
+summary(enq.final$H1)
+#Déjà dans l'ordre
+typeof(enq.final$H1)
+class(enq.final$H1)
+table(enq.final$H1)
+sum(is.na(enq.final$H1))
+enq.final$H1_re <- enq.final$H1
+#Fait : rien #
+#23 NA - s'en occuper#)
+####
+
+####
+#H2 "Considérez-vous que la soirée d’hier était une soirée inhabituelle ?"
+colnames(enq.final)[116]
+attributes(enq.final)$variable.labels[116]
+typeof(enq.final$H2)
+summary(enq.final$H2)
+
+table(enq.final$H2)
+sum(is.na(enq.final$H2))
+enq.final$H2_re <- enq.final$H2
+enq.final$H2_re<-relevel(enq.final$H2_re,"Oui")
+summary(enq.final$H2_re)#Remis dans l'ordre
+##•Fait: Remis dans l'ordre
+##Eventuellement penser à regarder les commentaire en fin d'enquête
+
+#HA3 : Habituellement, prenez-vous votre repas du soir en regardant un écran : #
+colnames(enq.final)[117]
+attributes(enq.final)$variable.labels[117]
+summary(enq.final$HA3)
+typeof(enq.final$HA3)
+class(enq.final$HA3)
+table(enq.final$HA3)
+sum(is.na(enq.final$HA3))
+enq.final$HA3_re <- enq.final$HA3
+enq.final$HA3_re<-relevel(enq.final$HA3_re,"Jamais ou rarement")
+summary(enq.final$HA3_re)#Remis dans l'ordre
+#Fait : remis dans l'ordre #
+#23 NA - s'en occuper#)
+
+#HA4_1 : [Avec des amis] \tHabituellement, vous prenez votre repas du soir...\t(Plusieurs réponses possibles) #
+#Que faire avec les questions à choix multiple?
+colnames(enq.final)[118]
+attributes(enq.final)$variable.labels[118]
+summary(enq.final$HA4_1)
+typeof(enq.final$HA4_1)
+class(enq.final$HA4_1)
+table(enq.final$HA4_1)
+sum(is.na(enq.final$HA4_1))
+enq.final$HA4_re <- enq.final$HA4
+#Fait : rien #
+#23 NA - s'en occuper#)
+#HA4_2 : [Avec votre famille ou conjoint(e)] \tHabituellement, vous prenez votre repas du soir...\t(Plusieurs réponses possibles) #
+colnames(enq.final)[119]
+attributes(enq.final)$variable.labels[119]
+summary(enq.final$HA4_2)
+typeof(enq.final$HA4_2)
+class(enq.final$HA4_2)
+table(enq.final$HA4_2)
+sum(is.na(enq.final$HA4_2))
+enq.final$HA4_2_re <- enq.final$HA4_2
+#Fait : rien #
+#HA4_2 : [Seul(e)] \tHabituellement, vous prenez votre repas du soir...\t(Plusieurs réponses possibles) #
+colnames(enq.final)[120]
+attributes(enq.final)$variable.labels[120]
+summary(enq.final$HA4_3)
+typeof(enq.final$HA4_3)
+class(enq.final$HA4_3)
+table(enq.final$HA4_3)
+sum(is.na(enq.final$HA4_3))
+enq.final$HA4_3_re <- enq.final$HA4_3
+#Fait : rien # Comment gérer ces chhoix multiples
+#D13 : Vous êtes :  #
+colnames(enq.final)[121]
+attributes(enq.final)$variable.labels[121]
+summary(enq.final$D13)#dejà dans l'ordre
+typeof(enq.final$D13)
+class(enq.final$D13)
+table(enq.final$D13)
+sum(is.na(enq.final$D13))
+enq.final$D13_re <- enq.final$D13
+#Fait : rien #
+#D13 : Quel âge avez-vous ?  #
+colnames(enq.final)[122]
+attributes(enq.final)$variable.labels[122]
+summary(enq.final$D1)
+typeof(enq.final$D1)
+class(enq.final$D1)
+table(enq.final$D1)
+sum(is.na(enq.final$D1))
+enq.final$D1_re <- enq.final$D1
+#Deux 0 et un 9999, sont-ce des non-réponses? Je les supprime. Tous les autres semblent plausibles
+enq.final$D1_re [enq.final$D1 %in% c(0,9999999)]<-NA
+#vérification
+table(enq.final$D1, useNA = "ifany")
+table(enq.final$D1_re, useNA = "ifany")
+#Fait : valeurs abjectes supprimées (3 NA en plus) #
+
+#D2 : Quel est le nom de votre commune ?  #
+colnames(enq.final)[123]
+attributes(enq.final)$variable.labels[123]
+summary(enq.final$D2)
+typeof(enq.final$D2)
+class(enq.final$D2)
+table(enq.final$D2)
+sum(is.na(enq.final$D2))
+enq.final$D2_re <- enq.final$D2
+#Fait : rien, Voir Alejandra #
+
+#D3 :  Quel est le diplôme le plus élevé que vous ayez obtenu ?  #
+colnames(enq.final)[124]
+attributes(enq.final)$variable.labels[124]
+summary(enq.final$D3)
+typeof(enq.final$D3)
+class(enq.final$D3)
+table(enq.final$D3)
+sum(is.na(enq.final$D3))
+levels(enq.final$D3_re)
+enq.final$D3_re<-enq.final$D3
+
+
+
+#D3_other : [Autre] Quel est le diplôme le plus élevé que vous ayez obtenu ?  #
+colnames(enq.final)[125]
+attributes(enq.final)$variable.labels[125]
+summary(enq.final$D3_other)
+typeof(enq.final$D3_other)
+class(enq.final$D3_other)
+table(enq.final$D3_other)
+sum(is.na(enq.final$D3_other))
+
+enq.final$D3_other_re [enq.final$D3_other %in% c("14 ans au maroc, ne sait pas quel niveau")]<-"14 ans au Maroc (à reclasser)"
+enq.final$D3_other_re [enq.final$D3_other %in% c("à l'étranger jusqu'au lycée")]<-"a reclasser(etranger jusqu'au lycee)"
+#A soumettre: pour moi on ne peut rien tirer de "à l'étranger jusqu'au lycée"
+enq.final$D3_other_re [enq.final$D3_other %in% c("brevet professionel")]<-"BEPC, brevet"
+enq.final$D3_other_re [enq.final$D3_other %in% c("diplome auxiliaire de puericulture", "niveau cap")]<-"CAP, BEP"
+enq.final$D3_other_re [enq.final$D3_other %in% c("Diplome d'état")]<-"Diplome d'état (à reclasser)"
+#Je comptais le mettre en NA
+enq.final$D3_other_re [enq.final$D3_other %in% c("Diplôme de retoucherie")]<-"CAP, BEP"
+# si retoucherie signifie retouche j'ai cherché et il suffit d'un CAP ou BEP pour y acceder
+enq.final$D3_other_re [enq.final$D3_other %in% c("educatrice spécialisée")]<-"Licence, Bac+3" 
+enq.final$D3_other_re [enq.final$D3_other %in% c("Je n'ai pas passé mon certificat d'étude donc je ne sais pas ce que ça vaut maintenant","permis de conduire")]<-"Aucun diplôme"
+enq.final$D3_other_re [enq.final$D3_other %in% c("niveau 4")]<-"Baccalauréat, BP"#j'ai vérifié
+enq.final$D3_other_re [enq.final$D3_other %in% c("passe le bac")]<-"BEPC, brevet"
+enq.final$D3_other_re [enq.final$D3_other %in% c("premier prix du conservatoire de paris (20ans)")]<-"Licence, Bac+3"
+enq.final$D3_other_re [enq.final$D3_other %in% c("Thèse")]<-"Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc."
+table(enq.final$D3_other_re)# il y en a 12 avec les 2 NA, ce qui est normal
+
+
+
+#Lien D3 DE_other
+enq.final$D3_re <- ifelse(is.na(enq.final$D3_other_re)==FALSE,ifelse(enq.final$D3_other_re %in% levels(enq.final$D3_re), as.character(enq.final$D3_other_re), "Autre (voir D3_other_re)"),as.character(enq.final$D3_re) )
+
+table(enq.final$D3_re, useNA = "ifany")
+enq.final$D3_re <- factor(enq.final$D3_re,levels=c(levels(enq.final[,124])[6],"BEPC, brevet",
+                                                   "CAP, BEP","Baccalauréat, BP",
+                                                   "Deug, DUT, BTS, diplômes des professions sociales ou de la santé",
+                                                   "Licence, Bac+3","Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.",
+                                                   "Aucun diplôme", "Autre (voir D3_other_re)",
+                                                   "Refus"))
+
+table(enq.final$D3_re)
+
+#fait: niveaux remis dans l'ordre, rangé les individus qui pouvaient l'être
+#a faire: finir de regrouper les autres regroupables (les trois derniers)
+
+enq.final$D3_re <- as.factor(enq.final$D3_re)
+typeof(enq.final$D3_re)
+class(enq.final$D3_re)
+table(enq.final$D3_re)
+#remis en facrtor
+
+#D4 : Actuellement, quelle est votre situation ?  # /dans le dictionnaire des variables: "exercez-vous une activité rémunérée?
+colnames(enq.final)[126]
+attributes(enq.final)$variable.labels[126]
+summary(enq.final$D4)
+typeof(enq.final$D4)
+class(enq.final$D4)
+table(enq.final$D4)
+##Problème de modalités répétées + revoir dictionnaire des variables (Etudiant(s) absents...)
+sum(is.na(enq.final$D4))
+levels(enq.final$D4)
+#croisement selon ordi/télphone de cette variable
+table(enq.final$D4,enq.final$dummy.tel,useNA = "ifany")
+#visiblement, j'imagine que la question et les modalités ont été changées en cours d'enquête,
+#pendant que nous passions les questionnaires par téléphone, au tout début (donc pas de pb pour le téléphone)
+#Le mail qu'Antoine a envoyé aux chargés de Limesurvey atteste de cette version, il mentionnait la répétion de la case retraitée
+#En revanche pour les panels nous sommes revenus sur l'ancienne version du questionnaire avec les modalités répétées
+#Les modalités concernant les etudiant sont présentes dans les deux modes d'enquêtes donc pas de biais de ce côté là
+#La question initiale devait être exercez-vous une activité rémunérée et la finale, Actuellement quelle est votre situation?
+#Que faire?
+#J'ai pour l'instant décidé de regrouper les modalités retraite et recherche d'emploi (ci-dessous) qui sont répétées
+#Le problème des auto-entrepreneurs reste donc en suspension
+
+enq.final$D4_re <- enq.final$D4
+
+#La modalité
+enq.final$D4_re [enq.final$D4_re %in% c("En recherche d'emploi",levels(enq.final[,126])[9])]<-"En recherche d'emploi"
+enq.final$D4_re [enq.final$D4_re %in% c("Non, à la retraite","A la retraite")]<-"A la retraite"
+enq.final$D4_re <- droplevels(enq.final$D4_re)
+
+
+table(enq.final$D4_re, useNA = "ifany") # on a bien 57 NA
+
+#Fait : regroupé modalités identiques #
+
+
+#D4_other :  [Autre] Actuellement, quelle est votre situation ?  #
+colnames(enq.final)[127]
+attributes(enq.final)$variable.labels[127]
+summary(enq.final$D4_other)
+typeof(enq.final$D4_other)
+class(enq.final$D4_other)
+table(enq.final$D4_other)
+sum(is.na(enq.final$D4_other))
+
+enq.final$D4_other_re [enq.final$D4_other %in% c("autoentrepreneur","autoenrtrepreneur","Indépendant")]<-"Autoentrepreneur"
+enq.final$D4_other_re [enq.final$D4_other %in% c("en invalidité","maladie","en invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"En invalidité"
+enq.final$D4_other_re [enq.final$D4_other %in% c("SANS EMPLOI","sans emploi pas retraité")]<-"En recherche d'emploi"
+enq.final$D4_other_re [enq.final$D4_other %in% c("autre")]<-"Autre"
+enq.final$D4_other_re [enq.final$D4_other %in% c("femme au foyer")]<-"Au foyer"
+enq.final$D4_other_re [enq.final$D4_other %in% c("congé parentale")]<-"En congé parentale"
+enq.final$D4_other_re [enq.final$D4_other %in% c("Formation adulte")]<-"En formation"
+enq.final$D4_other_re [enq.final$D4_other %in% c("intérim")]<-"Interim"
+enq.final$D4_other_re [enq.final$D4_other %in% c("rentiste")]<-"Rentier ou dentiste"
+
+
+
+
+#Maladie est-ce invalidité? Intérim? Rentiste est-ce rentier?
+
+
+
+##Lien D4,D4other
+table(enq.final$D4_other_re, useNA = "ifany")
+
+enq.final$D4_re <- ifelse(is.na(enq.final$D4_other_re)==FALSE,ifelse(enq.final$D4_other_re %in% levels(enq.final$D4_re), as.character(enq.final$D4_other_re), "Autre (voir D4_other_re)"),as.character(enq.final$D4_re) )
+
+table(enq.final$D4_re, useNA = "ifany")
+
+enq.final$D4_re <- as.factor(enq.final$D4_re)
+#Ci-dessous, remise en ordre des niveaux
+enq.final$D4_re <- factor(enq.final$D4_re,levels=c("Emploi à plein temps","Emploi à temps partiel","Au foyer",
+                                                   "En recherche d'emploi","Etudiant sans emploi","Etudiant avec emploi","A la retraite","Autre (voir D4_other_re)"))
+table(enq.final$D4_re, useNA = "ifany")
+
+typeof(enq.final$D4_re)
+class(enq.final$D4_re)
+table(enq.final$D4_re)
+
+#Fait : regroupement des modalités identiques, remise dans l'ordre #
+#A faire: Discuter du problème des modalités et du changemetn de l'intitulé de la question
+#Eventuelle recatégorisation des "autres"
+#Eventuellement réordonner selon le futur nouveau dico des variables
+#regroupement des autres?
+#Quelle est votre profession ou la dernière que vous ayez exercée ? 
+colnames(enq.final)[128]
+attributes(enq.final)$variable.labels[128]
+summary(enq.final$D5)
+typeof(enq.final$D5)
+class(enq.final$D5)
+table(enq.final$D5)
+sum(is.na(enq.final$D5))
+#Fait rien
+#A faire: Voir Antoine et Nadia
+
+#Qui compose votre foyer ? 
+colnames(enq.final)[129]
+attributes(enq.final)$variable.labels[129]
+summary(enq.final$D6)
+typeof(enq.final$D6)
+class(enq.final$D6)
+table(enq.final$D6)
+sum(is.na(enq.final$D6))
+enq.final$D6_re<-enq.final$D6
+levels(enq.final$D6_re)
+
+table(enq.final$D6_re,useNA = "ifany")
+
+
+#[Autre] Qui compose votre foyer ? 
+colnames(enq.final)[130]
+attributes(enq.final)$variable.labels[130]
+summary(enq.final$D6_other)
+typeof(enq.final$D6r)
+class(enq.final$D6)
+table(enq.final$D6)
+sum(is.na(enq.final$D6))
+levels(enq.final$D6_other)
+enq.final$D6_other_re [enq.final$D6_other %in% c("5 colocataires","collocation","colocataire","Colocataires","colocation","COLOCATION")]<-"vous et un ou plusieurs colocataire(s)"
+enq.final$D6_other_re [enq.final$D6_other %in% c("amis")]<-"vous et un ou plusieurs ami(s)"
+enq.final$D6_other_re [enq.final$D6_other %in% c("moi et mes grands-parents", "Grands parents et moi")]<-"Vous et vos grand parents"
+enq.final$D6_other_re [enq.final$D6_other %in% c("Seule avec mon chat")]<-"Vous uniquement"
+enq.final$D6_other_re [enq.final$D6_other %in% c("2 enfants en accueuil et petit(e)s filles")]<-"vous , un ou plusieurs enfant(s) d'accueil et un ou plusieurs petits enfants"
+enq.final$D6_other_re [enq.final$D6_other %in% c("Conjoint petits enfants enfant")]<-"conjoint avec enfant(s) et petit(s) enfant(s)"
+enq.final$D6_other_re [enq.final$D6_other %in% c("mere conjointe fils")]<-"conjoint(e) avec enfant(s) et parent(s)"
+
+table(enq.final$D6_other_re,useNA = "ifany")
+
+#Lien D6 D6_other
+enq.final$D6_re <- ifelse(is.na(enq.final$D6_other_re)==FALSE,ifelse(enq.final$D6_other_re %in% levels(enq.final$D6_re), as.character(enq.final$D6_other_re), "Autre (voir D6_other_re)"),as.character(enq.final$D6_re) )
+
+table(enq.final$D6_re, useNA = "ifany") #1 "vous uniquement en plus"
+
+enq.final$D6_re <- as.factor(enq.final$D6_re)
+typeof(enq.final$D6_re)
+class(enq.final$D6_re)
+table(enq.final$D6_re)
+
+#remise en ordre
+enq.final$D6_re <- factor(enq.final$D6_re,levels=c("Vous uniquement","Vous et un ou plusieurs enfant(s)",
+                                                   "Vous et votre conjoint(e) (sans enfant)","Vous et votre conjoint(e), avec un ou plusieurs enfant(s)",
+                                                   levels(enq.final[,129])[1],"Autre (voir D6_other_re)" ))
+table(enq.final$D6_re, useNA = "ifany")
+
+#Fait: prise en comprte autre, remise dans l'ordre
+#a faire: recoder autres?
+#Actuellement, quelle est la situation de votre conjoint ? 
+colnames(enq.final)[131]
+attributes(enq.final)$variable.labels[131]
+summary(enq.final$D7)
+typeof(enq.final$D7)
+class(enq.final$D7)
+table(enq.final$D7)
+#Visiblement, pas le même pb que précédemment (pas de modalités répétées) 
+#mais les modalités du dico des variables sont erronnées (etudiants ommis)
+sum(is.na(enq.final$D7))
+levels(enq.final$D7)
+enq.final$D7_re <-enq.final$D7
+table(enq.final$D7_re,useNA="ifany")
+
+
+#[Autre] Actuellement, quelle est la situation de votre conjoint ? 
+colnames(enq.final)[132]
+attributes(enq.final)$variable.labels[132]
+summary(enq.final$D7_other)
+typeof(enq.final$D7_other)
+class(enq.final$D7_other)
+table(enq.final$D7_other)
+sum(is.na(enq.final$D7_other))
+levels(enq.final$D7_other)
+#QUID DE RESTAURATEUR?
+enq.final$D7_other_re [enq.final$D7_other %in% c("agriculteur (auto entrepreneur)","Chef d'entreprise","patron","restaurateur")]<-"Autoentrepreneur"
+enq.final$D7_other_re [enq.final$D7_other %in% c("en invalidité","Handicapés","invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"Non, en invalidité"
+enq.final$D7_other_re [enq.final$D7_other %in% c("refus")]<-"Refus"
+enq.final$D7_other_re [enq.final$D7_other %in% c("variable")]<-"variable"
+enq.final$D7_other_re [enq.final$D7_other %in% c("SANS EMPLOI")]<-levels(enq.final[,131])[5]
+enq.final$D7_other_re [enq.final$D7_other %in% c("Conger maternité")]<-"congé maternité"
+enq.final$D7_other_re [enq.final$D7_other %in% c("etudiante")]<-"Etudiant"
+enq.final$D7_other_re [enq.final$D7_other %in% c("Formation")]<-"en formation"
+enq.final$D7_other_re [enq.final$D7_other %in% c("intercontrat","interim")]<-"interim"
+enq.final$D7_other_re [enq.final$D7_other %in% c("medecin")]<-"Emploi"
+table(enq.final$D7_other_re,useNA="ifany")
+
+#Lien D7 D7_other
+enq.final$D7_re <- ifelse(is.na(enq.final$D7_other_re)==FALSE,ifelse(enq.final$D7_other_re %in% levels(enq.final$D7_re), as.character(enq.final$D7_other_re), "Autre (voir D7_other_re)"),as.character(enq.final$D7_re) )
+
+table(enq.final$D7_re, useNA = "ifany")
+
+enq.final$D7_re <- as.factor(enq.final$D7_re)
+typeof(enq.final$D7_re)
+class(enq.final$D7_re)
+table(enq.final$D7_re)
+enq.final$D7_re <- factor(enq.final$D7_re,levels=c("Emploi à plein temps","Emploi à temps partiel","Au foyer",
+                                                   levels(enq.final[,131])[5],"Etudiant sans emploi","Etudiant avec emploi","A la retraite","Autre (voir D7_other_re)"))
+table(enq.final$D7_re,useNA = "ifany")
+
+#Fait: prise en compte "autre", remise dans l'ordre
+#a faire: recoder autres?
+
+#Quelle est cette profession ?  #NADIA ET ANTOINE?
+colnames(enq.final)[133]
+attributes(enq.final)$variable.labels[133]
+summary(enq.final$D8)
+typeof(enq.final$D8)
+class(enq.final$D8)
+table(enq.final$D8)
+sum(is.na(enq.final$D8))
+levels(enq.final$D8)
+
+#Quel est le diplôme le plus élevé de votre conjoint ?
+colnames(enq.final)[134]
+attributes(enq.final)$variable.labels[134]
+summary(enq.final$D3_bis)
+typeof(enq.final$D3_bis)
+class(enq.final$D3_bis)
+table(enq.final$D3_bis)
+sum(is.na(enq.final$D3_bis))
+levels(enq.final$D3_bis)
+
+enq.final$D3_bis_re<-enq.final$D3_bis
+
+
+table(enq.final$D3_bis_re)
+
+
+
+
+#[Autre] Quel est le diplôme le plus élevé de votre conjoint ?
+colnames(enq.final)[135]
+attributes(enq.final)$variable.labels[135]
+summary(enq.final$D3_bis_other)
+typeof(enq.final$D3_bis)
+class(enq.final$D3_bis)
+table(enq.final$D3_bis)
+sum(is.na(enq.final$D3_bis))
+levels(enq.final$D3_bis)
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("certificat de capacite professionnelle taxi")]<-"CAP, BEP"
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("lycée à l'étranger")]<-"NA ou BAC?"
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("Artiste")]<-"Artiste"
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("refus")]<-"Refus"
+table(enq.final$D3_bis_other_re)
+
+#Lien D3_bis D3_bis_other
+enq.final$D3_bis_re <- ifelse(is.na(enq.final$D3_bis_other_re)==FALSE,ifelse(enq.final$D3_bis_other_re %in% levels(enq.final$D3_bis_re), as.character(enq.final$D3_bis_other_re), "Autre (voir D3_bis_other_re)"),as.character(enq.final$D3_bis_re) )
+
+table(enq.final$D3_bis_re, useNA = "ifany")
+
+enq.final$D3_bis_re <- as.factor(enq.final$D3_bis_re)
+typeof(enq.final$D3_bis_re)
+class(enq.final$D3_bis_re)
+enq.final$D3_bis_re <- factor(enq.final$D3_bis_re,levels=c(levels(enq.final[,134])[6],"BEPC, brevet",
+                                                           "CAP, BEP","Baccalauréat, BP",
+                                                           "Deug, DUT, BTS, diplômes des professions sociales ou de la santé",
+                                                           "Licence, Bac+3","Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.",
+                                                           "Aucun diplôme", "Autre (voir D3_bis_other_re)",
+                                                           "Refus"))
+table(enq.final$D3_bis_re)
+
+
+
+
+
+#Combien d’enfants vivent avec vous au moins la moitié du temps?
+colnames(enq.final)[136]
+attributes(enq.final)$variable.labels[136]
+summary(enq.final$D9)
+typeof(enq.final$D9)
+class(enq.final$D9)
+table(enq.final$D9)
+sum(is.na(enq.final$D9))
+levels(enq.final$D9)
+enq.final$D9_re<-relevel(enq.final$D9,"Aucun")
+#croisement avoir un enfant et compo foyer=>on voit qu'il n'y a pas de NA chez ceux qui répondes a avoir un enfant
+table(enq.final$D6_re,enq.final$D9_re,useNA = "ifany")
+#Rien à faire,
+
+#Quel âge a votre enfant ?
+colnames(enq.final)[137]
+attributes(enq.final)$variable.labels[137]
+summary(enq.final$D10_bis)
+typeof(enq.final$D10_bis)
+class(enq.final$D10_bis)
+table(enq.final$D10_bis)#ça me paraît correct, pas de valeurs absurdes
+sum(is.na(enq.final$D10_bis))
+levels(enq.final$D10_bis)
+enq.final$D10_bis_re<-enq.final$D10_bis
+#croisement avec nb enfants
+table(enq.final$D10_bis_re,enq.final$D9_re,useNA = "ifany")#PAs de pb
+
+#Quel âge a le plus jeune ?
+colnames(enq.final)[138]
+attributes(enq.final)$variable.labels[138]
+summary(enq.final$D10)
+typeof(enq.final$D10)
+class(enq.final$D10)
+table(enq.final$D10)#ça me paraît correct, pas de valeurs absurdes
+sum(is.na(enq.final$D10))
+levels(enq.final$D10)
+enq.final$D10_re<-enq.final$D10
+
+#Quel âge a le plus âgé?
+colnames(enq.final)[139]
+attributes(enq.final)$variable.labels[139]
+summary(enq.final$D11)
+typeof(enq.final$D11)
+class(enq.final$D11)
+table(enq.final$D11)#ça me paraît correct, pas de valeurs absurdes
+sum(is.na(enq.final$D11))
+levels(enq.final$D11)
+enq.final$D11_re<-enq.final$D11
+
+#Quel est le revenu mensuel moyen de votre ménage ? (en revenu net)
+colnames(enq.final)[140]
+attributes(enq.final)$variable.labels[140]
+summary(enq.final$D12)
+typeof(enq.final$D12)
+class(enq.final$D12)
+table(enq.final$D12)
+sum(is.na(enq.final$D12))
+levels(enq.final$D12)
+enq.final$D12_re<-enq.final$D12
+enq.final$D12_re <- factor(enq.final$D12_re,levels=c(levels(enq.final[,140])[2],levels(enq.final[,140])[3],
+                                                     levels(enq.final[,140])[4],levels(enq.final[,140])[5],
+                                                     levels(enq.final[,140])[6],levels(enq.final[,140])[7],
+                                                     levels(enq.final[,140])[8],levels(enq.final[,140])[9],
+                                                     levels(enq.final[,140])[10],
+                                                     levels(enq.final[,140])[1],"Refus","Ne sait pas"))
+table(enq.final$D12_re)
+#Niveaux reconnus
+#Regardez si le signe euro fonctionne chez vous
+
+#D14 c'est les commentaires. Comment les traiter

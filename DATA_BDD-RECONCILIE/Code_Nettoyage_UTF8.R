@@ -1,4 +1,4 @@
-##Importation BDD + Etiquettes##
+##### Importation BDD + Etiquettes #####
 setwd("C:/Users/sarah/Google Drive/2-TeleRepas")
 enq.final <- read.csv("_Data/BDD réconciliée/BDD/enq final.csv", encoding = "UTF-8")
 etiquettes <- read.csv("_Data/BDD réconciliée/Etiquettes/etiquettes.csv", encoding = "UTF-8")
@@ -7,7 +7,7 @@ attributes(enq.final)$variable.labels <- etiquettes
 attributes(enq.final)$variable.labels[120]
 enq.final$X <- NULL
 
-####
+############ Partie 1 : Alimentation #########
 
 ####
 #A1 : Hier, à partir de 18h...#
@@ -785,7 +785,7 @@ table(enq.final$A26_7_re)
 
 
 
-####TIMOTHEE 11/09 - REMETTRE LES MODALITES DANS L'ORDRE####
+#### TIMOTHEE 11/09 - REMETTRE LES MODALITES DANS L'ORDRE ####
 
 str(enq.final[,148:202])
 
@@ -1210,10 +1210,7 @@ table(enq.final$A26_7_re)
 #GOOD#
 
 
-##############################
 ###### Partie 2 : Ecran ######
-##############################
-
 
 
 #R1_1#
@@ -1357,7 +1354,7 @@ sum(is.na(enq.final$r5))
 
 enq.final$r5_re <- enq.final$r5
 
-##########
+##### Remettre les modalités dans l'ordre (écran) ####
 
 str(enq.final[,202:227])
 
@@ -1448,12 +1445,8 @@ enq.final$r5_re <- as.factor(enq.final$r5_re)
 table(enq.final$r5_re)
 
 # Partie Cesar -equippement #
+###### Partie 3: Equipement ######
 
-####
-
-#################################
-###### Parti 3: Equipement ######
-#################################
 
 #E1#
 colnames(enq.final)[93]
@@ -1734,9 +1727,8 @@ enq.final$E8_b_re <- enq.final$E8_b
 table (enq.final$E8_b_re, enq.final$E8_b)
 
 
-###################################
-##Ordonner selon le questionnaire##
-###################################
+#### Remettre les modalités dans l'ordre (équipement) ####
+
 
 str(enq.final[,228:249])
 
@@ -1866,9 +1858,9 @@ table(enq.final$E8_b_re)
 enq.final$E8_b_re <- factor(enq.final$E8_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E8_b_re)
 
-##########################################"#
+
 ###### Partie 3: Socio-démo/habitudes ######
-############################################
+
 #PARTIE SEBASTIEN
 
 ####
@@ -2132,7 +2124,7 @@ table(enq.final$D4_re)
 #regroupement des autres?
 
 
-#Quelle est votre profession ou la dernière que vous ayez exercée ? 
+#Quelle est votre profession ou la dernière que vous ayez exercée (CSP) ? 
 #D5#
 colnames(enq.final)[128]
 attributes(enq.final)$variable.labels[128]
@@ -2146,6 +2138,7 @@ enq.final$D5_re <- factor(enq.final$D5_re,levels=c("Agriculteurs exploitants","A
                                                    "Professions intermédiaires","Employés","Ouvriers","Sans activité professionnelle"))
 library(questionr)
 freq(enq.final$D5_re)
+
 
 #Qui compose votre foyer ? 
 colnames(enq.final)[129]

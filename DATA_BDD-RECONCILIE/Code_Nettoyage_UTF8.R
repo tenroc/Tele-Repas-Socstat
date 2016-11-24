@@ -2130,16 +2130,22 @@ table(enq.final$D4_re)
 #Eventuelle recatégorisation des "autres"
 #Eventuellement réordonner selon le futur nouveau dico des variables
 #regroupement des autres?
+
+
 #Quelle est votre profession ou la dernière que vous ayez exercée ? 
+#D5#
 colnames(enq.final)[128]
 attributes(enq.final)$variable.labels[128]
-summary(enq.final$D5)
-typeof(enq.final$D5)
-class(enq.final$D5)
-table(enq.final$D5)
-sum(is.na(enq.final$D5))
-#Fait rien
-#A faire: Voir Antoine et Nadia
+#Recodage sous excel puis intégration à base (D5_re)#
+# /!\ Vérifier chemin / dernière version du csv pour le recodage à jour /!\
+pro <- read.csv(file="CSPre/D5_re.csv", encoding="UTF8")
+enq.final$D5_re <- pro$x
+rm(pro)
+# Remettre les CSP dans l'ordre #
+enq.final$D5_re <- factor(enq.final$D5_re,levels=c("Agriculteurs exploitants","Artisans, commerçants","Cadres",
+                                                   "Professions intermédiaires","Employés","Ouvriers","Sans activité professionnelle"))
+library(questionr)
+freq(enq.final$D5_re)
 
 #Qui compose votre foyer ? 
 colnames(enq.final)[129]
@@ -2248,12 +2254,15 @@ table(enq.final$D7_re,useNA = "ifany")
 #Quelle est cette profession ?  #NADIA ET ANTOINE?
 colnames(enq.final)[133]
 attributes(enq.final)$variable.labels[133]
-summary(enq.final$D8)
-typeof(enq.final$D8)
-class(enq.final$D8)
-table(enq.final$D8)
-sum(is.na(enq.final$D8))
-levels(enq.final$D8)
+#Recodage sous excel puis intégration à base (D8_re)#
+# /!\ Vérifier chemin / dernière version du csv pour le recodage à jour /!\
+pro2 <- read.csv(file="CSPre/D8_re.csv", encoding="UTF8")
+enq.final$D8_re <- pro2$x
+rm(pro2)
+# Remettre les CSP dans l'ordre #
+enq.final$D8_re <- factor(enq.final$D8_re,levels=c("Agriculteurs exploitants","Artisans, commerçants","Cadres",
+                                                   "Professions intermédiaires","Employés","Ouvriers"))
+freq(enq.final$D8_re)
 
 #Quel est le diplôme le plus élevé de votre conjoint ?
 colnames(enq.final)[134]

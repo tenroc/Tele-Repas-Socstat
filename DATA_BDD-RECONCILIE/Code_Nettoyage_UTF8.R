@@ -672,7 +672,14 @@ table(enq.final$A22_re)
 #A FAIRE : REGROUPER LES HEURES 7h30/19h30...Interroger les valeurs aberrantes#
 ####
 
+colnames(enq.final)[43]
+attributes(enq.final)$variable.labels[43]
+typeof(enq.final$A23)
+class(enq.final$A23)
+table(enq.final$A23)
+sum(is.na(enq.final$A23))
 
+enq.final$A23_re <- enq.final$A23
 
 
 

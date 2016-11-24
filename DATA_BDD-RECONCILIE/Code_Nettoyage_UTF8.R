@@ -1965,8 +1965,8 @@ class(enq.final$D1)
 table(enq.final$D1)
 sum(is.na(enq.final$D1))
 enq.final$D1_re <- enq.final$D1
-#Deux 0 et un 9999, sont-ce des non-réponses? Je les supprime. Tous les autres semblent plausibles
-enq.final$D1_re [enq.final$D1 %in% c(0,9999999)]<-NA
+#Deux 0 et un 9999, ainsi qu'un 99 (Antoine me certifie que c'est une non réponse) sont-ce des non-réponses? Je les supprime. Tous les autres semblent plausibles
+enq.final$D1_re [enq.final$D1 %in% c(0,9999999,99)]<-NA
 #vérification
 table(enq.final$D1, useNA = "ifany")
 table(enq.final$D1_re, useNA = "ifany")
@@ -2005,12 +2005,12 @@ class(enq.final$D3_other)
 table(enq.final$D3_other)
 sum(is.na(enq.final$D3_other))
 
-enq.final$D3_other_re [enq.final$D3_other %in% c("14 ans au maroc, ne sait pas quel niveau")]<-"14 ans au Maroc (à reclasser)"
-enq.final$D3_other_re [enq.final$D3_other %in% c("à l'étranger jusqu'au lycée")]<-"a reclasser(etranger jusqu'au lycee)"
+enq.final$D3_other_re [enq.final$D3_other %in% c("14 ans au maroc, ne sait pas quel niveau")]<-"BEPC, brevet"
+enq.final$D3_other_re [enq.final$D3_other %in% c("à l'étranger jusqu'au lycée")]<-"BEPC, brevet"
 #A soumettre: pour moi on ne peut rien tirer de "à l'étranger jusqu'au lycée"
 enq.final$D3_other_re [enq.final$D3_other %in% c("brevet professionel")]<-"BEPC, brevet"
 enq.final$D3_other_re [enq.final$D3_other %in% c("diplome auxiliaire de puericulture", "niveau cap")]<-"CAP, BEP"
-enq.final$D3_other_re [enq.final$D3_other %in% c("Diplome d'état")]<-"Diplome d'état (à reclasser)"
+enq.final$D3_other_re [enq.final$D3_other %in% c("Diplome d'état")]<-"Licence, Bac+3"
 #Je comptais le mettre en NA
 enq.final$D3_other_re [enq.final$D3_other %in% c("Diplôme de retoucherie")]<-"CAP, BEP"
 # si retoucherie signifie retouche j'ai cherché et il suffit d'un CAP ou BEP pour y acceder
@@ -2091,12 +2091,12 @@ table(enq.final$D4_other)
 sum(is.na(enq.final$D4_other))
 
 enq.final$D4_other_re [enq.final$D4_other %in% c("autoentrepreneur","autoenrtrepreneur","Indépendant")]<-"Autoentrepreneur"
-enq.final$D4_other_re [enq.final$D4_other %in% c("en invalidité","maladie","en invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"En invalidité"
+enq.final$D4_other_re [enq.final$D4_other %in% c("en invalidité","maladie","en invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"Au foyer"
 enq.final$D4_other_re [enq.final$D4_other %in% c("SANS EMPLOI","sans emploi pas retraité")]<-"En recherche d'emploi"
 enq.final$D4_other_re [enq.final$D4_other %in% c("autre")]<-"Autre"
 enq.final$D4_other_re [enq.final$D4_other %in% c("femme au foyer")]<-"Au foyer"
 enq.final$D4_other_re [enq.final$D4_other %in% c("congé parentale")]<-"En congé parentale"
-enq.final$D4_other_re [enq.final$D4_other %in% c("Formation adulte")]<-"En formation"
+enq.final$D4_other_re [enq.final$D4_other %in% c("Formation adulte")]<-"Etudiant sans emploi"
 enq.final$D4_other_re [enq.final$D4_other %in% c("intérim")]<-"Interim"
 enq.final$D4_other_re [enq.final$D4_other %in% c("rentiste")]<-"Rentier ou dentiste"
 
@@ -2224,13 +2224,13 @@ sum(is.na(enq.final$D7_other))
 levels(enq.final$D7_other)
 #QUID DE RESTAURATEUR?
 enq.final$D7_other_re [enq.final$D7_other %in% c("agriculteur (auto entrepreneur)","Chef d'entreprise","patron","restaurateur")]<-"Autoentrepreneur"
-enq.final$D7_other_re [enq.final$D7_other %in% c("en invalidité","Handicapés","invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"Non, en invalidité"
+enq.final$D7_other_re [enq.final$D7_other %in% c("en invalidité","Handicapés","invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"Au foyer"
 enq.final$D7_other_re [enq.final$D7_other %in% c("refus")]<-"Refus"
 enq.final$D7_other_re [enq.final$D7_other %in% c("variable")]<-"variable"
 enq.final$D7_other_re [enq.final$D7_other %in% c("SANS EMPLOI")]<-levels(enq.final[,131])[5]
 enq.final$D7_other_re [enq.final$D7_other %in% c("Conger maternité")]<-"congé maternité"
-enq.final$D7_other_re [enq.final$D7_other %in% c("etudiante")]<-"Etudiant"
-enq.final$D7_other_re [enq.final$D7_other %in% c("Formation")]<-"en formation"
+enq.final$D7_other_re [enq.final$D7_other %in% c("etudiante")]<-"Etudiant sans emploi"
+enq.final$D7_other_re [enq.final$D7_other %in% c("Formation")]<-"Etudiant sans emploi"
 enq.final$D7_other_re [enq.final$D7_other %in% c("intercontrat","interim")]<-"interim"
 enq.final$D7_other_re [enq.final$D7_other %in% c("medecin")]<-"Emploi"
 table(enq.final$D7_other_re,useNA="ifany")
@@ -2292,9 +2292,9 @@ table(enq.final$D3_bis)
 sum(is.na(enq.final$D3_bis))
 levels(enq.final$D3_bis)
 enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("certificat de capacite professionnelle taxi")]<-"CAP, BEP"
-enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("lycée à l'étranger")]<-"NA ou BAC?"
-enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("Artiste")]<-"Artiste"
-enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("refus")]<-"Refus"
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("lycée à l'étranger")]<-"Baccalauréat, BP"
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("Artiste")]<-"Aucun diplôme"
+enq.final$D3_bis_other_re [enq.final$D3_bis_other %in% c("refus")]<-"Aucun diplôme"
 table(enq.final$D3_bis_other_re)
 
 #Lien D3_bis D3_bis_other

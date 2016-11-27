@@ -2391,3 +2391,21 @@ table(enq.final$D12_re)
 #Regardez si le signe euro fonctionne chez vous
 
 #D14 c'est les commentaires. Comment les traiter
+# Intégration des remarques enquêteur (erreurs de saisie etc...)
+#Supression des deux lignes test qui ne devraient pas être là
+enq.final<-enq.final[!(enq.final$id_r==1 | enq.final$id_r==2),]
+# id_r = 35 > pb sur les heures de repas, ne garder que la première. Voir avec le groupe qui s'en occupe
+# id_r = 62 > pb sur le diplome. "CAP d'enseignant" = Certificat d'Aptitude au Professorat de lycée professionnel?
+# Je le recode en bac+2 mais dépend des cas
+enq.final[(enq.final$id_r==62),]$D3 <- "Deug, DUT, BTS, diplômes des professions sociales ou de la santé"
+#id_r = 100 : pas de rep sur la commune, je la remet à partir du numéro
+enq.final[(enq.final$id_r==100),]$D2 <- "Gy"
+#id_r = 108 : un repas en trop, à voir avec le groupe qui s'en occupe
+#id_r = 162 : Doublon à cause bug questionnaire, je le supprime au cas où ce ne soit pas déjà fait plus haut
+enq.final<-enq.final[!(enq.final$id_r==162),]
+#id_r = 211 : un seul repas, mettre les deux autres en NA (mettre dans partie alim ?)
+#id_r = 248 : ajout CSP du mari (ingénieur des mines)
+enq.final[(enq.final$id_r==248),]$D8_re <- "Cadres"
+#id_r = 276 : ajout CSP de la femme (sophrologue)
+enq.final[(enq.final$id_r==276),]$D8_re <- "Professions intermédiaires"
+

@@ -2142,14 +2142,12 @@ colnames(enq.final)[128]
 attributes(enq.final)$variable.labels[128]
 #Recodage sous excel puis intégration à base (D5_re)#
 # /!\ Vérifier chemin / dernière version du csv pour le recodage à jour /!\
-pro <- read.csv(file="CSPre/D5_re.csv", encoding="UTF8")
-enq.final$D5_re <- pro$x
+pro <- read.csv(file="_Data/BDD réconciliée/BDD/D5_re.csv", encoding="UTF8")
+enq.final <- merge(enq.final, pro, by ="id_r", sort = FALSE) 
 rm(pro)
 # Remettre les CSP dans l'ordre #
 enq.final$D5_re <- factor(enq.final$D5_re,levels=c("Agriculteurs exploitants","Artisans, commerçants","Cadres",
                                                    "Professions intermédiaires","Employés","Ouvriers","Sans activité professionnelle"))
-library(questionr)
-freq(enq.final$D5_re)
 
 
 #Qui compose votre foyer ? 
@@ -2260,13 +2258,15 @@ colnames(enq.final)[133]
 attributes(enq.final)$variable.labels[133]
 #Recodage sous excel puis intégration à base (D8_re)#
 # /!\ Vérifier chemin / dernière version du csv pour le recodage à jour /!\
-pro2 <- read.csv(file="CSPre/D8_re.csv", encoding="UTF8")
-enq.final$D8_re <- pro2$x
+pro2 <- read.csv(file="_Data/BDD réconciliée/BDD/D8_re.csv", encoding="UTF8")
+enq.final <- merge(enq.final, pro2, by ="id_r", sort = FALSE)
 rm(pro2)
+enq.final$X.x <- NULL
+enq.final$X.y <- NULL
 # Remettre les CSP dans l'ordre #
 enq.final$D8_re <- factor(enq.final$D8_re,levels=c("Agriculteurs exploitants","Artisans, commerçants","Cadres",
                                                    "Professions intermédiaires","Employés","Ouvriers"))
-freq(enq.final$D8_re)
+
 
 #Quel est le diplôme le plus élevé de votre conjoint ?
 colnames(enq.final)[134]

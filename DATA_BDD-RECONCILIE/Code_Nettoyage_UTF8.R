@@ -1956,7 +1956,7 @@ table(enq.final$D13)
 sum(is.na(enq.final$D13))
 enq.final$D13_re <- enq.final$D13
 #Fait : rien #
-#D13 : Quel âge avez-vous ?  #
+#D1 : Quel âge avez-vous ?  #
 colnames(enq.final)[122]
 attributes(enq.final)$variable.labels[122]
 summary(enq.final$D1)
@@ -1965,12 +1965,18 @@ class(enq.final$D1)
 table(enq.final$D1)
 sum(is.na(enq.final$D1))
 enq.final$D1_re <- enq.final$D1
-#Deux 0 et un 9999, ainsi qu'un 99 (Antoine me certifie que c'est une non réponse) sont-ce des non-réponses? Je les supprime. Tous les autres semblent plausibles
+#Deux 0 et un 9999, ainsi qu'un 99 (Antoine me certifie que c'est une non réponse) sont-ce tous des non-réponses? Je les met en NA. Tous les autres semblent plausibles
 enq.final$D1_re [enq.final$D1 %in% c(0,9999999,99)]<-NA
 #vérification
 table(enq.final$D1, useNA = "ifany")
 table(enq.final$D1_re, useNA = "ifany")
 #Fait : valeurs abjectes supprimées (3 NA en plus) #
+
+#Création d'une variable regroupant les âges par classes d'âges (cf recensement 2013)
+enq.final$age_calage <- cut(enq.final$D1_re, c(18, 25,  40,  55, 65,80,100), include.lowest=TRUE, 
+                     right=FALSE, labels=c("18-24", "25-39", "40-54", "55-64", "65-79", "80 et plus"))
+table(enq.final$age_calage,useNA = "ifany")#même nombre de NA
+table(enq.final$D1_re,enq.final$age_calage,useNA = "ifany")#visiblement c'est bon
 
 #D2 : Quel est le nom de votre commune ?  #
 colnames(enq.final)[123]
@@ -2090,16 +2096,15 @@ class(enq.final$D4_other)
 table(enq.final$D4_other)
 sum(is.na(enq.final$D4_other))
 
-enq.final$D4_other_re [enq.final$D4_other %in% c("autoentrepreneur","autoenrtrepreneur","Indépendant")]<-"Autoentrepreneur"
+enq.final$D4_other_re [enq.final$D4_other %in% c("autoentrepreneur","autoenrtrepreneur","Indépendant")]<-"Indépendant"
 enq.final$D4_other_re [enq.final$D4_other %in% c("en invalidité","maladie","en invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"Au foyer"
 enq.final$D4_other_re [enq.final$D4_other %in% c("SANS EMPLOI","sans emploi pas retraité")]<-"En recherche d'emploi"
 enq.final$D4_other_re [enq.final$D4_other %in% c("autre")]<-"Autre"
 enq.final$D4_other_re [enq.final$D4_other %in% c("femme au foyer")]<-"Au foyer"
-enq.final$D4_other_re [enq.final$D4_other %in% c("congé parentale")]<-"En congé parentale"
+enq.final$D4_other_re [enq.final$D4_other %in% c("congé parentale")]<-"Au foyer"
 enq.final$D4_other_re [enq.final$D4_other %in% c("Formation adulte")]<-"Etudiant sans emploi"
-enq.final$D4_other_re [enq.final$D4_other %in% c("intérim")]<-"Interim"
-enq.final$D4_other_re [enq.final$D4_other %in% c("rentiste")]<-"Rentier ou dentiste"
-
+enq.final$D4_other_re [enq.final$D4_other %in% c("intérim")]<-"Emploi à temps partiel"
+enq.final$D4_other_re [enq.final$D4_other %in% c("rentiste")]<-"Rentier ou dentiste"#De toute façon celui-ci semble être un test (sociologue rentiste)
 
 
 
@@ -2170,12 +2175,11 @@ class(enq.final$D6)
 table(enq.final$D6)
 sum(is.na(enq.final$D6))
 levels(enq.final$D6_other)
-enq.final$D6_other_re [enq.final$D6_other %in% c("5 colocataires","collocation","colocataire","Colocataires","colocation","COLOCATION")]<-"vous et un ou plusieurs colocataire(s)"
-enq.final$D6_other_re [enq.final$D6_other %in% c("amis")]<-"vous et un ou plusieurs ami(s)"
+enq.final$D6_other_re [enq.final$D6_other %in% c("5 colocataires","collocation","colocataire","Colocataires","colocation","COLOCATION","amis")]<-"vous et un ou plusieurs colocataire(s)"
 enq.final$D6_other_re [enq.final$D6_other %in% c("moi et mes grands-parents", "Grands parents et moi")]<-"Vous et vos grand parents"
 enq.final$D6_other_re [enq.final$D6_other %in% c("Seule avec mon chat")]<-"Vous uniquement"
-enq.final$D6_other_re [enq.final$D6_other %in% c("2 enfants en accueuil et petit(e)s filles")]<-"vous , un ou plusieurs enfant(s) d'accueil et un ou plusieurs petits enfants"
-enq.final$D6_other_re [enq.final$D6_other %in% c("Conjoint petits enfants enfant")]<-"conjoint avec enfant(s) et petit(s) enfant(s)"
+enq.final$D6_other_re [enq.final$D6_other %in% c("2 enfants en accueuil et petit(e)s filles")]<-"Vous et un ou plusieurs enfant(s)"
+enq.final$D6_other_re [enq.final$D6_other %in% c("Conjoint petits enfants enfant")]<-"Vous et votre conjoint(e), avec un ou plusieurs enfant(s)"
 enq.final$D6_other_re [enq.final$D6_other %in% c("mere conjointe fils")]<-"conjoint(e) avec enfant(s) et parent(s)"
 
 table(enq.final$D6_other_re,useNA = "ifany")
@@ -2223,16 +2227,16 @@ table(enq.final$D7_other)
 sum(is.na(enq.final$D7_other))
 levels(enq.final$D7_other)
 #QUID DE RESTAURATEUR?
-enq.final$D7_other_re [enq.final$D7_other %in% c("agriculteur (auto entrepreneur)","Chef d'entreprise","patron","restaurateur")]<-"Autoentrepreneur"
+enq.final$D7_other_re [enq.final$D7_other %in% c("agriculteur (auto entrepreneur)","Chef d'entreprise","patron","restaurateur")]<-"Indépendant"
 enq.final$D7_other_re [enq.final$D7_other %in% c("en invalidité","Handicapés","invalidite","invalide","INVALIDE","invalidité","Invalidité","invalidite","INVALIDITE","unvalidité")]<-"Au foyer"
 enq.final$D7_other_re [enq.final$D7_other %in% c("refus")]<-"Refus"
 enq.final$D7_other_re [enq.final$D7_other %in% c("variable")]<-"variable"
 enq.final$D7_other_re [enq.final$D7_other %in% c("SANS EMPLOI")]<-levels(enq.final[,131])[5]
-enq.final$D7_other_re [enq.final$D7_other %in% c("Conger maternité")]<-"congé maternité"
+enq.final$D7_other_re [enq.final$D7_other %in% c("Conger maternité")]<-"Au foyer"
 enq.final$D7_other_re [enq.final$D7_other %in% c("etudiante")]<-"Etudiant sans emploi"
 enq.final$D7_other_re [enq.final$D7_other %in% c("Formation")]<-"Etudiant sans emploi"
-enq.final$D7_other_re [enq.final$D7_other %in% c("intercontrat","interim")]<-"interim"
-enq.final$D7_other_re [enq.final$D7_other %in% c("medecin")]<-"Emploi"
+enq.final$D7_other_re [enq.final$D7_other %in% c("intercontrat","interim")]<-"Emploi à temps partiel"
+enq.final$D7_other_re [enq.final$D7_other %in% c("medecin")]<-"Emploi à plein temps"
 table(enq.final$D7_other_re,useNA="ifany")
 
 #Lien D7 D7_other

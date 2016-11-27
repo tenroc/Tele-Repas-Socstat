@@ -2174,7 +2174,7 @@ table(enq.final$D6)
 sum(is.na(enq.final$D6))
 levels(enq.final$D6_other)
 enq.final$D6_other_re [enq.final$D6_other %in% c("5 colocataires","collocation","colocataire","Colocataires","colocation","COLOCATION","amis")]<-"vous et un ou plusieurs colocataire(s)"
-enq.final$D6_other_re [enq.final$D6_other %in% c("moi et mes grands-parents", "Grands parents et moi")]<-"Vous et vos grand parents"
+enq.final$D6_other_re [enq.final$D6_other %in% c("moi et mes grands-parents", "Grands parents et moi")]<-levels(enq.final[,129])[1]
 enq.final$D6_other_re [enq.final$D6_other %in% c("Seule avec mon chat")]<-"Vous uniquement"
 enq.final$D6_other_re [enq.final$D6_other %in% c("2 enfants en accueuil et petit(e)s filles")]<-"Vous et un ou plusieurs enfant(s)"
 enq.final$D6_other_re [enq.final$D6_other %in% c("Conjoint petits enfants enfant")]<-"Vous et votre conjoint(e), avec un ou plusieurs enfant(s)"
@@ -2389,6 +2389,71 @@ enq.final$D12_re <- factor(enq.final$D12_re,levels=c(levels(enq.final[,140])[2],
 table(enq.final$D12_re)
 #Niveaux reconnus
 #Regardez si le signe euro fonctionne chez vous
+
+#Transformation en unités de consommation
+#Complexe car nous n'avons pas le nombre d'adultes (par exemple pour vous, vos parents et 
+#eventuels frères et soeurs donc j'ai arbitrairement considéré qu'il y avait un frere et soeur)
+#j'ai en général minimisé le nombre de personnes quand il n'était pas défini (par exemple 3 ou plus=>3)
+#Parce qu'il me paraît bizarre de les supprimer
+#Ca me paraît beaucoup trop approximatif pour être exploitable
+
+
+enq.final$ucenfA<- ifelse(enq.final$D9=="1",enq.final$ucenfA<-1,ifelse(enq.final$D9=="2",enq.final$ucenfA<-2, ifelse(enq.final$D9=="3 ou plus",enq.final$ucenfA<-3,enq.final$ucenfA<-0)))
+table(enq.final$ucenfA)
+
+enq.final$ucenf<-ifelse(enq.final$ucenfA==1,ifelse(enq.final$D10_bis>13,enq.final$ucenf<-0.5,enq.final$ucenf<-0.3 ),ifelse(enq.final$D10>13,enq.final$ucenf<-enq.final$ucenfA*0.5,ifelse(enq.final$D11<14, enq.final$ucenf<-enq.final$ucenfA*0.3, ifelse(enq.final$ucenfA==2, enq.final$ucenf<-0.8, enq.final$ucenf<-1.2 ))))                                                                                                                                                    
+
+table(enq.final$ucenfA,enq.final$ucenf)
+table(enq.final$D10,enq.final$ucenf)
+table(enq.final$ucenf,enq.final$D10)
+table(enq.final$ucenfA,enq.final$ucenf)
+table(enq.final$ucenfA,enq.final$ucenf)
+table(enq.final$ucenfA,enq.final$ucenf)
+#Ci-dessous j'utilise les modalités de la base principale pour que les autres ne soient pas recodés trop grossièrement
+enq.final$unit_conso<-ifelse(enq.final$D6=="Vous uniquement",enq.final$unit_conso<-1,
+                             ifelse(enq.final$D6==levels(enq.final[,129])[1],enq.final$unit_conso<-2.5,
+                                    ifelse(enq.final$D6=="Vous et un ou plusieurs enfant(s)",enq.final$unit_conso<-1+enq.final$ucenf,
+                                           ifelse(enq.final$D6=="Vous et votre conjoint(e) (sans enfant)",enq.final$unit_conso<-1.5,
+                                                  ifelse(enq.final$D6=="Vous et votre conjoint(e), avec un ou plusieurs enfant(s)",enq.final$unit_conso<-1.5+enq.final$ucenf,
+                                                         enq.final$unit_conso<-1)))))
+enq.final$ucB<-ifelse(enq.final$D6_other=="Seule avec mon chat",enq.final$ucB<-1,
+                      ifelse(enq.final$D6_other=="5 colocataires",enq.final$ucB<-3.5,
+                             ifelse(enq.final$D6_other=="Colocataires"|enq.final$D6_other=="amis",enq.final$ucB<-2,
+                                    ifelse(enq.final$D6_other %in% c("collocation","colocataire","colocation","COLOCATION"), enq.final$ucB<-1.5,
+                                           ifelse(enq.final$D6_other %in% c("Grands parents et moi","moi et mes grands-parents"), enq.final$ucB<-2,
+                                                  ifelse(enq.final$D6_other=="mere conjointe fils", enq.final$ucB<-2.3,
+                                                         ifelse(enq.final$D6_other=="2 enfants en accueuil et petit(e)s filles", enq.final$ucB<-2.2,
+                                                                ifelse(enq.final$D6_other=="Conjoint petits enfants enfant", enq.final$ucB<-2.6,enq.final$ucB<-enq.final$ucB))))))))
+
+
+enq.final$ucX<-ifelse(is.na(enq.final$D6),enq.final$ucX<-enq.final$ucB,enq.final$ucX<-enq.final$unit_conso )
+table(enq.final$unit_conso,useNA="ifany")
+table(enq.final$ucX,useNA="ifany")
+table(enq.final$ucB,useNA="ifany")
+table(enq.final$D6,useNA = "ifany")
+table(enq.final$D6,enq.final$unit_conso,useNA = "ifany")
+table(enq.final$D6,enq.final$ucX,useNA = "ifany")
+table(enq.final$D6,enq.final$D9,useNA  = "ifany")
+#8 NA => Individus ayant déclaré vivre avec un ou des enfant(s) dans le foyer mais pas plus au moins la moitié du temps
+
+table(enq.final$D6,enq.final$D11,useNA = "ifany")
+table(enq.final$D6,enq.final$D10_bis,useNA = "ifany")
+table(enq.final$D6_other,enq.final$unit_conso)
+
+enq.final$uc_mois<-ifelse(enq.final$D12_re==levels(enq.final[,140])[2], enq.final$uc_mois<-550/enq.final$ucX,
+                          ifelse(enq.final$D12_re==levels(enq.final[,140])[3],enq.final$uc_mois<-1250/enq.final$ucX,
+                                 ifelse(enq.final$D12_re==levels(enq.final[,140])[4],enq.final$uc_mois<-1550/enq.final$ucX,
+                                        ifelse(enq.final$D12_re==levels(enq.final[,140])[5],enq.final$uc_mois<-1850/enq.final$ucX,
+                                               ifelse(enq.final$D12_re==levels(enq.final[,140])[6],enq.final$uc_mois<-2250/enq.final$ucX,
+                                                      ifelse(enq.final$D12_re==levels(enq.final[,140])[7],enq.final$uc_mois<-2700/enq.final$ucX,
+                                                             ifelse(enq.final$D12_re==levels(enq.final[,140])[8],enq.final$uc_mois<-3150/enq.final$ucX,
+                                                                    ifelse(enq.final$D12_re==levels(enq.final[,140])[9],enq.final$uc_mois<-3750/enq.final$ucX,
+                                                                           ifelse(enq.final$D12_re==levels(enq.final[,140])[10],enq.final$uc_mois<-4700/enq.final$ucX,
+                                                                                  ifelse(enq.final$D12_re==levels(enq.final[,140])[1],enq.final$uc_mois<-7950/enq.final$ucX,enq.final$uc_mois<-NA))))))))))
+
+table(enq.final$uc_mois,useNA="ifany")
+#un peu grossier
+#170 NA...
 
 #D14 c'est les commentaires. Comment les traiter
 # Intégration des remarques enquêteur (erreurs de saisie etc...)

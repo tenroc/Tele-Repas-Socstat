@@ -2391,6 +2391,9 @@ table(enq.final$D12_re)
 #Regardez si le signe euro fonctionne chez vous
 
 #Transformation en unités de consommation
+
+#***CODE SEB**#
+
 #Complexe car nous n'avons pas le nombre d'adultes (par exemple pour vous, vos parents et 
 #eventuels frères et soeurs donc j'ai arbitrairement considéré qu'il y avait un frere et soeur)
 #j'ai en général minimisé le nombre de personnes quand il n'était pas défini (par exemple 3 ou plus=>3)
@@ -2454,6 +2457,136 @@ enq.final$uc_mois<-ifelse(enq.final$D12_re==levels(enq.final[,140])[2], enq.fina
 table(enq.final$uc_mois,useNA="ifany")
 #un peu grossier
 #170 NA...
+
+#Transformation en unités de consommation
+##**CODE TIM**##
+
+#VARIABLES UTILISEES
+
+#"Combien d’enfants vivent avec vous au moins la moitié du temps? "
+colnames(enq.final)[136]
+attributes(enq.final)$variable.labels[136]
+table(enq.final$D9)
+
+#"Quel âge a votre enfant ?"
+colnames(enq.final)[137]
+attributes(enq.final)$variable.labels[137]
+table(enq.final$D10_bis)
+
+# "Quel âge a le plus jeune ?"
+colnames(enq.final)[138]
+attributes(enq.final)$variable.labels[138]
+table(enq.final$D10)
+
+#Quel âge a le plus âgé?
+colnames(enq.final)[139]
+attributes(enq.final)$variable.labels[139]
+table(enq.final$D11)
+
+
+##ENFANTS##
+
+
+#On crée une variable ucenfA avec le nombre d'enfants#
+enq.final$ucenfA<- ifelse(enq.final$D9=="1",enq.final$ucenfA<-1,ifelse(enq.final$D9=="2",enq.final$ucenfA<-2, ifelse(enq.final$D9=="3 ou plus",enq.final$ucenfA<-3,enq.final$ucenfA<-0)))
+table(enq.final$D9)
+table(enq.final$ucenfA)
+
+enq.final$ucenf <- NULL
+
+#On attribue le nombre d'unité de consommation adapté pour les réponses 0 et 1
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="1", ifelse(enq.final$D10_bis<14,0.3,0.5),0)
+table(enq.final$ucenf)
+
+#On attribue le nombre d'unité de consommation adapté pour les réponses à 2 et 3enfants#
+#On commence par rajouter le nombre d'uc pour l'enfant le âgé#
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="2"| enq.final$ucenfA=="3", ifelse(enq.final$D11<14, enq.final$ucenf + 0.3,0.5),enq.final$ucenf)
+table(enq.final$ucenf)
+#On rajoute maintenant le nombre d'uc pour l'enfant le plus jeune#
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="2"| enq.final$ucenfA=="3", ifelse(enq.final$D10<14, enq.final$ucenf + 0.3,0.5),enq.final$ucenf)
+table(enq.final$ucenf)
+
+#Il nous reste maintenant à attribuer l'uc pour l'enfant à l'âge inconnu : on attribue au troisième la moyenne de l'âge des premiers#
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="3", ifelse(((enq.final$D10+enq.final$D11)/2)<14, enq.final$ucenf + 0.3,0.5),enq.final$ucenf)
+table(enq.final$ucenf)
+
+##ADULTES##
+
+#On remplace les modalités par le nombre d'adultes correspondant#
+enq.final$ucad <- enq.final$D6_re
+table(enq.final$ucad)
+class(enq.final$ucad)
+levels(enq.final$ucad) <- c("1","1","1.5","1.5","1.5","Autre")
+table(enq.final$ucad)
+#Il y a 8 individus avec "autres"#
+table(enq.final$D6_other_re)
+#Mais 13 modalités diff dans D6_other_re, car certaines ont été rebasculées#
+
+#On s'occupe des AUTRES, en repartant de D6 other pour plus de granularité#
+enq.final$ucad2 <- as.factor(enq.final$D6_other_re)
+levels(enq.final$ucad2)
+levels(enq.final$ucad2) <- c("2","2","2","1","1.5","1")
+table(enq.final$ucad2)
+
+enq.final$ucad2 <- as.character(enq.final$ucad2)
+enq.final$ucad <- as.character(enq.final$ucad)
+
+enq.final$ucad <- ifelse(is.na(enq.final$ucad2)==FALSE,enq.final$ucad2,enq.final$ucad)
+table(enq.final$ucad)
+
+#On vérifie qu'on n'a pas perdu d'observations#
+sum(is.na(enq.final$ucad))
+sum(is.na(enq.final$D6_r))
+#On a bien toujours 27 NA#
+
+#On a le nombre d'unités de consommation pour les adultes et pour les enfants. On les somme#
+table(enq.final$ucad)
+enq.final$ucad <- as.numeric(enq.final$ucad)
+enq.final$ucenf <- as.numeric(enq.final$ucenf)
+
+#On remplace les NA du nombre d'UC enfants par des 0 pour pouvoir sommer les variables
+#et ne se retrouver que avec les NA de D6_re#
+enq.final$ucenf <- ifelse(is.na(enq.final$ucenf),0,enq.final$ucenf)
+enq.final$uc <- enq.final$ucad + enq.final$ucenf
+table(enq.final$uc)
+
+#Résultat : on a bien le nombre de NA souhaité#
+sum(is.na(enq.final$uc))
+sum(is.na(enq.final$D6_r))
+
+
+## On s'occupe maintenant du revenu
+enq.final$revenu <- enq.final$D12_re
+levels(enq.final$revenu) <- c("550","1250","1550","1850","2250","2700","3150","3750","4700","7950","NA","NA")
+table(enq.final$revenu)
+#Gymnastique nécessaire à cause du pb factor/char#
+enq.final$revenu <- as.numeric(as.character(enq.final$revenu))
+table(enq.final$revenu)
+enq.final$revenuparuc <- enq.final$revenu/enq.final$uc
+table(enq.final$revenuparuc)
+table(enq.final$D12_re)
+#On crée une variable quanti, avec que des NA, pour pouvoir sortir des stats descriptives rapidos, et on rabat les problèmes non traités sur revenuparuc#
+enq.final$revenuparucquanti <- enq.final$revenuparuc
+enq.final$revenuparuc <- as.character(enq.final$revenuparuc)
+enq.final$revenuparuc <- ifelse(enq.final$D12_re=="Refus","Refus",enq.final$revenuparuc)
+enq.final$revenuparuc <- ifelse(enq.final$D12_re=="Ne sait pas","Ne sait pas",enq.final$revenuparuc)
+#Les 27 NA sont toujours ceux du début. Si on ajoute les non réponses non attribuées à la question du revenu
+#on passe à 163. Donc le compte est bon, on n'a perdu  personne en route.#
+sum(is.na(enq.final$revenuparuc))
+sum(is.na(enq.final$revenuparucquanti))
+27+113+23
+hist(enq.final$revenuparucquanti[is.na(enq.final$revenuparucquanti)==FALSE])
+plot(density(enq.final$revenuparucquanti[is.na(enq.final$revenuparucquanti)==FALSE]))
+summary(enq.final$revenuparucquanti[is.na(enq.final$revenuparucquanti)==FALSE])
+
+
+
+
+
+
+
+
+
 
 #D14 c'est les commentaires. Comment les traiter
 # Intégration des remarques enquêteur (erreurs de saisie etc...)

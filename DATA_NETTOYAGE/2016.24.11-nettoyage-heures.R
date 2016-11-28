@@ -89,12 +89,26 @@ for(i in 1:nrow(enq.final)){
     if (enq.final[i,"flag_n3"]==0){
       enq.final[i,"A22_SQ001_SQ001_R"] <- NA
       enq.final[i,"A22_SQ001_SQ002_R"] <- NA
+      enq.final[i,"A23"] <- NA
+      enq.final[i,"A24"] <- NA
+      enq.final[i,"A25"] <- NA
+      enq.final[i,"A25_other"] <- NA
+      enq.final[i,"A26_5"] <- NA
+      enq.final[i,"A26_1"] <- NA
+      enq.final[i,"A26_2"] <- NA
+      enq.final[i,"A26_3"] <- NA
+      enq.final[i,"A26_6"] <- NA
+      enq.final[i,"A26_other"] <- NA
+      
+      enq.final[i,"R1_3"] <- NA
+      enq.final[i,"r2_3"] <- NA
+      enq.final[i,"r6_3"] <- NA
     }
   }
 }
 }
 
-# heures2:
+# heures2: Invalid factor : lignes 27 et 5
 
 for(i in 1:nrow(enq.final)){
   if(is.na(enq.final[i,"flag_n2"])==F){
@@ -103,8 +117,58 @@ for(i in 1:nrow(enq.final)){
   } else {
     if (enq.final[i,"flag_n2"]==0){
       if (is.na(enq.final[i,"A22_SQ001_SQ001_R"]) != T){
-        enq.final[i,"A17_SQ001_SQ001_R"] <- enq.final[i,"A22_SQ001_SQ001_R"]
-        enq.final[i,"A17_SQ001_SQ002_R"] <- enq.final[i,"A22_SQ001_SQ002_R"]
+        
+        enq.final[i,"A17_SQ001_SQ001_R"] <-  enq.final[i,"A22_SQ001_SQ001_R"]
+        enq.final[i,"A17_SQ001_SQ002_R"] <-  enq.final[i,"A22_SQ001_SQ002_R"]
+        enq.final[i,"A18"] <-  enq.final[i,"A23"]
+        enq.final[i,"A19"] <-  enq.final[i,"A24"]
+        enq.final[i,"A20"] <-  enq.final[i,"A25"]
+        enq.final[i,"A20_other"] <-  enq.final[i,"A25_other"]
+        enq.final[i,"A21_1"] <-  enq.final[i,"A26_5"]
+        enq.final[i,"A21_2"] <-  enq.final[i,"A26_1"]
+        enq.final[i,"A21_3"] <-  enq.final[i,"A26_2"]
+        enq.final[i,"A21_4"] <-  enq.final[i,"A26_3"]
+        enq.final[i,"A21_5"] <-  enq.final[i,"A26_6"]
+        enq.final[i,"A21_other"] <-  enq.final[i,"A26_other"]
+        
+        enq.final[i,"R1_2"] <-  enq.final[i,"R1_3"]
+        enq.final[i,"r2_2"] <-  enq.final[i,"r2_3"]
+        enq.final[i,"r6_2"] <-  enq.final[i,"r6_3"]
+        
+        enq.final[i,"A22_SQ001_SQ001_R"] <- NA
+        enq.final[i,"A22_SQ001_SQ002_R"] <- NA
+        enq.final[i,"A23"] <- NA
+        enq.final[i,"A24"] <- NA
+        enq.final[i,"A25"] <- NA
+        enq.final[i,"A25_other"] <- NA
+        enq.final[i,"A26_5"] <- NA
+        enq.final[i,"A26_1"] <- NA
+        enq.final[i,"A26_2"] <- NA
+        enq.final[i,"A26_3"] <- NA
+        enq.final[i,"A26_6"] <- NA
+        enq.final[i,"A26_other"] <- NA
+        
+        enq.final[i,"R1_3"] <- NA
+        enq.final[i,"r2_3"] <- NA
+        enq.final[i,"r6_3"] <- NA
+        
+      } else {
+        enq.final[i,"A17_SQ001_SQ001_R"] <-  NA
+        enq.final[i,"A17_SQ001_SQ002_R"] <-  NA
+        enq.final[i,"A18"] <-  NA
+        enq.final[i,"A19"] <-  NA
+        enq.final[i,"A20"] <-  NA
+        enq.final[i,"A20_other"] <-  NA
+        enq.final[i,"A21_1"] <-  NA
+        enq.final[i,"A21_2"] <-  NA
+        enq.final[i,"A21_3"] <-  NA
+        enq.final[i,"A21_4"] <-  NA
+        enq.final[i,"A21_5"] <-  NA
+        enq.final[i,"A21_other"] <-  NA
+        
+        enq.final[i,"R1_2"] <-  NA
+        enq.final[i,"r2_2"] <-  NA
+        enq.final[i,"r6_2"] <-  NA
       }
     }
   }
@@ -119,11 +183,61 @@ for(i in 1:nrow(enq.final)){
     enq.final[i,"A2_1_1_R"] <- as.character(as.numeric(enq.final[i,"A2_1_1_R"]) + 12)
   } else {
     if (enq.final[i,"flag_n1"]==0){
-      if (is.na(enq.final[i,"A2_2_1_R"]) != T){
-        enq.final[i,"A2_1_1_R"] <- enq.final[i,"A17_SQ001_SQ001_R"]
-        enq.final[i,"A2_1_2_R"] <- enq.final[i,"A17_SQ001_SQ002_R"]
+      if (is.na(enq.final[i,"A17_SQ001_SQ001_R"]) != T){
+       
+        enq.final[i,"A2_1_1_R"] <-  enq.final[i,"A17_SQ001_SQ001_R"]
+        enq.final[i,"A2_1_2_R"] <-  enq.final[i,"A17_SQ001_SQ002_R"]
+        enq.final[i,"A3"] <-  enq.final[i,"A18"]
+        enq.final[i,"A6"] <-  enq.final[i,"A19"]
+        enq.final[i,"A8"] <-  enq.final[i,"A20"]
+        enq.final[i,"A8_other"] <-  enq.final[i,"A20_other"]
+        enq.final[i,"A11_1"] <-  enq.final[i,"A21_1"]
+        enq.final[i,"A11_2"] <-  enq.final[i,"A21_2"]
+        enq.final[i,"A11_3"] <-  enq.final[i,"A21_3"]
+        enq.final[i,"A11_4"] <-  enq.final[i,"A21_4"]
+        enq.final[i,"A11_5"] <-  enq.final[i,"A21_5"]
+        enq.final[i,"A11_other"] <-  enq.final[i,"A21_other"]
+        
+        enq.final[i,"R1_1"] <-  enq.final[i,"R1_2"]
+        enq.final[i,"r2_1"] <-  enq.final[i,"r2_2"]
+        enq.final[i,"r3_1"] <-  enq.final[i,"r3_2"]
+        
+        enq.final[i,"A4"] <- NA
+        enq.final[i,"A5"] <- NA
+        enq.final[i,"A7"] <- NA
+        enq.final[i,"A9"] <- NA
+        enq.final[i,"A10"] <- NA
+        enq.final[i,"A10_other"] <- NA
+        enq.final[i,"A12"] <- NA
+        enq.final[i,"A13_1"] <- NA
+        enq.final[i,"A13_2"] <- NA
+        enq.final[i,"A13_3"] <- NA
+        enq.final[i,"A13_4"] <- NA
+        enq.final[i,"A13_5"] <- NA
+        enq.final[i,"A13_other"] <- NA
+        enq.final[i,"A14"] <- NA
+        enq.final[i,"A15"] <- NA
+        enq.final[i,"A16"] <- NA
+        
+        enq.final[i,"A17_SQ001_SQ001_R"] <-  NA
+        enq.final[i,"A17_SQ001_SQ002_R"] <-  NA
+        enq.final[i,"A18"] <-  NA
+        enq.final[i,"A19"] <-  NA
+        enq.final[i,"A20"] <-  NA
+        enq.final[i,"A20_other"] <-  NA
+        enq.final[i,"A21_1"] <-  NA
+        enq.final[i,"A21_2"] <-  NA
+        enq.final[i,"A21_3"] <-  NA
+        enq.final[i,"A21_4"] <-  NA
+        enq.final[i,"A21_5"] <-  NA
+        enq.final[i,"A21_other"] <-  NA
+        
+        enq.final[i,"R1_2"] <-  NA
+        enq.final[i,"r2_2"] <-  NA
+        enq.final[i,"r6_2"] <-  NA
+        
       } else {
-        rm (enq.final[i,])
+        enq.final[i,] <- NA
       }
     }
   }

@@ -2148,7 +2148,7 @@ rm(pro)
 # Remettre les CSP dans l'ordre #
 enq.final$D5_re <- factor(enq.final$D5_re,levels=c("Agriculteurs exploitants","Artisans, commerçants","Cadres",
                                                    "Professions intermédiaires","Employés","Ouvriers","Sans activité professionnelle"))
-
+table (enq.final$D5_re)
 
 #Qui compose votre foyer ? 
 colnames(enq.final)[129]
@@ -2266,7 +2266,7 @@ enq.final$X.y <- NULL
 # Remettre les CSP dans l'ordre #
 enq.final$D8_re <- factor(enq.final$D8_re,levels=c("Agriculteurs exploitants","Artisans, commerçants","Cadres",
                                                    "Professions intermédiaires","Employés","Ouvriers"))
-
+table(enq.final$D8_re,useNA = "ifany")
 
 #Quel est le diplôme le plus élevé de votre conjoint ?
 colnames(enq.final)[134]

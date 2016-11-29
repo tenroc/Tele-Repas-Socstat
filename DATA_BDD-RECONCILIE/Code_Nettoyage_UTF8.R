@@ -1989,6 +1989,15 @@ sum(is.na(enq.final$D2))
 enq.final$D2_re <- enq.final$D2
 #Fait : rien, Voir Alejandra #
 
+#CODE DE ALEJANDRA pour le recodage des communes # 
+communes <- read.csv2(file="_Data/recodage communes_najenson.csv", encoding="UTF8")
+communes$X <- NULL
+communes$id <- NULL
+
+enq.final <- merge(enq.final,communes,by = "id_r",sort=FALSE)
+table(enq.final$D2_re,useNA="ifany")
+table(enq.final$UU2010_re,useNA="ifany")
+
 #D3 :  Quel est le diplôme le plus élevé que vous ayez obtenu ?  #
 colnames(enq.final)[124]
 attributes(enq.final)$variable.labels[124]

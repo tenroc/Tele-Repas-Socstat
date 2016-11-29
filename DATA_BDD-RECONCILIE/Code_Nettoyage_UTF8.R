@@ -2616,3 +2616,30 @@ enq.final[(enq.final$id_r==248),]$D8_re <- "Cadres"
 #id_r = 276 : ajout CSP de la femme (sophrologue)
 enq.final[(enq.final$id_r==276),]$D8_re <- "Professions intermédiaires"
 
+################# SUPPRESSION DES INDIVIDUS NON REPONSES -CODE ALEJANDRA #################
+
+#combien de NA dans chaque variable
+summary (enq.final$A1_re)
+summary (enq.final$D13_re)
+summary (enq.final$D1_re)
+summary (enq.final$D5_re)
+
+
+#quels sonts les effectifs qui ont des de NA dans chaque variable
+
+which (is.na(enq.final$A1_re))
+which (is.na(enq.final$D13_re))
+which (is.na(enq.final$D1_re))
+which (is.na(enq.final$D5_re))
+
+#enlever les NA
+
+enq.final <- enq.final[!is.na(enq.final$A1_re) & !is.na(enq.final$D13_re)& !is.na(enq.final$D1_re)& !is.na(enq.final$D5_re), ]
+
+#véRifier
+
+which (is.na(enq.final$A1_re))
+which (is.na(enq.final$D13_re))
+which (is.na(enq.final$D1_re))
+which (is.na(enq.final$D5_re))
+table(enq.final$D13_re, useNA = "ifany")

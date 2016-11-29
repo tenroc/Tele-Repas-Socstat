@@ -1,7 +1,7 @@
 ##### Importation BDD + Etiquettes #####
-setwd("C:/Users/sarah/Google Drive/2-TeleRepas")
-enq.final <- read.csv("_Data/BDD réconciliée/BDD/enq final.csv", encoding = "UTF-8")
-etiquettes <- read.csv("_Data/BDD réconciliée/Etiquettes/etiquettes.csv", encoding = "UTF-8")
+setwd("C:/Users/amaury/Documents/cours/M2/Enquete")
+enq.final <- read.csv("enq final.csv", encoding = "UTF-8")
+etiquettes <- read.csv("etiquettes.csv", encoding = "UTF-8")
 etiquettes <- as.character(etiquettes$x)
 attributes(enq.final)$variable.labels <- etiquettes
 attributes(enq.final)$variable.labels[120]
@@ -1221,8 +1221,8 @@ table(enq.final$A26_7_re)
 
 
 #R1_1#
-colnames(enq.final)[66]
-attributes(enq.final)$variable.labels[66]
+colnames(enq.final)[(65)]
+attributes(enq.final)$variable.labels[65]
 typeof(enq.final$R1_1)
 class(enq.final$R1_1)
 table(enq.final$R1_1)
@@ -1231,8 +1231,8 @@ sum(is.na(enq.final$R1_1))
 enq.final$R1_1_re <- enq.final$R1_1
 
 #R2_1#
-colnames(enq.final)[67]
-attributes(enq.final)$variable.labels[67]
+colnames(enq.final)[66]
+attributes(enq.final)$variable.labels[66]
 typeof(enq.final$r2_1)
 class(enq.final$r2_1)
 table(enq.final$r2_1)
@@ -1241,8 +1241,8 @@ sum(is.na(enq.final$r2_1))
 enq.final$r2_1_re <- enq.final$r2_1
 
 #R6_1#
-colnames(enq.final)[68]
-attributes(enq.final)$variable.labels[68]
+colnames(enq.final)[67]
+attributes(enq.final)$variable.labels[67]
 typeof(enq.final$r6_1)
 class(enq.final$r6_1)
 table(enq.final$r6_1)
@@ -1251,8 +1251,8 @@ sum(is.na(enq.final$r6_1))
 enq.final$r6_1_re <- enq.final$r6_1
 
 #R1_2#
-colnames(enq.final)[69]
-attributes(enq.final)$variable.labels[69]
+colnames(enq.final)[68]
+attributes(enq.final)$variable.labels[68]
 typeof(enq.final$R1_2)
 class(enq.final$R1_2)
 table(enq.final$R1_2)
@@ -1261,8 +1261,8 @@ sum(is.na(enq.final$R1_2))
 enq.final$R1_2_re <- enq.final$R1_2
 
 #R2_2#
-colnames(enq.final)[70]
-attributes(enq.final)$variable.labels[70]
+colnames(enq.final)[69]
+attributes(enq.final)$variable.labels[69]
 typeof(enq.final$r2_2)
 class(enq.final$r2_2)
 table(enq.final$r2_2)
@@ -1271,19 +1271,19 @@ sum(is.na(enq.final$r2_2))
 enq.final$r2_2_re <- enq.final$r2_2
 
 #R6_2#
-colnames(enq.final)[71]
-attributes(enq.final)$variable.labels[71]
+colnames(enq.final)[70]
+attributes(enq.final)$variable.labels[70]
 typeof(enq.final$r6_2)
 class(enq.final$r6_2)
 table(enq.final$r6_2)
 sum(is.na(enq.final$r6_2))
 
 enq.final$r6_2_re <- enq.final$r6_2
-### il manque la 1ere modalite "aucune attention", est confondu avec les NA
+
 
 #R1_3#
-colnames(enq.final)[72]
-attributes(enq.final)$variable.labels[72]
+colnames(enq.final)[71]
+attributes(enq.final)$variable.labels[71]
 typeof(enq.final$R1_3)
 class(enq.final$R1_3)
 table(enq.final$R1_3)
@@ -1292,19 +1292,18 @@ sum(is.na(enq.final$R1_3))
 enq.final$R1_3_re <- enq.final$R1_3
 
 #R2_3#
-colnames(enq.final)[73]
-attributes(enq.final)$variable.labels[73]
+colnames(enq.final)[72]
+attributes(enq.final)$variable.labels[72]
 typeof(enq.final$r2_3)
 class(enq.final$r2_3)
 table(enq.final$r2_3)
 sum(is.na(enq.final$r2_3))
 
 enq.final$r2_3_re <- as.factor(enq.final$r2_3)
-### idem R2_2 
 
 #R6_3#
-colnames(enq.final)[80]
-attributes(enq.final)$variable.labels[74]
+colnames(enq.final)[73]
+attributes(enq.final)$variable.labels[73]
 typeof(enq.final$r6_3)
 class(enq.final$r6_3)
 table(enq.final$r6_3)
@@ -1312,44 +1311,85 @@ sum(is.na(enq.final$r6_3))
 
 enq.final$r6_3_re <- enq.final$r6_3
 
-#R3#
+#R3_1#
+colnames(enq.final)[74]
+attributes(enq.final)$variable.labels[73]
+typeof(enq.final$r3_1)
+class(enq.final$r3_1)
+table(enq.final$r3_1)
+sum(is.na(enq.final$r3_1))
 enq.final$r3_1_re <- as.character(enq.final$r3_1)
+
+#R3_2#
+colnames(enq.final)[75]
+attributes(enq.final)$variable.labels[75]
+typeof(enq.final$r3_2)
+class(enq.final$r3_2)
+table(enq.final$r3_2)
+sum(is.na(enq.final$r3_2))
 enq.final$r3_2_re <- as.character(enq.final$r3_2)
+
+#R3_3#
+colnames(enq.final)[76]
+attributes(enq.final)$variable.labels[76]
+typeof(enq.final$r3_3)
+class(enq.final$r3_3)
+table(enq.final$r3_3)
+sum(is.na(enq.final$r3_3))
 enq.final$r3_3_re <- as.character(enq.final$r3_3)
+
+#R3_4#
+colnames(enq.final)[77]
+attributes(enq.final)$variable.labels[77]
+typeof(enq.final$r3_4)
+class(enq.final$r3_4)
+table(enq.final$r3_4)
+sum(is.na(enq.final$r3_4))
 enq.final$r3_4_re <- as.character(enq.final$r3_4)
+
+#R3_4#
+colnames(enq.final)[78]
+attributes(enq.final)$variable.labels[78]
+typeof(enq.final$r3_5)
+class(enq.final$r3_5)
+table(enq.final$r3_5)
+sum(is.na(enq.final$r3_5))
 enq.final$r3_5_re <- as.character(enq.final$r3_5)
 
-colnames(enq.final)[80]
-attributes(enq.final)$variable.labels[80]
+#R3_Other
+colnames(enq.final)[79]
+attributes(enq.final)$variable.labels[79]
 typeof(enq.final$r3_other)
 class(enq.final$r3_other)
 table(enq.final$r3_other)
 sum(is.na(enq.final$r3_other))
 # 1 seul obs dans cette modalite : reponse aberante "amis" Supprimer cet observation ??
-#enq.final$A13_5_other_re <- as.character(enq.final$A13_other)
+#enq.final$r3_other_re <- as.character(enq.final$r3_other)
 
 #R4#
 
-colnames(enq.final)[81] ## r4_14 ??? moi pas comprendre, il n y a que 12 modalite pour cette var 
+colnames(enq.final)[80]
+attributes(enq.final)$variable.labels[80]
+typeof(enq.final$r4_1)
+class(enq.final$r4_1)
+table(enq.final$r4_1)
+sum(is.na(enq.final$r4_1))
 enq.final$r4_1_re <- as.character(enq.final$r4_1)
+
 enq.final$r4_2_re <- as.character(enq.final$r4_2)
-enq.final$r4_3_re <- as.character(enq.final$r4_3)
 enq.final$r4_4_re <- as.character(enq.final$r4_4)
 enq.final$r4_5_re <- as.character(enq.final$r4_5)
-enq.final$r4_6_re <- as.character(enq.final$r4_6)
 enq.final$r4_7_re <- as.character(enq.final$r4_7)
-enq.final$r4_8_re <- as.character(enq.final$r4_8)
 enq.final$r4_9_re <- as.character(enq.final$r4_9)
 enq.final$r4_10_re <- as.character(enq.final$r4_10)
-##enq.final$r4_11_re <- as.character(enq.final$r4_11)
-table(enq.final$r4_11)                   ########## R_4_11 n existe pas ...
 enq.final$r4_12_re <- as.character(enq.final$r4_12)
 enq.final$r4_13_re <- as.character(enq.final$r4_13)
 enq.final$r4_14_re <- as.character(enq.final$r4_14)
 enq.final$r4_15_re <- as.character(enq.final$r4_15)
 
 
-table(enq.final$r4_other) #Quelle idee de demander de preciser le jeu video ! 
+table(enq.final$r4_other) 
+enq.final$r4_other_re <- as.character(enq.final$r4_other)
 
 #R5#
 colnames(enq.final)[92]
@@ -1363,89 +1403,184 @@ enq.final$r5_re <- enq.final$r5
 
 ##### Remettre les modalités dans l'ordre (écran) ####
 
-str(enq.final[,202:227])
+str(enq.final[,203:228])
 
 #R1_1_re 
-colnames(enq.final)[202]
+colnames(enq.final)[203]
 class(enq.final$R1_1_re)
 table(enq.final$R1_1_re)
 enq.final$R1_1_re <- relevel(enq.final$R1_1_re,"Oui")
 table(enq.final$R1_1_re)
 
 #R2_1_re 
-colnames(enq.final)[203]
+colnames(enq.final)[204]
 class(enq.final$r2_1_re)
 table(enq.final$r2_1_re)
 enq.final$r2_1_re <- as.factor(enq.final$r2_1_re)
 table(enq.final$r2_1_re)
 
 #R6_1_re 
-colnames(enq.final)[204]
+colnames(enq.final)[205]
 class(enq.final$r6_1_re)
 table(enq.final$r6_1_re)
 enq.final$r6_1_re <- relevel(enq.final$r6_1_re,"Oui")
 table(enq.final$r6_1_re)
 
 #R1_2_re 
-colnames(enq.final)[205]
-class(enq.final$r1_2_re)
-table(enq.final$r1_2_re)
-enq.final$r1_2_re <- relevel(enq.final$r1_2_re, "oui") ### ne fonctionne point 
-table(enq.final$r1_2_re)
-
-#R2_2_re ### en attente ####
 colnames(enq.final)[206]
+class(enq.final$R1_2_re)
+table(enq.final$R1_2_re)
+enq.final$R1_2_re <- relevel(enq.final$R1_2_re, "Oui") 
+table(enq.final$R1_2_re)
+
+#R2_2_re
+colnames(enq.final)[207]
 class(enq.final$r2_2_re)
 table(enq.final$r2_2_re)
 enq.final$r2_2_re <- as.factor(enq.final$r2_2_re)  
 table(enq.final$r2_2_re)
 
 #R6_2_re 
-colnames(enq.final)[207]
+colnames(enq.final)[208]
 class(enq.final$r6_2_re)
 table(enq.final$r6_2_re)
 enq.final$r6_2_re <- relevel(enq.final$r6_2_re,"Oui")
 table(enq.final$r6_2_re)
 
 #R1_3_re 
-colnames(enq.final)[208]
-class(enq.final$r1_3_re)
-table(enq.final$r1_3_re)
-enq.final$r1_3_re <- relevel(enq.final$r1_3_re,"Oui") ## ne fonctionne tj point !
-table(enq.final$r1_3_re)
-
-#R2_3_re ### idem R2_2
 colnames(enq.final)[209]
+class(enq.final$R1_3_re)
+table(enq.final$R1_3_re)
+enq.final$R1_3_re <- relevel(enq.final$R1_3_re,"Oui") 
+table(enq.final$R1_3_re)
+
+#R2_3_re 
+colnames(enq.final)[210]
 class(enq.final$r2_3_re)
 table(enq.final$r2_3_re)
 enq.final$r2_3_re <- as.factor(enq.final$r2_3_re)
 table(enq.final$r2_3_re)
 
 #R6_3_re 
-colnames(enq.final)[210]
+colnames(enq.final)[211]
 class(enq.final$r6_3_re)
 table(enq.final$r6_3_re)
 enq.final$r6_3_re <- relevel(enq.final$r6_3_re,"Oui")
 table(enq.final$r6_3_re)
 
 #R3_1_re
-colnames(enq.final)[211]
+colnames(enq.final)[212]
 class(enq.final$r3_1_re)
 table(enq.final$r3_1_re)
-enq.final$r3_1_re <- relevel(enq.final$r3_1_re,"Oui")
+enq.final$r3_3_re <- relevel(as.factor(enq.final$r3_1_re),"Oui")
 table(enq.final$r3_1_re)
 #R3_2_re
-colnames(enq.final)[212]
+colnames(enq.final)[213]
 class(enq.final$r3_2_re)
 table(enq.final$r3_2_re)
-enq.final$r3_2_re <- relevel(enq.final$r3_2_re,"Oui")
+enq.final$r3_3_re <- relevel(as.factor(enq.final$r3_2_re),"Oui")
 table(enq.final$r3_2_re)
-######### meme pb que pour R1_2_re et R1_3_re 
 
-#R4_re en attente de résoudre le pb des modalites
+#R3_3_re
+colnames(enq.final)[214]
+class(enq.final$r3_3_re)
+table(enq.final$r3_3_re)
+enq.final$r3_3_re <- relevel(as.factor(enq.final$r3_3_re),"Oui")
+table(enq.final$r3_3_re)
+
+#R3_4_re
+colnames(enq.final)[215]
+class(enq.final$r3_4_re)
+table(enq.final$r3_4_re)
+enq.final$r3_4_re <- relevel(as.factor(enq.final$r3_4_re),"Oui")
+table(enq.final$r3_4_re)
+
+#R3_5_re
+colnames(enq.final)[216]
+class(enq.final$r3_5_re)
+table(enq.final$r3_5_re)
+enq.final$r3_5_re <- relevel(as.factor(enq.final$r3_5_re),"Oui")
+table(enq.final$r3_5_re)
+
+#R4_1_re 
+colnames(enq.final)[217]
+class(enq.final$r4_1_re)
+table(enq.final$r4_1_re)
+enq.final$r4_1_re <- relevel(as.factor(enq.final$r4_1_re),"Oui")
+table(enq.final$r4_1_re)
+
+#R4_2_re 
+colnames(enq.final)[218]
+class(enq.final$r4_2_re)
+table(enq.final$r4_2_re)
+enq.final$r4_2_re <- relevel(as.factor(enq.final$r4_2_re),"Oui")
+table(enq.final$r4_2_re)
+
+#R4_4_re 
+colnames(enq.final)[219]
+class(enq.final$r4_4_re)
+table(enq.final$r4_4_re)
+enq.final$r4_4_re <- relevel(as.factor(enq.final$r4_4_re),"Oui")
+table(enq.final$r4_4_re)
+
+#R4_5_re 
+colnames(enq.final)[220]
+class(enq.final$r4_5_re)
+table(enq.final$r4_5_re)
+enq.final$r4_5_re <- relevel(as.factor(enq.final$r4_5_re),"Oui")
+table(enq.final$r4_5_re)
+
+#R4_7_re 
+colnames(enq.final)[221]
+class(enq.final$r4_7_re)
+table(enq.final$r4_7_re)
+enq.final$r4_7_re <- relevel(as.factor(enq.final$r4_7_re),"Oui")
+table(enq.final$r4_7_re)
+
+#R4_9_re 
+colnames(enq.final)[222]
+class(enq.final$r4_9_re)
+table(enq.final$r4_9_re)
+enq.final$r4_9_re <- relevel(as.factor(enq.final$r4_9_re),"Oui")
+table(enq.final$r4_9_re)
+
+#R4_12_re 
+colnames(enq.final)[223]
+class(enq.final$r4_12_re)
+table(enq.final$r4_12_re)
+enq.final$r4_12_re <- relevel(as.factor(enq.final$r4_12_re),"Oui")
+table(enq.final$r4_12_re)
+
+#R4_13_re 
+colnames(enq.final)[224]
+class(enq.final$r4_13_re)
+table(enq.final$r4_13_re)
+enq.final$r4_13_re <- relevel(as.factor(enq.final$r4_13_re),"Oui")
+table(enq.final$r4_13_re)
+
+#R4_14_re 
+colnames(enq.final)[225]
+class(enq.final$r4_14_re)
+table(enq.final$r4_14_re)
+enq.final$r4_14_re <- relevel(as.factor(enq.final$r4_14_re),"Oui")
+table(enq.final$r4_14_re)
+
+#R4_15_re 
+colnames(enq.final)[226]
+class(enq.final$r4_15_re)
+table(enq.final$r4_15_re)
+enq.final$r4_15_re <- relevel(as.factor(enq.final$r4_15_re),"Oui")
+table(enq.final$r4_15_re)
+
+#R4_10_re 
+colnames(enq.final)[227]
+class(enq.final$r4_10_re)
+table(enq.final$r4_10_re)
+enq.final$r4_10_re <- relevel(as.factor(enq.final$r4_10_re),"Oui")
+table(enq.final$r4_10_re)
 
 #R5_re
-colnames(enq.final) #### je sais pas ou il est mais il existe 
+colnames(enq.final)[228] 
 class(enq.final$r5_re)
 table(enq.final$r5_re)
 enq.final$r5_re <- as.factor(enq.final$r5_re)
@@ -1737,129 +1872,129 @@ table (enq.final$E8_b_re, enq.final$E8_b)
 #### Remettre les modalités dans l'ordre (équipement) ####
 
 
-str(enq.final[,228:249])
+str(enq.final[,229:250])
 
 #E1_re#
-colnames(enq.final)[228]
+colnames(enq.final)[229]
 class(enq.final$E1_re)
 table(enq.final$E1_re)
 enq.final$E1_re <- factor(enq.final$E1_re,levels = c("Vous n'avez pas internet à la maison", "Oui", "Non"))
 table(enq.final$E1_re)
 
 #E2_re#
-colnames(enq.final)[229]
+colnames(enq.final)[230]
 class(enq.final$E2_re)
 table(enq.final$E2_re) ##Déjà ordonnée selon le questionaire
 
 #E2_a_re#
-colnames(enq.final)[230]
+colnames(enq.final)[231]
 class(enq.final$E2_a_re)
 table(enq.final$E2_a_re) ##Déjà ordonnée selon le questionaire
 
 #E2_b_re#
-colnames(enq.final)[231]
+colnames(enq.final)[232]
 class(enq.final$E2_b_re)
 table(enq.final$E2_b_re)
 enq.final$E2_b_re <- factor(enq.final$E2_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E2_b_re)
 
 #E3_re#
-colnames(enq.final)[232]
+colnames(enq.final)[233]
 class(enq.final$E3_re)
 table(enq.final$E3_re) ##Déjà ordonnée selon le questionaire
 
 #E3_a_re#
-colnames(enq.final)[233]
+colnames(enq.final)[234]
 class(enq.final$E3_a_re)
 table(enq.final$E3_a_re) ##Déjà ordonnée selon le questionaire
 
 #E3_b_re#
-colnames(enq.final)[234]
+colnames(enq.final)[235]
 class(enq.final$E3_b_re)
 table(enq.final$E3_b_re)
 enq.final$E3_b_re <- factor(enq.final$E3_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E3_b_re)
 
 #E4_re#
-colnames(enq.final)[235]
+colnames(enq.final)[236]
 class(enq.final$E4_re)
 table(enq.final$E4_re) ##Déjà ordonnée selon le questionaire
 
 #E4_a_re#
-colnames(enq.final)[236]
+colnames(enq.final)[237]
 class(enq.final$E4_a_re)
 table(enq.final$E4_a_re) ##Déjà ordonnée selon le questionaire
 
 #E4_b_re#
-colnames(enq.final)[237]
+colnames(enq.final)[238]
 class(enq.final$E4_b_re)
 table(enq.final$E4_b_re)
 enq.final$E4_b_re <- factor(enq.final$E4_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E4_b_re)
 
 #E5_re#
-colnames(enq.final)[238]
+colnames(enq.final)[239]
 class(enq.final$E5_re)
 table(enq.final$E5_re) ##Déjà ordonnée selon le questionaire
 
 #E5_a_re#
-colnames(enq.final)[239]
+colnames(enq.final)[240]
 class(enq.final$E5_a_re)
 table(enq.final$E5_a_re) ##Déjà ordonnée selon le questionaire
 
 #E5_b_re#
-colnames(enq.final)[240]
+colnames(enq.final)[241]
 class(enq.final$E5_b_re)
 table(enq.final$E5_b_re)
 enq.final$E5_b_re <- factor(enq.final$E5_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E5_b_re)
 
 #E6_re#
-colnames(enq.final)[241]
+colnames(enq.final)[242]
 class(enq.final$E6_re)
 table(enq.final$E6_re) ##Déjà ordonnée selon le questionaire
 
 #E6_a_re#
-colnames(enq.final)[242]
+colnames(enq.final)[243]
 class(enq.final$E6_a_re)
 table(enq.final$E6_a_re) ##Déjà ordonnée selon le questionaire
 
 #E6_b_re#
-colnames(enq.final)[243]
+colnames(enq.final)[244]
 class(enq.final$E6_b_re)
 table(enq.final$E6_b_re)
 enq.final$E6_b_re <- factor(enq.final$E6_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E6_b_re)
 
 #E7_re#
-colnames(enq.final)[244]
+colnames(enq.final)[245]
 class(enq.final$E7_re)
 table(enq.final$E7_re) ##Déjà ordonnée selon le questionaire
 
 #E7_a_re#
-colnames(enq.final)[245]
+colnames(enq.final)[246]
 class(enq.final$E7_a_re)
 table(enq.final$E7_a_re) ##Déjà ordonnée selon le questionaire
 
 #E7_b_re#
-colnames(enq.final)[246]
+colnames(enq.final)[247]
 class(enq.final$E7_b_re)
 table(enq.final$E7_b_re)
 enq.final$E7_b_re <- factor(enq.final$E7_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))
 table(enq.final$E7_b_re)
 
 #E8_re#
-colnames(enq.final)[247]
+colnames(enq.final)[248]
 class(enq.final$E8_re)
 table(enq.final$E8_re) ##Déjà ordonnée selon le questionaire
 
 #E8_a_re#
-colnames(enq.final)[248]
+colnames(enq.final)[249]
 class(enq.final$E8_a_re)
 table(enq.final$E8_a_re) ##Déjà ordonnée selon le questionaire
 
 #E8_b_re#
-colnames(enq.final)[249]
+colnames(enq.final)[250]
 class(enq.final$E8_b_re)
 table(enq.final$E8_b_re)
 enq.final$E8_b_re <- factor(enq.final$E8_b_re, levels = c("Très souvent", "Souvent", "Occasionnellement", "Jamais"))

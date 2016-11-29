@@ -2509,14 +2509,14 @@ table(enq.final$ucenf)
 
 #On attribue le nombre d'unité de consommation adapté pour les réponses à 2 et 3enfants#
 #On commence par rajouter le nombre d'uc pour l'enfant le âgé#
-enq.final$ucenf <-ifelse(enq.final$ucenfA=="2"| enq.final$ucenfA=="3", ifelse(enq.final$D11<14, enq.final$ucenf + 0.3,0.5),enq.final$ucenf)
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="2"| enq.final$ucenfA=="3", ifelse(enq.final$D11<14, enq.final$ucenf + 0.3,enq.final$ucenf + 0.5),enq.final$ucenf)
 table(enq.final$ucenf)
 #On rajoute maintenant le nombre d'uc pour l'enfant le plus jeune#
-enq.final$ucenf <-ifelse(enq.final$ucenfA=="2"| enq.final$ucenfA=="3", ifelse(enq.final$D10<14, enq.final$ucenf + 0.3,0.5),enq.final$ucenf)
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="2"| enq.final$ucenfA=="3", ifelse(enq.final$D10<14, enq.final$ucenf + 0.3,enq.final$ucenf + 0.5),enq.final$ucenf)
 table(enq.final$ucenf)
 
 #Il nous reste maintenant à attribuer l'uc pour l'enfant à l'âge inconnu : on attribue au troisième la moyenne de l'âge des premiers#
-enq.final$ucenf <-ifelse(enq.final$ucenfA=="3", ifelse(((enq.final$D10+enq.final$D11)/2)<14, enq.final$ucenf + 0.3,0.5),enq.final$ucenf)
+enq.final$ucenf <-ifelse(enq.final$ucenfA=="3", ifelse(((enq.final$D10+enq.final$D11)/2)<14, enq.final$ucenf + 0.3, enq.final$ucenf + 0.5),enq.final$ucenf)
 table(enq.final$ucenf)
 
 ##ADULTES##

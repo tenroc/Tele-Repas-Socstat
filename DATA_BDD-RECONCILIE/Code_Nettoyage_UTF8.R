@@ -1,7 +1,8 @@
 ##### Importation BDD + Etiquettes #####
-setwd("C:/Users/amaury/Documents/cours/M2/Enquete")
-enq.final <- read.csv("enq final.csv", encoding = "UTF-8")
-etiquettes <- read.csv("etiquettes.csv", encoding = "UTF-8")
+
+setwd(chemin) #Attention : le chemin doit pointer sur le répertoire TeleRepas 
+enq.final <- read.csv("C:/Users/sarah/Google Drive/2-TeleRepas/_Data/BDD réconciliée/BDD/enq final.csv", encoding = "UTF-8")
+etiquettes <- read.csv("C:/Users/sarah/Google Drive/2-TeleRepas/_Data/BDD réconciliée/Etiquettes/etiquettes.csv", encoding = "UTF-8")
 etiquettes <- as.character(etiquettes$x)
 attributes(enq.final)$variable.labels <- etiquettes
 attributes(enq.final)$variable.labels[120]

@@ -1,8 +1,8 @@
 ##### Importation BDD + Etiquettes #####
-
+rm(list=ls())
 setwd(chemin) #Attention : le chemin doit pointer sur le répertoire TeleRepas 
-enq.final <- read.csv("C:/Users/sarah/Google Drive/2-TeleRepas/_Data/BDD réconciliée/BDD/enq final.csv", encoding = "UTF-8")
-etiquettes <- read.csv("C:/Users/sarah/Google Drive/2-TeleRepas/_Data/BDD réconciliée/Etiquettes/etiquettes.csv", encoding = "UTF-8")
+enq.final <- read.csv("./_Data/BDD réconciliée/BDD/enq final.csv", encoding = "UTF-8")
+etiquettes <- read.csv("./_Data/BDD réconciliée/Etiquettes/etiquettes.csv", encoding = "UTF-8")
 etiquettes <- as.character(etiquettes$x)
 attributes(enq.final)$variable.labels <- etiquettes
 attributes(enq.final)$variable.labels[120]
@@ -227,21 +227,20 @@ sum(is.na(enq.final$A8_other))
 
 #Je nettoie rapidement les modalités (regroupement + forme)#
 enq.final$A8_other_re <- ifelse(enq.final$A8_other=="a la danse","A la danse", ifelse(enq.final$A8_other=="hopital"|enq.final$A8_other=="HOPITAL","A l'hopital",enq.final$A8_other))
-
 table(enq.final$A8_other_re)
-
-#Je les re-bascule dans la variable A8_re : les individus ayant choisi "Autre, précisez" sont sinon codés comme NA#
-enq.final$A8_re <- ifelse(is.na(enq.final$A8_other_re)==FALSE,"Autre, précisez (voir A8_other_re)", enq.final$A8_re)
-
+#Je les re-bascule dans la variable A8_re#
+enq.final$A8_re <- ifelse(is.na(enq.final$A8_other_re)==FALSE,"Dans un restaurant/fast-food/bar/brasserie etc.", enq.final$A8_re)
 #Je rebascule la variable en factor#
 enq.final$A8_re <- as.factor(enq.final$A8_re)
 typeof(enq.final$A8_re)
 class(enq.final$A8_re)
 table(enq.final$A8_re)
+
 #FAIT : regroupement A8 & A8 other#
 #A faire : ras#
 ##Remarque Mme Plessz : ordonner les modalités (là autre s'est fouttu en 2ème position)#
 #Question : que fait-on de danse et hopital ? Catégorie Autre semble pas mal#
+# finalement on les a mis dans Restaurant/fast food#
 ####
 
 
@@ -283,20 +282,20 @@ enq.final$A10_other_re <- as.character(enq.final$A10_other)
 
 
 #Je nettoie rapidement les modalités (regroupement + forme)#
-
-enq.final$A10_other_re <-  ifelse(enq.final$A10_other_re=="bureau"|enq.final$A10_other_re=="BUREAU","Bureau",ifelse(enq.final$A10_other_re=="CHAMBRE FILS","Chambre Fils",ifelse(enq.final$A10_other_re=="dehors","Dehors",ifelse(enq.final$A10_other_re=="salle a manger"|enq.final$A10_other_re=="salle à manger","Salle à manger", ifelse(enq.final$A10_other_re=="terrasse","Terrasse",ifelse(enq.final$A10_other_re=="veranda"|enq.final$A10_other_re=="véranda","Veranda",enq.final$A10_other_re))))))
+#version Paulus et Sara#
+#Regroupement#
+enq.final$A10_other_re <-  ifelse(enq.final$A10_other_re=="bureau"|enq.final$A10_other_re=="BUREAU","Bureau",ifelse(enq.final$A10_other_re=="CHAMBRE FILS","Chambre",ifelse(enq.final$A10_other_re=="dehors" | enq.final$A10_other_re=="terrasse" |enq.final$A10_other_re=="veranda"|enq.final$A10_other_re=="véranda","Exterieur",ifelse(enq.final$A10_other_re=="salle a manger"| enq.final$A10_other_re=="salle à manger","Salle à manger", enq.final$A10_other_re))))
 table(enq.final$A10_other_re)
-
-
 #Je les re-bascule dans la variable#
-
-enq.final$A10_re <- ifelse(is.na(enq.final$A10_other_re)==FALSE,"Autre (réponse ouverte)", enq.final$A10_re)
-enq.final$A10_re <- as.factor(enq.final$A10_re)
+enq.final$A10_re_re <- enq.final$A10_other_re
+my.na <- is.na(enq.final$A10_other_re)
+enq.final$A10_re_re[my.na] <- enq.final$A10_re[my.na]
+table(enq.final$A10_re_re)
+enq.final$A10_re <- as.factor(enq.final$A10_re_re)
 table(enq.final$A10_re)
-table(enq.final$A10_other_re)
-
+table(enq.final$A10)
+table(enq.final$A10_re, enq.final$A10)
 #FAIT : regroupement A10 et A10other#
-#A FAIRE : réflexion sur le thème: faut-il rebasculer des modalité de A10_other dans A10 ? on pourrait regrouper Terrasse + véranda + Dehors, faire basculer sale à manger (presque autant que 1 pièce),...Que faire de "bureau" ?#
 ## *PROBLEME* : il y a une modalité 7## Problème reglé : j'avais oublié de rebasculer la variabel en caractère#
 ####
 
@@ -344,25 +343,9 @@ class(enq.final$A11_1)
 table(enq.final$A11_1)
 sum(is.na(enq.final$A11_1))
 
-table(enq.final$A11_1)
-table(enq.final$A11_2)
-table(enq.final$A11_3)
-table(enq.final$A11_4)
-table(enq.final$A11_5)
-
-#Je pense qu'il est mieux de laisser ça sous la forme de variables dichotomiques (vu que QCM)#
-
-enq.final$A11_1_re <- enq.final$A11_1
-enq.final$A11_2_re <- enq.final$A11_2
-enq.final$A11_3_re <- enq.final$A11_3
-enq.final$A11_4_re <- enq.final$A11_4
-enq.final$A11_5_re <- enq.final$A11_5
-
 #FAIT : RIEN#
 #A FAIRE : NSP#
 ####
-
-
 
 ####
 colnames(enq.final)[28]
@@ -374,9 +357,10 @@ table(enq.final$A11_other)
 enq.final$A11_other_re <- enq.final$A11_other
 
 enq.final$A11_other_re <-
-  ifelse(enq.final$A11_other_re=="ecoutait la radio"|enq.final$A11_other_re=="ecouter la radio"|enq.final$A11_other_re=="radio","Oui, j'écoutais la radio",ifelse(enq.final$A11_other_re=="donner a manger a ma fille","Oui, je donnais à manger à ma fille",ifelse(enq.final$A11_other_re=="écouter de la musique"|enq.final$A11_other_re=="musique","Oui, j'écoutais de la musique",ifelse(enq.final$A11_other_re=="regarder la télévision", "Oui, je regardais la télévision", enq.final$A11_other_re))))
+  ifelse(enq.final$A11_other_re=="ecoutait la radio"|enq.final$A11_other_re=="ecouter la radio"|enq.final$A11_other_re=="radio" |enq.final$A11_other_re=="écouter de la musique"|enq.final$A11_other_re=="musique","Oui, j'écoutais radio / musique",ifelse(enq.final$A11_other_re=="donner a manger a ma fille","Oui, je discutais",ifelse(enq.final$A11_other_re=="regarder la télévision", "Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)", enq.final$A11_other_re)))
 
 table(enq.final$A11_other_re)
+
 
 #Création d'une nouvelle variable
 enq.final$A11_6_other_re <- ifelse(is.na(enq.final$A11_other_re)==FALSE,"Oui","Non sélectionné")
@@ -389,8 +373,38 @@ table(enq.final$A11_6_other_re)
 -#Regarder ce qu'il faut rebasculer en créant une dummmy (tout ce qui a trait au son et à la musique notamment)#
   ####
   
+# ESSAI DE PAULUS ET SARA qui ne marche pas
+  ####################################### TEST -- Rien de tout ca ne fonctionne#
+  #if (enq.final$A11_other_re=="Oui, je discutais") {
+  # enq.final$A11_other_re <- enq.final$A11_3_re=TRUE}
+  #if (enq.final$A11_other_re=="Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)"){enq.final$A11_other_re <- enq.final$A11_4_re}
+  #enq.final$A11_6_re <- ifelse(is.na(enq.final$A11_other_re)==FALSE,"Oui, j'écoutais radio / musique", "Non sélectionné")
+  
+  #enq.final$A11_3_re <- if (enq.final$A11_other_re=="Oui, je discutais"){"Oui, je discutais"}
+  #if (enq.final$A11_other_re=="Oui, je discutais") {
+# enq.final$A11_other_re <- enq.final$A11_3_re}
+
+#if (enq.final$A11_other_re == "Oui, je discutais") {
+#enq.final$A11_other_re="";
+#enq.final$A11_2_re==TRUE
+# }
+#else if (enq.final$A11_other_re == "Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)") {enq.final$A11_other_re="", enq.final$A11_3_re=TRUE}
+
+############Ils me disent : the condition has length > 1 and only the first element will be used -- pourauoi??####
+#enq.final$A11_2_re=(enq.final$A11_2_re=="Oui") || ifelse(enq.final$A11_other_re=="Oui, je discutais",TRUE,FALSE)
+#enq.final$A11_2_re=="Oui" || ifelse(enq.final$A11_other_re=="Oui, je discutais",TRUE,FALSE)
+#enq.final$A11_3_re=(enq.final$A11_3_re=="Oui") || ifelse(enq.final$A11_other_re=="Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)",TRUE,FALSE)
+#table(enq.final$A11_2_re)
+
+#D'abord vire les deux modalites qui rentrent dans deux autres var
+#Création d'une nouvelle variable
+#enq.final$A11_6_re <- ifelse(is.na(enq.final$A11_other_re)==FALSE,"Oui, j'écoutais radio / musique", "Non sélectionné")
+#table(enq.final$A11_6_re)
+
+
   
   
+#A12  
 ####
 colnames(enq.final)[29]
 attributes(enq.final)$variable.labels[29]
@@ -432,10 +446,12 @@ table(enq.final$A13_other)
 sum(is.na(enq.final$A12))
 
 
-enq.final$A13_5_other_re <- as.character(enq.final$A13_other)
+enq.final$A13_other_re <- as.character(enq.final$A13_other)
+table(enq.final$A13_other_re)
 
-enq.final$A13_5_other_re <- ifelse(enq.final$A13_5_other_re=="2 Petits enfants"|enq.final$A13_5_other_re=="mon petit fils de 3 ans","Petit enfant",ifelse(enq.final$A13_5_other_re=="aide menagere","Aide Ménagère",ifelse(enq.final$A13_5_other_re=="camarades de fac","Camarades de fac",enq.final$A13_5_other_re)))
-table(enq.final$A13_5_other_re)
+enq.final$A13_other_re <- ifelse(enq.final$A13_other_re=="2 Petits enfants"|enq.final$A13_other_re=="mon petit fils de 3 ans","Enfants",ifelse(enq.final$A13_other_re=="aide menagere","Aide Ménagère",ifelse(enq.final$A13_other_re=="camarades de fac","Collègue(s)", ifelse(enq.final$A13_other_re=="Colocataire","Ami(s)", enq.final$A13_other_re))))
+table(enq.final$A13_other_re)
+
 
 enq.final$A13_6_re <- ifelse(is.na(enq.final$A13_5_other_re)==FALSE, "Oui","Non sélectionné")
 
@@ -503,16 +519,17 @@ enq.final$A16_re <- enq.final$A16
 
 
 ####
-#A17_SQ001_SQ001 Parmi ces personnes qui regardaient un écran, certaines regardaient-elles le même écran que vous ? (Tv, Ordinateur, Tablette, Téléphone/Smartphone, Console)"#
+#A17_SQ001_SQ001 "Nous allons maintenant évoquer rapidement votre autre
+#             prise alimentaire de la soirée.\tA quelle heure a-t-elle eu lieu "#
 colnames(enq.final)[39]
-attributes(enq.final)$variable.labels[40]
+attributes(enq.final)$variable.labels[39]
 typeof(enq.final$A17_SQ001_SQ002)
 class(enq.final$A17_SQ001_SQ002)
-table(enq.final$A16)
-sum(is.na(enq.final$A16))
-
+#'heure
 table(enq.final$A17_SQ001_SQ001)
+#minutes
 table(enq.final$A17_SQ001_SQ002)
+
 enq.final$A17_re <- paste(enq.final$A17_SQ001_SQ001, enq.final$A17_SQ001_SQ002, sep=',')
 enq.final$A17_re <- gsub("h","",enq.final$A17_re, ignore.case =TRUE)
 enq.final$A17_re <- gsub(",,",",",enq.final$A17_re, ignore.case =TRUE)
@@ -565,7 +582,12 @@ table(enq.final$A19)
 enq.final$A19_re <- enq.final$A19
 #A RECOLLER AVEC CEUX QUI S'EN OCCUPENT#
 ####
-
+#HMMM 
+#saucisson sec	NA	terrasse
+#cake	NA	théâtre
+#sandwich	NA	opéra
+# Ici, on est dans du repas sur le pouce/grignotage à l'extérieur (non assis sans être "en marchant"), et nous n'avions pas de catégorie#
+####
 
 
 
@@ -585,7 +607,7 @@ enq.final$A20_re <- as.character(enq.final$A20)
 
 
 ####
-#A21 "Pouvez-vous me dire où vous étiez à ce moment-là ?"#
+#A2O_other "Pouvez-vous me dire où vous étiez à ce moment-là ?"#
 colnames(enq.final)[46]
 attributes(enq.final)$variable.labels[46]
 typeof(enq.final$A20_other)
@@ -595,27 +617,17 @@ sum(is.na(enq.final$A20_other))
 table(enq.final$A20_other)
 enq.final$A20_other_re <- enq.final$A20_other
 
-enq.final$A20_other_re <-ifelse(enq.final$A20_other_re=="opéra","Opéra",ifelse(enq.final$A20_other_re=="terrasse","Terrasse",ifelse(enq.final$A20_other_re=="théâtre","Théâtre",enq.final$A13_5_other_re)))
+enq.final$A20_other_re <-ifelse(enq.final$A20_other_re=="opéra","Opéra",ifelse(enq.final$A20_other_re=="terrasse","Terrasse",ifelse(enq.final$A20_other_re=="théâtre","Théâtre",enq.final$A20_other_re)))
 
 table(enq.final$A20_other_re)
-
-enq.final$A20_re <- ifelse(is.na(enq.final$A20_other_re)==FALSE,"Autre",enq.final$A20_re)
+enq.final$A20_re <- ifelse(is.na(enq.final$A20_other_re)==FALSE, "Dans un restaurant/fast-food/bar/brasserie etc.",enq.final$A20_re)
 table(enq.final$A20_re)
 enq.final$A20_re <- as.factor(enq.final$A20_re)
 table(enq.final$A20_re)
-#HMMM 
-#saucisson sec	NA	terrasse
-#cake	NA	théâtre
-#sandwich	NA	opéra
-# Ici, on est dans du repas sur le pouce/grignotage à l'extérieur (non assis sans être "en marchant"), et nous n'avions pas de catégorie#
-####
-
-
-
-
 
 ####
-#A20 "Pouvez-vous me dire où vous étiez à ce moment-là ?"#
+#A21 "Est-ce que vous faisiez quelque chose d’autre en mangeant ?"#
+
 
 table(enq.final$A21_1)
 table(enq.final$A21_2)
@@ -629,17 +641,19 @@ enq.final$A21_3_re <- enq.final$A21_3
 enq.final$A21_4_re <- enq.final$A21_4
 enq.final$A21_5_re <- enq.final$A21_5
 
-colnames(enq.final)[52]
-attributes(enq.final)$variable.labels[52]
 table(enq.final$A21_other)
 enq.final$A21_other_re <- enq.final$A21_other
 
 
-enq.final$A21_other_re <- ifelse(enq.final$A21_other_re=="Cuisine"|enq.final$A21_other_re=="Je préparai le gaspacho du soir"|enq.final$A21_other_re=="je prepare la suite du repas petit pois diende"|enq.final$A21_other_re=="sauter les crepes","Oui, je faisais la cuisine", ifelse(enq.final$A21_other_re=="nettoyer"|enq.final$A21_other_re=="ménage"|enq.final$A21_other_re=="rangement, devoirs, menage", "Oui, je faisais du nettoyage et du ménage", ifelse(enq.final$A21_other_re=="musique","Oui, j'écoutais de la musique",enq.final$A21_other_re)))
-
+enq.final$A21_other_re <- ifelse(enq.final$A21_other_re=="Cuisine"|enq.final$A21_other_re=="Je préparai le gaspacho du soir"|enq.final$A21_other_re=="je prepare la suite du repas petit pois diende"|enq.final$A21_other_re=="sauter les crepes" |enq.final$A21_other_re=="nettoyer"|enq.final$A21_other_re=="ménage"|enq.final$A21_other_re=="rangement, devoirs, menage", "Oui, je faisais le ménage / la cuisine", ifelse(enq.final$A21_other_re=="musique","Oui, j'écoutais la radio / de la musique",enq.final$A21_other_re))
 table(enq.final$A21_other_re)
 
 enq.final$A21_6_re <- ifelse(is.na(enq.final$A21_other_re)==FALSE,"Oui","Non sélectionné")
+table (enq.final$A21_6_re)
+enq.final$A21_5_re <- ifelse(enq.final$A21_5_re=="Oui"|enq.final$A21_6_re=="Oui", "Oui", ifelse(enq.final$A21_5_re=="Non sélectionné"|enq.final$A21_6_re=="Non sélectionné", "Non sélectionné"))
+table(enq.final$A21_5_re)
+attributes(enq.final)$A21_5_re <- "[Je ne sais pas/Autre] Est-ce que vous faisiez quelque chose d'autre en mangeant ?"
+attributes(enq.final)$A21_5_re
 
 #FAIT : CLEANAGE VAR OTHER (AVEC REGROUPEMENT) / + CREATION NVELLE DUMMY#
 
@@ -673,8 +687,10 @@ table(enq.final$A22_re)
 #A FAIRE : REGROUPER LES HEURES 7h30/19h30...Interroger les valeurs aberrantes#
 ####
 
-colnames(enq.final)[43]
-attributes(enq.final)$variable.labels[43]
+#A23 deuxième prise alimentaire - Combien de temps a-t-elle duré ?#
+
+colnames(enq.final)[55]
+attributes(enq.final)$variable.labels[55]
 typeof(enq.final$A23)
 class(enq.final$A23)
 table(enq.final$A23)
@@ -686,8 +702,8 @@ enq.final$A23_re <- enq.final$A23
 
 ####
 #A24  "Qu'est-ce que vous avez mangé ?"#
-colnames(enq.final)[55]
-attributes(enq.final)$variable.labels[55]
+colnames(enq.final)[56]
+attributes(enq.final)$variable.labels[56]
 typeof(enq.final$A24)
 class(enq.final$A24)
 table(enq.final$A24)
@@ -721,27 +737,6 @@ enq.final$A25_re <- enq.final$A25
 #RAS#
 ####
 
-
-
-
-
-
-
-
-####
-#A25 "Pouvez-vous me dire où vous étiez à ce moment-là ? "
-colnames(enq.final)[57]
-attributes(enq.final)$variable.labels[57]
-typeof(enq.final$A25)
-class(enq.final$A25)
-table(enq.final$A25)
-sum(is.na(enq.final$A25))
-table(enq.final$A25)
-enq.final$A25_re <- enq.final$A25
-#RAS#
-####
-
-
 ####
 #A25_other "Pouvez-vous me dire où vous étiez à ce moment-là ? "
 colnames(enq.final)[58]
@@ -752,13 +747,13 @@ table(enq.final$A25_other)
 sum(is.na(enq.final$A25_other))
 table(enq.final$A25_other)
 enq.final$A25_other_re <- enq.final$A25_other
-#RAS - VAR NULLE 
+#RAS - VAR NULLE #Rien a faire , Il n'y a pas de Autres
 
 
 
 
 ####
-#A25_other "Pouvez-vous me dire où vous étiez à ce moment-là ? "
+#A26 "Est-ce que vous faisire quelque chose d’autre en mangeant ?"
 
 table(enq.final$A26_1)
 table(enq.final$A26_2)
@@ -777,11 +772,12 @@ enq.final$A26_6_re <- enq.final$A26_6
 
 table(enq.final$A26_other)
 enq.final$A26_other_re <- enq.final$A26_other
-enq.final$A26_other_re <- ifelse(enq.final$A26_other_re=="Cuisine","Oui, je faisais la cuisine", ifelse(enq.final$A26_other_re=="écouter un podcast radio","Oui, j'écoutais un podcast radio",ifelse(enq.final$A26_other_re=="musique","Oui, j'écoutais de la musique",enq.final$A26_other_re)))
+enq.final$A26_other_re <- ifelse(enq.final$A26_other_re=="Cuisine","Oui, je faisais la cuisine", ifelse(enq.final$A26_other_re=="écouter un podcast radio"|enq.final$A26_other_re=="musique","Oui, j'écoutais la radio / de la musique",enq.final$A26_other_re))
 table(enq.final$A26_other_re)
 
 enq.final$A26_7_re <-ifelse(is.na(enq.final$A26_other_re)==FALSE,"Oui","Non sélectionné")
 table(enq.final$A26_7_re)
+
 
 #FAiT : cREATION d'une dummy supp#
 #A faire : checker les recodages#
@@ -862,7 +858,8 @@ colnames(enq.final)[156]
 class(enq.final$A8_re)
 table(enq.final$A8_re)
 levels(enq.final$A8_re)
-enq.final$A8_re <- factor(enq.final$A8_re,levels=c("Chez vous","Au travail", "Dans les transports ou en marchant","Dans un restaurant/fast-food/brasserie etc.","Chez des amis","Chez de la famille","Autre, précisez (voir A8_other_re)"))
+enq.final$A8_re<- factor(as.factor(enq.final$A8_re), levels = c("Chez vous","Au travail","Dans les transports ou en marchant", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+levels(enq.final$A8_re)
 table(enq.final$A8_re)
 
 #A8_re#
@@ -881,11 +878,12 @@ table(enq.final$A9_re)
 #GOOD#
 
 #A10_re#
+#version paulus & sara
 colnames(enq.final)[159]
 class(enq.final$A10_re)
 table(enq.final$A10_re)
-enq.final$A10_re <- factor(enq.final$A10_re,levels=c("Cuisine","Salon / Salle de séjour", "Chambre","Mon logement a une seule pièce","Autre (réponse ouverte)"))
-table(enq.final$A10_re)
+enq.final$A10_re<- factor(as.factor(enq.final$A10_re), levels = c("Cuisine","Salon / Salle de séjour","Chambre", "Mon logement a une seule pièce", "Bureau", "Exterieur", "Salle à manger"))
+levels(enq.final$A10_re)
 #GOOD#
 
 #A10_other_re#
@@ -1069,7 +1067,8 @@ colnames(enq.final)[182]
 class(enq.final$A20_re)
 table(enq.final$A20_re)
 levels(enq.final$A20_re)
-enq.final$A20_re <- factor(enq.final$A20_re,levels=c("Chez vous","Au travail","Dans les transports, en marchant etc.","Dans un restaurant/fast-food/bar/brasserie etc.","Chez des amis","Chez de la famille","Autre"))
+enq.final$A20_re<- factor(as.factor(enq.final$A20_re), levels = c("Chez vous","Au travail","Dans les transports ou en marchant", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+levels(enq.final$A20_re)
 table(enq.final$A20_re )
 #GOOD#
 
@@ -1311,7 +1310,7 @@ table(enq.final$r6_3)
 sum(is.na(enq.final$r6_3))
 
 enq.final$r6_3_re <- enq.final$r6_3
-
+#question R3 #
 #R3_1#
 colnames(enq.final)[74]
 attributes(enq.final)$variable.labels[73]
@@ -1348,7 +1347,7 @@ table(enq.final$r3_4)
 sum(is.na(enq.final$r3_4))
 enq.final$r3_4_re <- as.character(enq.final$r3_4)
 
-#R3_4#
+#R3_5#
 colnames(enq.final)[78]
 attributes(enq.final)$variable.labels[78]
 typeof(enq.final$r3_5)
@@ -1357,26 +1356,58 @@ table(enq.final$r3_5)
 sum(is.na(enq.final$r3_5))
 enq.final$r3_5_re <- as.character(enq.final$r3_5)
 
-#R3_Other
-colnames(enq.final)[79]
+#R3_Other " VERSION PAULUS ET SARA"
+colnames(enq.final)[79]<-"R3_other"
 attributes(enq.final)$variable.labels[79]
 typeof(enq.final$r3_other)
 class(enq.final$r3_other)
-table(enq.final$r3_other)
-sum(is.na(enq.final$r3_other))
+table(enq.final$r3_other) #pas de modalités autres
+enq.final$r3_other <- NULL
 # 1 seul obs dans cette modalite : reponse aberante "amis" Supprimer cet observation ??
 #enq.final$r3_other_re <- as.character(enq.final$r3_other)
 
 #R4#
-
-colnames(enq.final)[80]
+str(enq.final[80:90])
+colnames(enq.final)[80]<- "r4_1"
 attributes(enq.final)$variable.labels[80]
+
+colnames(enq.final)[81]<- "r4_15"
+attributes(enq.final)$variable.labels[81]
+
+colnames(enq.final)[82]<- "R4_4"
+attributes(enq.final)$variable.labels[82]
+
+colnames(enq.final)[83]<- "r4_5"
+attributes(enq.final)$variable.labels[83]
+
+
+colnames(enq.final)[84]<- "r4_7"
+attributes(enq.final)$variable.labels[84]
+
+
+colnames(enq.final)[85]<- "r4_9"
+attributes(enq.final)$variable.labels[85]
+
+colnames(enq.final)[86]<- "r4_10"
+attributes(enq.final)$variable.labels[86]
+
+colnames(enq.final)[87]<- "r4_12"
+attributes(enq.final)$variable.labels[87]
+
+colnames(enq.final)[88]<- "r4_13"
+attributes(enq.final)$variable.labels[88]
+
+colnames(enq.final)[89]<- "r4_2"
+attributes(enq.final)$variable.labels[89]
+
+colnames(enq.final)[90]<- "r4_14"
+attributes(enq.final)$variable.labels[90]
+
 typeof(enq.final$r4_1)
 class(enq.final$r4_1)
 table(enq.final$r4_1)
 sum(is.na(enq.final$r4_1))
 enq.final$r4_1_re <- as.character(enq.final$r4_1)
-
 enq.final$r4_2_re <- as.character(enq.final$r4_2)
 enq.final$r4_4_re <- as.character(enq.final$r4_4)
 enq.final$r4_5_re <- as.character(enq.final$r4_5)
@@ -1388,13 +1419,17 @@ enq.final$r4_13_re <- as.character(enq.final$r4_13)
 enq.final$r4_14_re <- as.character(enq.final$r4_14)
 enq.final$r4_15_re <- as.character(enq.final$r4_15)
 
-
+colnames(enq.final)[91]
 table(enq.final$r4_other) 
+attributes(enq.final)$variable.labels[91]<-"[Autre] Que faisiez-vous sur ce/ces écran(s) ?"
 enq.final$r4_other_re <- as.character(enq.final$r4_other)
+#non traité par Paulus et Sara #
+
 
 #R5#
-colnames(enq.final)[92]
-attributes(enq.final)$variable.labels[92]
+colnames(enq.final)[91]
+attributes(enq.final)$variable.labels[91]<-attributes(enq.final)$variable.labels[92]
+attributes(enq.final)$variable.labels[91]
 typeof(enq.final$r5)
 class(enq.final$r5)
 table(enq.final$r5)
@@ -1473,6 +1508,7 @@ table(enq.final$r6_3_re)
 colnames(enq.final)[212]
 class(enq.final$r3_1_re)
 table(enq.final$r3_1_re)
+enq.final$r3_3_re <- as.factor(enq.final$r3_1_re)
 enq.final$r3_3_re <- relevel(as.factor(enq.final$r3_1_re),"Oui")
 table(enq.final$r3_1_re)
 #R3_2_re
@@ -1545,47 +1581,50 @@ table(enq.final$r4_9_re)
 enq.final$r4_9_re <- relevel(as.factor(enq.final$r4_9_re),"Oui")
 table(enq.final$r4_9_re)
 
-#R4_12_re 
+#R4_10_re 
 colnames(enq.final)[223]
 class(enq.final$r4_12_re)
 table(enq.final$r4_12_re)
 enq.final$r4_12_re <- relevel(as.factor(enq.final$r4_12_re),"Oui")
 table(enq.final$r4_12_re)
 
-#R4_13_re 
+#R4_12_re 
 colnames(enq.final)[224]
 class(enq.final$r4_13_re)
 table(enq.final$r4_13_re)
 enq.final$r4_13_re <- relevel(as.factor(enq.final$r4_13_re),"Oui")
 table(enq.final$r4_13_re)
 
-#R4_14_re 
+#R4_13_re 
 colnames(enq.final)[225]
 class(enq.final$r4_14_re)
 table(enq.final$r4_14_re)
 enq.final$r4_14_re <- relevel(as.factor(enq.final$r4_14_re),"Oui")
 table(enq.final$r4_14_re)
 
-#R4_15_re 
+#R4_14_re 
 colnames(enq.final)[226]
 class(enq.final$r4_15_re)
 table(enq.final$r4_15_re)
 enq.final$r4_15_re <- relevel(as.factor(enq.final$r4_15_re),"Oui")
 table(enq.final$r4_15_re)
 
-#R4_10_re 
+#R4_15_re 
 colnames(enq.final)[227]
 class(enq.final$r4_10_re)
 table(enq.final$r4_10_re)
 enq.final$r4_10_re <- relevel(as.factor(enq.final$r4_10_re),"Oui")
 table(enq.final$r4_10_re)
 
-#R5_re
+#R4_other_re
 colnames(enq.final)[228] 
 class(enq.final$r5_re)
 table(enq.final$r5_re)
 enq.final$r5_re <- as.factor(enq.final$r5_re)
 table(enq.final$r5_re)
+
+
+
 
 # Partie Cesar -equippement #
 ###### Partie 3: Equipement ######
@@ -2034,7 +2073,7 @@ enq.final$H2_re <- enq.final$H2
 enq.final$H2_re<-relevel(enq.final$H2_re,"Oui")
 summary(enq.final$H2_re)#Remis dans l'ordre
 ##•Fait: Remis dans l'ordre
-##Eventuellement penser à regarder les commentaire en fin d'enquête
+##Eventuellement penser à regarder les commentaire en fin d'enquête#FAIT
 
 #HA3 : Habituellement, prenez-vous votre repas du soir en regardant un écran : #
 colnames(enq.final)[117]
@@ -2126,7 +2165,7 @@ enq.final$D2_re <- enq.final$D2
 #Fait : rien, Voir Alejandra #
 
 #CODE DE ALEJANDRA pour le recodage des communes # 
-communes <- read.csv2(file="_Data/recodage communes_najenson.csv", encoding="UTF8")
+communes <- read.csv2("./_Data/recodage communes_najenson.csv")
 communes$X <- NULL
 communes$id <- NULL
 
@@ -2287,7 +2326,7 @@ colnames(enq.final)[128]
 attributes(enq.final)$variable.labels[128]
 #Recodage sous excel puis intégration à base (D5_re)#
 # /!\ Vérifier chemin / dernière version du csv pour le recodage à jour /!\
-pro <- read.csv(file="_Data/BDD réconciliée/BDD/D5_re.csv", encoding="UTF8")
+pro <- read.csv(file="./_Data/BDD réconciliée/BDD/D5_re.csv", encoding="UTF8")
 enq.final <- merge(enq.final, pro, by ="id_r", sort = FALSE) 
 rm(pro)
 # Remettre les CSP dans l'ordre #
@@ -2403,7 +2442,7 @@ colnames(enq.final)[133]
 attributes(enq.final)$variable.labels[133]
 #Recodage sous excel puis intégration à base (D8_re)#
 # /!\ Vérifier chemin / dernière version du csv pour le recodage à jour /!\
-pro2 <- read.csv(file="_Data/BDD réconciliée/BDD/D8_re.csv", encoding="UTF8")
+pro2 <- read.csv(file="./_Data/BDD réconciliée/BDD/D8_re.csv", encoding="UTF8")
 enq.final <- merge(enq.final, pro2, by ="id_r", sort = FALSE)
 rm(pro2)
 enq.final$X.x <- NULL
@@ -2778,4 +2817,7 @@ which (is.na(enq.final$A1_re))
 which (is.na(enq.final$D13_re))
 which (is.na(enq.final$D1_re))
 which (is.na(enq.final$D5_re))
+table(enq.final$D1_re, useNA = "ifany")
 table(enq.final$D13_re, useNA = "ifany")
+table(enq.final$A1_re, useNA = "ifany")
+table(enq.final$D5_re, useNA = "ifany")

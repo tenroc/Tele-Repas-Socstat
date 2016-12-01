@@ -79,6 +79,28 @@ levels(as.factor(enq.final$A22_SQ001_SQ002_R))
 # tente de repasser la seconde prise déclarée en premiere prise (a débattre, dû au format: prise principale)
 # Si la seconde prise est une non-réponse, l'individu est supprimé (a débattre)
 
+# Repasse toutes les variables concernées en character (sinon erreur de level)
+
+# 1ere tranche
+
+for (i in c("A2_1_1_R","A2_1_2_R","A3","A4","A5","A6","A7","A8","A8_other","A9","A10","A10_other","A11_1","A11_2","A11_3","A11_4","A11_5","A11_other","A12","A13_1",
+            "A13_2","A13_3","A13_4","A13_5","A13_other","A14","A15","A16","R1_1","r2_1","r6_1")){
+  enq.final[,i] <- as.character(enq.final[,i])
+}
+
+# 2nd tranche
+
+for (i in c("A17_SQ001_SQ001_R","A17_SQ001_SQ002_R","A18","A19","A20","A20_other","A21_1","A21_2","A21_3","A21_4","A21_5","A21_other","R1_2","r2_2","r6_2")){
+  enq.final[,i] <- as.character(enq.final[,i])
+}
+
+# 3eme tranche
+
+for (i in c("A22_SQ001_SQ001_R","A22_SQ001_SQ002_R","A23","A24","A25","A25_other","A26_5","A26_1","A26_2","A26_3","A26_6","A26_other","R1_3","r2_3","r6_3")){
+  enq.final[,i] <- as.character(enq.final[,i])
+}
+
+
 # heure3:
 
 for(i in 1:nrow(enq.final)){
@@ -271,5 +293,26 @@ for(i in 1:nrow(enq.final)){
       }
     }
   }
+}
+
+# Repasse toutes les variables concernées en factor
+
+# 1ere tranche
+
+for (i in c("A2_1_1_R","A2_1_2_R","A3","A4","A5","A6","A7","A8","A8_other","A9","A10","A10_other","A11_1","A11_2","A11_3","A11_4","A11_5","A11_other","A12","A13_1",
+            "A13_2","A13_3","A13_4","A13_5","A13_other","A14","A15","A16","R1_1","r2_1","r6_1")){
+  enq.final[,i] <- as.factor(enq.final[,i])
+}
+
+# 2nd tranche
+
+for (i in c("A17_SQ001_SQ001_R","A17_SQ001_SQ002_R","A18","A19","A20","A20_other","A21_1","A21_2","A21_3","A21_4","A21_5","A21_other","R1_2","r2_2","r6_2")){
+  enq.final[,i] <- as.factor(enq.final[,i])
+}
+
+# 3eme tranche
+
+for (i in c("A22_SQ001_SQ001_R","A22_SQ001_SQ002_R","A23","A24","A25","A25_other","A26_5","A26_1","A26_2","A26_3","A26_6","A26_other","R1_3","r2_3","r6_3")){
+  enq.final[,i] <- as.factor(enq.final[,i])
 }
 

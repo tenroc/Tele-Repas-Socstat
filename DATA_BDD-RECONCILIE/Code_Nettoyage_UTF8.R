@@ -2797,7 +2797,8 @@ enq.final[(enq.final$id_r==276),]$D8_re <- "Professions intermédiaires"
 summary (enq.final$A1_re)
 summary (enq.final$D13_re)
 summary (enq.final$D1_re)
-summary (enq.final$D5_re)
+summary (enq.final$D3_re)
+
 
 
 #quels sonts les effectifs qui ont des de NA dans chaque variable
@@ -2805,11 +2806,11 @@ summary (enq.final$D5_re)
 which (is.na(enq.final$A1_re))
 which (is.na(enq.final$D13_re))
 which (is.na(enq.final$D1_re))
-which (is.na(enq.final$D5_re))
+which (is.na(enq.final$D3_re))
 
 #enlever les NA
 
-enq.final <- enq.final[!is.na(enq.final$A1_re) & !is.na(enq.final$D13_re)& !is.na(enq.final$D1_re)& !is.na(enq.final$D5_re), ]
+enq.final <- enq.final[!is.na(enq.final$A1_re) & !is.na(enq.final$D13_re)& !is.na(enq.final$D1_re)& !is.na(enq.final$D3_re), ]
 
 #véRifier
 
@@ -2817,10 +2818,12 @@ which (is.na(enq.final$A1_re))
 which (is.na(enq.final$D13_re))
 which (is.na(enq.final$D1_re))
 which (is.na(enq.final$D5_re))
+which (is.na(enq.final$D3_re))
+
 table(enq.final$D1_re, useNA = "ifany")
 table(enq.final$D13_re, useNA = "ifany")
 table(enq.final$A1_re, useNA = "ifany")
-table(enq.final$D5_re, useNA = "ifany")
+table(enq.final$D3_re, useNA = "ifany")
 
 
 

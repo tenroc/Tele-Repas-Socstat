@@ -2821,3 +2821,7 @@ table(enq.final$D1_re, useNA = "ifany")
 table(enq.final$D13_re, useNA = "ifany")
 table(enq.final$A1_re, useNA = "ifany")
 table(enq.final$D5_re, useNA = "ifany")
+
+
+
+write.csv2(enq.final,"./_Data/BDD réconciliée/BDD/enq final_v2.csv", fileEncoding = "UTF-8")

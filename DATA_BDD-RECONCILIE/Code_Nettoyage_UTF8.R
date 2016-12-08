@@ -8,6 +8,9 @@ attributes(enq.final)$variable.labels <- etiquettes
 attributes(enq.final)$variable.labels[120]
 enq.final$X <- NULL
 
+enq.flag <- read.csv('/_Data/BDD réconciliée/BDD/enq.flag.csv')
+enq.final <- merge(enq.final, enq.flag, by="id_r")
+
 ############ Partie 1 : Alimentation #########
 
 ####

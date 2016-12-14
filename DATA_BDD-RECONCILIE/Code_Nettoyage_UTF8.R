@@ -2577,73 +2577,9 @@ table(enq.final$D12_re)
 #Niveaux reconnus
 #Regardez si le signe euro fonctionne chez vous
 
-#Transformation en unités de consommation
-
-#***CODE SEB**#
-
-#Complexe car nous n'avons pas le nombre d'adultes (par exemple pour vous, vos parents et 
-#eventuels frères et soeurs donc j'ai arbitrairement considéré qu'il y avait un frere et soeur)
-#j'ai en général minimisé le nombre de personnes quand il n'était pas défini (par exemple 3 ou plus=>3)
-#Parce qu'il me paraît bizarre de les supprimer
-#Ca me paraît beaucoup trop approximatif pour être exploitable
 
 
-enq.final$ucenfA<- ifelse(enq.final$D9=="1",enq.final$ucenfA<-1,ifelse(enq.final$D9=="2",enq.final$ucenfA<-2, ifelse(enq.final$D9=="3 ou plus",enq.final$ucenfA<-3,enq.final$ucenfA<-0)))
-table(enq.final$ucenfA)
 
-enq.final$ucenf<-ifelse(enq.final$ucenfA==1,ifelse(enq.final$D10_bis>13,enq.final$ucenf<-0.5,enq.final$ucenf<-0.3 ),ifelse(enq.final$D10>13,enq.final$ucenf<-enq.final$ucenfA*0.5,ifelse(enq.final$D11<14, enq.final$ucenf<-enq.final$ucenfA*0.3, ifelse(enq.final$ucenfA==2, enq.final$ucenf<-0.8, enq.final$ucenf<-1.2 ))))                                                                                                                                                    
-
-table(enq.final$ucenfA,enq.final$ucenf)
-table(enq.final$D10,enq.final$ucenf)
-table(enq.final$ucenf,enq.final$D10)
-table(enq.final$ucenfA,enq.final$ucenf)
-table(enq.final$ucenfA,enq.final$ucenf)
-table(enq.final$ucenfA,enq.final$ucenf)
-#Ci-dessous j'utilise les modalités de la base principale pour que les autres ne soient pas recodés trop grossièrement
-enq.final$unit_conso<-ifelse(enq.final$D6=="Vous uniquement",enq.final$unit_conso<-1,
-                             ifelse(enq.final$D6==levels(enq.final[,129])[1],enq.final$unit_conso<-2.5,
-                                    ifelse(enq.final$D6=="Vous et un ou plusieurs enfant(s)",enq.final$unit_conso<-1+enq.final$ucenf,
-                                           ifelse(enq.final$D6=="Vous et votre conjoint(e) (sans enfant)",enq.final$unit_conso<-1.5,
-                                                  ifelse(enq.final$D6=="Vous et votre conjoint(e), avec un ou plusieurs enfant(s)",enq.final$unit_conso<-1.5+enq.final$ucenf,
-                                                         enq.final$unit_conso<-1)))))
-enq.final$ucB<-ifelse(enq.final$D6_other=="Seule avec mon chat",enq.final$ucB<-1,
-                      ifelse(enq.final$D6_other=="5 colocataires",enq.final$ucB<-3.5,
-                             ifelse(enq.final$D6_other=="Colocataires"|enq.final$D6_other=="amis",enq.final$ucB<-2,
-                                    ifelse(enq.final$D6_other %in% c("collocation","colocataire","colocation","COLOCATION"), enq.final$ucB<-1.5,
-                                           ifelse(enq.final$D6_other %in% c("Grands parents et moi","moi et mes grands-parents"), enq.final$ucB<-2,
-                                                  ifelse(enq.final$D6_other=="mere conjointe fils", enq.final$ucB<-2.3,
-                                                         ifelse(enq.final$D6_other=="2 enfants en accueuil et petit(e)s filles", enq.final$ucB<-2.2,
-                                                                ifelse(enq.final$D6_other=="Conjoint petits enfants enfant", enq.final$ucB<-2.6,enq.final$ucB<-enq.final$ucB))))))))
-
-
-enq.final$ucX<-ifelse(is.na(enq.final$D6),enq.final$ucX<-enq.final$ucB,enq.final$ucX<-enq.final$unit_conso )
-table(enq.final$unit_conso,useNA="ifany")
-table(enq.final$ucX,useNA="ifany")
-table(enq.final$ucB,useNA="ifany")
-table(enq.final$D6,useNA = "ifany")
-table(enq.final$D6,enq.final$unit_conso,useNA = "ifany")
-table(enq.final$D6,enq.final$ucX,useNA = "ifany")
-table(enq.final$D6,enq.final$D9,useNA  = "ifany")
-#8 NA => Individus ayant déclaré vivre avec un ou des enfant(s) dans le foyer mais pas plus au moins la moitié du temps
-
-table(enq.final$D6,enq.final$D11,useNA = "ifany")
-table(enq.final$D6,enq.final$D10_bis,useNA = "ifany")
-table(enq.final$D6_other,enq.final$unit_conso)
-
-enq.final$uc_mois<-ifelse(enq.final$D12_re==levels(enq.final[,140])[2], enq.final$uc_mois<-550/enq.final$ucX,
-                          ifelse(enq.final$D12_re==levels(enq.final[,140])[3],enq.final$uc_mois<-1250/enq.final$ucX,
-                                 ifelse(enq.final$D12_re==levels(enq.final[,140])[4],enq.final$uc_mois<-1550/enq.final$ucX,
-                                        ifelse(enq.final$D12_re==levels(enq.final[,140])[5],enq.final$uc_mois<-1850/enq.final$ucX,
-                                               ifelse(enq.final$D12_re==levels(enq.final[,140])[6],enq.final$uc_mois<-2250/enq.final$ucX,
-                                                      ifelse(enq.final$D12_re==levels(enq.final[,140])[7],enq.final$uc_mois<-2700/enq.final$ucX,
-                                                             ifelse(enq.final$D12_re==levels(enq.final[,140])[8],enq.final$uc_mois<-3150/enq.final$ucX,
-                                                                    ifelse(enq.final$D12_re==levels(enq.final[,140])[9],enq.final$uc_mois<-3750/enq.final$ucX,
-                                                                           ifelse(enq.final$D12_re==levels(enq.final[,140])[10],enq.final$uc_mois<-4700/enq.final$ucX,
-                                                                                  ifelse(enq.final$D12_re==levels(enq.final[,140])[1],enq.final$uc_mois<-7950/enq.final$ucX,enq.final$uc_mois<-NA))))))))))
-
-table(enq.final$uc_mois,useNA="ifany")
-#un peu grossier
-#170 NA...
 
 #Transformation en unités de consommation
 ##**CODE TIM**##
@@ -2700,19 +2636,26 @@ table(enq.final$ucenf)
 ##ADULTES##
 
 #On remplace les modalités par le nombre d'adultes correspondant#
-enq.final$ucad <- enq.final$D6_re
+enq.final$ucad <- enq.final$D6
+table(enq.final$D6_re)
 table(enq.final$ucad)
 class(enq.final$ucad)
-levels(enq.final$ucad) <- c("1","1","1.5","1.5","1.5","Autre")
+#On considère ici que les individus ayant coché "vous, vos parents et vos éventuels frères et soeurs 
+#ne vivent qu'avec leurs deux parents
+levels(enq.final$ucad) <- c("2","1","1.5","1.5","1")
 table(enq.final$ucad)
-#Il y a 8 individus avec "autres"#
-table(enq.final$D6_other_re)
+#Il y a des individus avec "autres"#
+table(enq.final$D6_other)
 #Mais 13 modalités diff dans D6_other_re, car certaines ont été rebasculées#
 
 #On s'occupe des AUTRES, en repartant de D6 other pour plus de granularité#
-enq.final$ucad2 <- as.factor(enq.final$D6_other_re)
+#On a ci-dessous considéré que les individus dont l'âge était non précisé
+#ont moins de 14 ans si ce sont des "enfants"
+#Qu'il n'y a qu'un collocataire si le terme n'est pas au pluriel ou s'il est marqué collocation
+#qu'il y en a deux si le terme est au pluriel
+enq.final$ucad2 <- as.factor(enq.final$D6_other)
 levels(enq.final$ucad2)
-levels(enq.final$ucad2) <- c("2","2","2","1","1.5","1")
+levels(enq.final$ucad2) <- c("2.2","3.5","2","1.5","1.5","2","1.5","1.5","2.6","2","2.3","2","1")
 table(enq.final$ucad2)
 
 enq.final$ucad2 <- as.character(enq.final$ucad2)
@@ -2723,8 +2666,8 @@ table(enq.final$ucad)
 
 #On vérifie qu'on n'a pas perdu d'observations#
 sum(is.na(enq.final$ucad))
-sum(is.na(enq.final$D6_r))
-#On a bien toujours 27 NA#
+sum(is.na(enq.final$D6_re))
+#On a bien toujours 28 NA#
 
 #On a le nombre d'unités de consommation pour les adultes et pour les enfants. On les somme#
 table(enq.final$ucad)
@@ -2735,11 +2678,11 @@ enq.final$ucenf <- as.numeric(enq.final$ucenf)
 #et ne se retrouver que avec les NA de D6_re#
 enq.final$ucenf <- ifelse(is.na(enq.final$ucenf),0,enq.final$ucenf)
 enq.final$uc <- enq.final$ucad + enq.final$ucenf
-table(enq.final$uc)
+table(enq.final$uc,useNA = "ifany")
 
 #Résultat : on a bien le nombre de NA souhaité#
 sum(is.na(enq.final$uc))
-sum(is.na(enq.final$D6_r))
+sum(is.na(enq.final$D6_re))
 
 
 ## On s'occupe maintenant du revenu
@@ -2757,11 +2700,11 @@ enq.final$revenuparucquanti <- enq.final$revenuparuc
 enq.final$revenuparuc <- as.character(enq.final$revenuparuc)
 enq.final$revenuparuc <- ifelse(enq.final$D12_re=="Refus","Refus",enq.final$revenuparuc)
 enq.final$revenuparuc <- ifelse(enq.final$D12_re=="Ne sait pas","Ne sait pas",enq.final$revenuparuc)
-#Les 27 NA sont toujours ceux du début. Si on ajoute les non réponses non attribuées à la question du revenu
-#on passe à 163. Donc le compte est bon, on n'a perdu  personne en route.#
+#Les 28 NA sont toujours ceux du début. Si on ajoute les non réponses non attribuées à la question du revenu
+#on passe à 164. Donc le compte est bon, on n'a perdu  personne en route.#
 sum(is.na(enq.final$revenuparuc))
 sum(is.na(enq.final$revenuparucquanti))
-27+113+23
+28+113+23
 hist(enq.final$revenuparucquanti[is.na(enq.final$revenuparucquanti)==FALSE])
 plot(density(enq.final$revenuparucquanti[is.na(enq.final$revenuparucquanti)==FALSE]))
 summary(enq.final$revenuparucquanti[is.na(enq.final$revenuparucquanti)==FALSE])

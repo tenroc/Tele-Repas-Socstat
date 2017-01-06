@@ -305,104 +305,66 @@ table(enq.final$A10_re, enq.final$A10)
 
 
 
-####
+###################################
 #A11_1 "[Non, je ne faisais rien d'autre] Est-ce que vous faisiez quelque chose d'autre en mangeant ? "
 
 colnames(enq.final)[23]
 attributes(enq.final)$variable.labels[23]
-typeof(enq.final$A11_1)
-class(enq.final$A11_1)
-table(enq.final$A11_1)
-sum(is.na(enq.final$A11_1))
-
-table(enq.final$A11_1)
-table(enq.final$A11_2)
-table(enq.final$A11_3)
+table(enq.final$A11_1_re)
+typeof (enq.final$A11_1)
+attributes(enq.final)$variable.labels[24]
+table(enq.final$A11_2_re)
+typeof (enq.final$A11_2)
+attributes(enq.final)$variable.labels[25]
+table(enq.final$A11_3_re)
+typeof (enq.final$A11_3_re)
+attributes(enq.final)$variable.labels[26]
 table(enq.final$A11_4)
+typeof (enq.final$A11_4_re)
+attributes(enq.final)$variable.labels[27]
 table(enq.final$A11_5)
-
+typeof (enq.final$A11_5_re)
 #Je pense qu'il est mieux de laisser ça sous la forme de variables dichotomiques (vu que QCM)#
-
-enq.final$A11_1_re <- enq.final$A11_1
-enq.final$A11_2_re <- enq.final$A11_2
-enq.final$A11_3_re <- enq.final$A11_3
-enq.final$A11_4_re <- enq.final$A11_4
-enq.final$A11_5_re <- enq.final$A11_5
-
-#FAIT : RIEN#
-#A FAIRE : NSP#
-####
-
-
-
-
-####
-#A11_1 "[Non, je ne faisais rien d'autre] Est-ce que vous faisiez quelque chose d'autre en mangeant ? "
-
-colnames(enq.final)[23]
-attributes(enq.final)$variable.labels[23]
-typeof(enq.final$A11_1)
-class(enq.final$A11_1)
-table(enq.final$A11_1)
-sum(is.na(enq.final$A11_1))
-
-#FAIT : RIEN#
-#A FAIRE : NSP#
-####
-
-####
+enq.final$A11_1_re <- as.character(enq.final$A11_1)
+enq.final$A11_2_re <- as.character(enq.final$A11_2)
+enq.final$A11_3_re <- as.character(enq.final$A11_3)
+enq.final$A11_4_re <- as.character(enq.final$A11_4)
+enq.final$A11_5_re <- as.character(enq.final$A11_5)
+#A11 Other
 colnames(enq.final)[28]
 attributes(enq.final)$variable.labels[28]
-typeof(enq.final$A11_other)
-class(enq.final$A11_other)
 table(enq.final$A11_other)
-
-enq.final$A11_other_re <- enq.final$A11_other
-
+enq.final$A11_other_re <- as.character(enq.final$A11_other)
 enq.final$A11_other_re <-
-  ifelse(enq.final$A11_other_re=="ecoutait la radio"|enq.final$A11_other_re=="ecouter la radio"|enq.final$A11_other_re=="radio" |enq.final$A11_other_re=="écouter de la musique"|enq.final$A11_other_re=="musique","Oui, j'écoutais radio / musique",ifelse(enq.final$A11_other_re=="donner a manger a ma fille","Oui, je discutais",ifelse(enq.final$A11_other_re=="regarder la télévision", "Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)", enq.final$A11_other_re)))
-
+  ifelse(enq.final$A11_other_re=="ecoutait la radio"|enq.final$A11_other_re=="ecouter la radio"|enq.final$A11_other_re=="radio" |enq.final$A11_other_re=="écouter de la musique"|enq.final$A11_other_re=="musique","Oui, j'écoutais la radio / de la musique",ifelse(enq.final$A11_other_re=="donner a manger a ma fille","Oui, je discutais",ifelse(enq.final$A11_other_re=="regarder la télévision", "Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)", enq.final$A11_other_re)))
 table(enq.final$A11_other_re)
 
 
-#Création d'une nouvelle variable
-enq.final$A11_6_other_re <- ifelse(is.na(enq.final$A11_other_re)==FALSE,"Oui","Non sélectionné")
-table(enq.final$A11_6_other_re)
+#remettre les Autres dans les bonnes variables#
+enq.final$A11_other_re <- as.character(enq.final$A11_other_re)
+enq.final$A11_2_re <- as.character(enq.final$A11_2_re)
+enq.final$A11_other_re <- ifelse(is.na(enq.final$A11_other_re)==TRUE,"NA",enq.final$A11_other_re)
+table(enq.final$A11_other_re)
+table(enq.final$A11_2_re)
+enq.final$A11_2_re <- ifelse(enq.final$A11_other_re=="Oui, je discutais","Oui", enq.final$A11_2_re)
+table(enq.final$A11_2_re)
 
-#FAIT : créé une dummy A11_6_other pour les réponses autres ; nettoyé les réponses autres dans A11_6_other #
-#A faire : 
-# *probleme* modalité non pour a11_other_6_re 
-#-Rebasculer le " Oui, je regardais la télévision" en oui je regardais un écran
--#Regarder ce qu'il faut rebasculer en créant une dummmy (tout ce qui a trait au son et à la musique notamment)#
-  ####
-  
-# ESSAI DE PAULUS ET SARA qui ne marche pas
-  ####################################### TEST -- Rien de tout ca ne fonctionne#
-  #if (enq.final$A11_other_re=="Oui, je discutais") {
-  # enq.final$A11_other_re <- enq.final$A11_3_re=TRUE}
-  #if (enq.final$A11_other_re=="Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)"){enq.final$A11_other_re <- enq.final$A11_4_re}
-  #enq.final$A11_6_re <- ifelse(is.na(enq.final$A11_other_re)==FALSE,"Oui, j'écoutais radio / musique", "Non sélectionné")
-  
-  #enq.final$A11_3_re <- if (enq.final$A11_other_re=="Oui, je discutais"){"Oui, je discutais"}
-  #if (enq.final$A11_other_re=="Oui, je discutais") {
-# enq.final$A11_other_re <- enq.final$A11_3_re}
+enq.final$A11_other_re <- as.character(enq.final$A11_other_re)
+enq.final$A11_3_re <- as.character(enq.final$A11_3_re)
+enq.final$A11_other_re <- ifelse(is.na(enq.final$A11_other_re)==TRUE,"NA",enq.final$A11_other_re)
+table(enq.final$A11_other_re)
+table(enq.final$A11_3_re)
+enq.final$A11_3_re <- ifelse(enq.final$A11_other_re=="Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)","Oui", enq.final$A11_3_re)
+table(enq.final$A11_3_re)
 
-#if (enq.final$A11_other_re == "Oui, je discutais") {
-#enq.final$A11_other_re="";
-#enq.final$A11_2_re==TRUE
-# }
-#else if (enq.final$A11_other_re == "Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)") {enq.final$A11_other_re="", enq.final$A11_3_re=TRUE}
 
-############Ils me disent : the condition has length > 1 and only the first element will be used -- pourauoi??####
-#enq.final$A11_2_re=(enq.final$A11_2_re=="Oui") || ifelse(enq.final$A11_other_re=="Oui, je discutais",TRUE,FALSE)
-#enq.final$A11_2_re=="Oui" || ifelse(enq.final$A11_other_re=="Oui, je discutais",TRUE,FALSE)
-#enq.final$A11_3_re=(enq.final$A11_3_re=="Oui") || ifelse(enq.final$A11_other_re=="Oui, je regardais un écran (TV, Ordinateur, Tablette, Téléphone/smartphone, Console)",TRUE,FALSE)
-#table(enq.final$A11_2_re)
-
-#D'abord vire les deux modalites qui rentrent dans deux autres var
-#Création d'une nouvelle variable
-#enq.final$A11_6_re <- ifelse(is.na(enq.final$A11_other_re)==FALSE,"Oui, j'écoutais radio / musique", "Non sélectionné")
-#table(enq.final$A11_6_re)
+#Creer une nouvelle variable pour le Autre restant#
+enq.final$A11_other_re <- as.character(enq.final$A11_other_re)
+enq.final$A11_other_re <- ifelse(is.na(enq.final$A11_other_re)==TRUE,"NA",enq.final$A11_other_re)
+table(enq.final$A11_other_re)
+table(enq.final$A11_6_re)
+enq.final$A11_6_re <- ifelse(enq.final$A11_other_re=="Oui, j'écoutais radio / musique","Oui", NA)
+table(enq.final$A11_6_re)
 
 
   
@@ -426,13 +388,20 @@ enq.final$A12_re <- enq.final$A12
 
 
 
-####
-#A13_1 " "[Ami(s)] Avec qui étiez-vous ? "
+######################################
+#A13 Avec qui etiez vous (Amis, Collegues, Famille, Conjoints, Enfants) ?
 
+#Pourquoi est-ce qu'on avait separe Famille, Conjoint, Enfants ? Surtout que les gens ont la possibilite de cocher plusieurs cases
+
+attributes(enq.final)$variable.labels[30]
 table(enq.final$A13_1)
+attributes(enq.final)$variable.labels[31]
 table(enq.final$A13_2)
+attributes(enq.final)$variable.labels[32]
 table(enq.final$A13_3)
+attributes(enq.final)$variable.labels[33]
 table(enq.final$A13_4)
+attributes(enq.final)$variable.labels[34]
 table(enq.final$A13_5)
 
 enq.final$A13_1_re <- enq.final$A13_1
@@ -441,33 +410,55 @@ enq.final$A13_3_re <- enq.final$A13_3
 enq.final$A13_4_re <- enq.final$A13_4
 enq.final$A13_5_re <- enq.final$A13_5
 
+#A13 Other
 colnames(enq.final)[35]
 attributes(enq.final)$variable.labels[35]
 typeof(enq.final$A13_other)
 class(enq.final$A13_other)
 table(enq.final$A13_other)
-sum(is.na(enq.final$A12))
+
 
 
 enq.final$A13_other_re <- as.character(enq.final$A13_other)
 table(enq.final$A13_other_re)
-
 enq.final$A13_other_re <- ifelse(enq.final$A13_other_re=="2 Petits enfants"|enq.final$A13_other_re=="mon petit fils de 3 ans","Enfants",ifelse(enq.final$A13_other_re=="aide menagere","Aide Ménagère",ifelse(enq.final$A13_other_re=="camarades de fac","Collègue(s)", ifelse(enq.final$A13_other_re=="Colocataire","Ami(s)", enq.final$A13_other_re))))
 table(enq.final$A13_other_re)
 
 
-enq.final$A13_6_re <- ifelse(is.na(enq.final$A13_5_other_re)==FALSE, "Oui","Non sélectionné")
 
+#remettre les Autres dans les bonnes variables#
+enq.final$A13_other_re <- as.character(enq.final$A13_other_re)
+enq.final$A13_1_re <- as.character(enq.final$A13_1_re)
+enq.final$A13_other_re <- ifelse(is.na(enq.final$A13_other_re)==TRUE,"NA",enq.final$A13_other_re)
+table(enq.final$A13_other_re)
+table(enq.final$A13_1_re)
+enq.final$A13_1_re <- ifelse(enq.final$A13_other_re=="Ami(s)","Oui", enq.final$A13_1_re)
+table(enq.final$A13_1_re)
+
+enq.final$A13_other_re <- as.character(enq.final$A13_other_re)
+enq.final$A13_2_re <- as.character(enq.final$A13_2_re)
+enq.final$A13_other_re <- ifelse(is.na(enq.final$A13_other_re)==TRUE,"NA",enq.final$A13_other_re)
+table(enq.final$A13_other_re)
+table(enq.final$A13_2_re)
+enq.final$A13_2_re <- ifelse(enq.final$A13_other_re=="Collègue(s)","Oui", enq.final$A13_2_re)
+table(enq.final$A13_2_re)
+
+enq.final$A13_other_re <- as.character(enq.final$A13_other_re)
+enq.final$A13_5_re <- as.character(enq.final$A13_5_re)
+enq.final$A13_other_re <- ifelse(is.na(enq.final$A13_other_re)==TRUE,"NA",enq.final$A13_other_re)
+table(enq.final$A13_other_re)
+table(enq.final$A13_5_re)
+enq.final$A13_5_re <- ifelse(enq.final$A13_other_re=="Enfants","Oui", enq.final$A13_5_re)
+table(enq.final$A13_5_re)
+
+
+#Creer une nouvelle variable pour le Autre restant#
+enq.final$A13_other_re <- as.character(enq.final$A13_other_re)
+enq.final$A13_other_re <- ifelse(is.na(enq.final$A13_other_re)==TRUE,"NA",enq.final$A13_other_re)
+table(enq.final$A13_other_re)
 table(enq.final$A13_6_re)
-
-#FAIT : créé une dummy A13_6 pour les réponses autres ; nettoyé les réponses autres dans A13_6_other #
-# A FAIRE#
-#Recodages
-#*probleme* ça nous a encore fait un 4 wtf* #PROBLEME RESOlU : fallait rebasculer en caractère#
-#"petit fils". Très étrange d'avoir mis "famille"" et enfant. Où mettre petit-fils (à la fois "famille" et enfants (mais pas les siens !)) ? Si ce qui nous intéresse, c'est l'âge, alors recoder en enfant ; si c'est la nature du lien, alors recoder en famille.
-#présences forcées non prof ("collègues") : colocataire/camarades de fac (non-amis)
-#
-####
+enq.final$A13_6_re <- ifelse(enq.final$A13_other_re=="Aide Ménagère","Oui", NA)
+table(enq.final$A13_6_re)
 
 
 
@@ -595,7 +586,7 @@ enq.final$A19_re <- enq.final$A19
 
 
 
-####
+#######################################
 #A20 "Pouvez-vous me dire où vous étiez à ce moment-là ?"#
 colnames(enq.final)[45]
 attributes(enq.final)$variable.labels[45]
@@ -605,16 +596,9 @@ table(enq.final$A20)
 sum(is.na(enq.final$A20))
 table(enq.final$A20)
 enq.final$A20_re <- as.character(enq.final$A20)
-####
-
-
-
-####
-#A2O_other "Pouvez-vous me dire où vous étiez à ce moment-là ?"#
+#A20 Other
 colnames(enq.final)[46]
 attributes(enq.final)$variable.labels[46]
-typeof(enq.final$A20_other)
-class(enq.final$A20_other)
 table(enq.final$A20_other)
 sum(is.na(enq.final$A20_other))
 table(enq.final$A20_other)
@@ -623,20 +607,33 @@ enq.final$A20_other_re <- enq.final$A20_other
 enq.final$A20_other_re <-ifelse(enq.final$A20_other_re=="opéra","Opéra",ifelse(enq.final$A20_other_re=="terrasse","Terrasse",ifelse(enq.final$A20_other_re=="théâtre","Théâtre",enq.final$A20_other_re)))
 
 table(enq.final$A20_other_re)
+
 enq.final$A20_re <- ifelse(is.na(enq.final$A20_other_re)==FALSE, "Dans un restaurant/fast-food/bar/brasserie etc.",enq.final$A20_re)
 table(enq.final$A20_re)
 enq.final$A20_re <- as.factor(enq.final$A20_re)
 table(enq.final$A20_re)
 
-####
-#A21 "Est-ce que vous faisiez quelque chose d’autre en mangeant ?"#
 
+enq.final$A20_re<- factor(as.factor(enq.final$A20_re), levels = c("Chez vous","Au travail","Dans les transports ou en marchant", "Dans un restaurant/fast-food/bar/brasserie etc.", "Chez des amis", "Chez de la famille"))
+levels(enq.final$A20_re)
+
+##############################
+#A21 "Est-ce que vous faisiez quelque chose d'autre en mangeant ?"#
 
 table(enq.final$A21_1)
+attributes(enq.final)$variable.labels[47]
 table(enq.final$A21_2)
+attributes(enq.final)$variable.labels[48]
 table(enq.final$A21_3)
+attributes(enq.final)$variable.labels[49]
 table(enq.final$A21_4)
+attributes(enq.final)$variable.labels[50]
 table(enq.final$A21_5)
+attributes(enq.final)$variable.labels[51]
+table(enq.final$A21_other)
+attributes(enq.final)$variable.labels[52]
+
+
 
 enq.final$A21_1_re <- enq.final$A21_1
 enq.final$A21_2_re <- enq.final$A21_2
@@ -644,26 +641,30 @@ enq.final$A21_3_re <- enq.final$A21_3
 enq.final$A21_4_re <- enq.final$A21_4
 enq.final$A21_5_re <- enq.final$A21_5
 
+colnames(enq.final)[52]
+attributes(enq.final)$variable.labels[52]
 table(enq.final$A21_other)
 enq.final$A21_other_re <- enq.final$A21_other
-
 
 enq.final$A21_other_re <- ifelse(enq.final$A21_other_re=="Cuisine"|enq.final$A21_other_re=="Je préparai le gaspacho du soir"|enq.final$A21_other_re=="je prepare la suite du repas petit pois diende"|enq.final$A21_other_re=="sauter les crepes" |enq.final$A21_other_re=="nettoyer"|enq.final$A21_other_re=="ménage"|enq.final$A21_other_re=="rangement, devoirs, menage", "Oui, je faisais le ménage / la cuisine", ifelse(enq.final$A21_other_re=="musique","Oui, j'écoutais la radio / de la musique",enq.final$A21_other_re))
 table(enq.final$A21_other_re)
 
-enq.final$A21_6_re <- ifelse(is.na(enq.final$A21_other_re)==FALSE,"Oui","Non sélectionné")
-table (enq.final$A21_6_re)
-enq.final$A21_5_re <- ifelse(enq.final$A21_5_re=="Oui"|enq.final$A21_6_re=="Oui", "Oui", ifelse(enq.final$A21_5_re=="Non sélectionné"|enq.final$A21_6_re=="Non sélectionné", "Non sélectionné"))
-table(enq.final$A21_5_re)
-attributes(enq.final)$A21_5_re <- "[Je ne sais pas/Autre] Est-ce que vous faisiez quelque chose d'autre en mangeant ?"
-attributes(enq.final)$A21_5_re
 
-#FAIT : CLEANAGE VAR OTHER (AVEC REGROUPEMENT) / + CREATION NVELLE DUMMY#
 
-#A FAIRE : DISCUTER RECODAGE#
-#Même prb que précédemment pour musique + Questions des travaux ménagers (nettoyage, ménage, cuisine)#
-#2 cents...anti-passivité....Ces gens remangent parce qu'ils font qqchose (activité) et qu'ils sont en contact avec de la nourriture...approche par le corps (activité + proximité avec bouffe comme prédicteur)...mais minoritaire (versus télé)#
-####
+#Creer une nouvelle variable pour les Autres restants#
+enq.final$A21_other_re <- as.character(enq.final$A21_other_re)
+enq.final$A21_other_re <- ifelse(is.na(enq.final$A21_other_re)==TRUE,"NA",enq.final$A21_other_re)
+table(enq.final$A21_other_re)
+table(enq.final$A21_6_re)
+enq.final$A21_6_re <- ifelse(enq.final$A21_other_re=="Oui, j'écoutais la radio / de la musique","Oui", NA)
+table(enq.final$A21_6_re)
+
+enq.final$A21_other_re <- as.character(enq.final$A21_other_re)
+enq.final$A21_other_re <- ifelse(is.na(enq.final$A21_other_re)==TRUE,"NA",enq.final$A21_other_re)
+table(enq.final$A21_other_re)
+table(enq.final$A21_7_re)
+enq.final$A21_7_re <- ifelse(enq.final$A21_other_re=="Oui, je faisais le ménage / la cuisine","Oui", NA)
+table(enq.final$A21_7_re)
 
 
 
@@ -755,38 +756,43 @@ enq.final$A25_other_re <- enq.final$A25_other
 
 
 
-####
-#A26 "Est-ce que vous faisire quelque chose d’autre en mangeant ?"
+################################################
+#A26 "Est-ce que vous faisiez quelque chose d'autre en mangeant ?"
 
+attributes(enq.final)$variable.labels[59]
 table(enq.final$A26_1)
+attributes(enq.final)$variable.labels[60]
 table(enq.final$A26_2)
+attributes(enq.final)$variable.labels[61]
 table(enq.final$A26_3)
+attributes(enq.final)$variable.labels[62]
 table(enq.final$A26_4)
+attributes(enq.final)$variable.labels[63]
 table(enq.final$A26_5)
+attributes(enq.final)$variable.labels[64]
 table(enq.final$A26_6)
-
-enq.final$A26_1_re <- enq.final$A26_1
-enq.final$A26_2_re <- enq.final$A26_2
-enq.final$A26_3_re <- enq.final$A26_3
-enq.final$A26_4_re <- enq.final$A26_4
-enq.final$A26_5_re <- enq.final$A26_5
-enq.final$A26_6_re <- enq.final$A26_6
-
+attributes(enq.final)$variable.labels[65]
+table(enq.final$A26_other)
 
 table(enq.final$A26_other)
 enq.final$A26_other_re <- enq.final$A26_other
-enq.final$A26_other_re <- ifelse(enq.final$A26_other_re=="Cuisine","Oui, je faisais la cuisine", ifelse(enq.final$A26_other_re=="écouter un podcast radio"|enq.final$A26_other_re=="musique","Oui, j'écoutais la radio / de la musique",enq.final$A26_other_re))
+enq.final$A26_other_re <- ifelse(enq.final$A26_other_re=="Cuisine","Oui, je faisais le ménage / la cuisine", ifelse(enq.final$A26_other_re=="écouter un podcast radio"|enq.final$A26_other_re=="musique","Oui, j'écoutais la radio / de la musique",enq.final$A26_other_re))
 table(enq.final$A26_other_re)
 
-enq.final$A26_7_re <-ifelse(is.na(enq.final$A26_other_re)==FALSE,"Oui","Non sélectionné")
+#Creer une nouvelle variable pour les Autres restants#
+enq.final$A26_other_re <- as.character(enq.final$A26_other_re)
+enq.final$A26_other_re <- ifelse(is.na(enq.final$A26_other_re)==TRUE,"NA",enq.final$A26_other_re)
+table(enq.final$A26_other_re)
+table(enq.final$A26_6_re)
+enq.final$A26_6_re <- ifelse(enq.final$A26_other_re=="Oui, j'écoutais la radio / de la musique","Oui", NA)
+table(enq.final$A26_6_re)
+
+enq.final$A26_other_re <- as.character(enq.final$A26_other_re)
+enq.final$A26_other_re <- ifelse(is.na(enq.final$A26_other_re)==TRUE,"NA",enq.final$A26_other_re)
+table(enq.final$A26_other_re)
 table(enq.final$A26_7_re)
-
-
-#FAiT : cREATION d'une dummy supp#
-#A faire : checker les recodages#
-####
-
-
+enq.final$A26_7_re <- ifelse(enq.final$A26_other_re=="Oui, je faisais le ménage / la cuisine","Oui", NA)
+table(enq.final$A26_7_re)
 
 
 

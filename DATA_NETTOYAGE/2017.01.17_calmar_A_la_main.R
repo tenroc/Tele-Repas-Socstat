@@ -27,5 +27,5 @@ e$weight<-ifelse(e$D13_re=="Homme"&e$age_calage=="18-24",1.7,
           ))))))))))))
                  
 table(e$weight)
-write.csv2("./DATA_BDD-RECONCILIE/enq final_04.csv")
+write.csv2(e,"./DATA_BDD-RECONCILIE/enq final_04.csv",fileEncoding="UTF-8")
 e2<- read.csv2("./DATA_BDD-RECONCILIE/enq final_04.csv",encoding="UTF-8")

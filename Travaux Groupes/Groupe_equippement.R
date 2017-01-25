@@ -458,6 +458,7 @@ acm <- as.data.frame(lapply(acm, factor))
 
 res.acm <- MCA(acm, quali.sup=c(7:13), ncp=3, graph=T)
 
+
 # Axes à conserver:
 
 valprop.acm <- res.acm$eig[1:10,]
@@ -505,18 +506,7 @@ varact # res.acm pour toutes les modalites actives
 varact[modatot,] # res.acm pour les modalites contributives: indexe varact en fonction de modadot (ligne).
 
 
-
-# Graphiques
-
-plot.MCA(res.acm, invisible=c("ind","quali.sup"), 
-         title="Nuage des modalites actives Plan 1-2", axes=c(1,2), 
-         autoLab="yes", unselect=1,
-         selectMod=c(moda12))
-plot.MCA(res.acm, invisible=c("ind","quali.sup"), title="Nuage des modalites actives Plan 2-3", axes=c(2,3), 
-         autoLab="yes", unselect=1,
-         selectMod=c(moda23))
-
-# Mieux axe 1-2: cadre vide
+## Graphiques: axe 1-2: cadre vide
 
 plot(res.acm$var$coord[modatot, 1:2]*1.2, type="n",
      xlab=paste0("Axe 1 (", round(res.acm$eig[1,2], 1), "%)"),
@@ -553,7 +543,7 @@ modasup=c("25-45 ans", "46-65 ans", "<25 ans", ">65 ans", "Bac", "<bac", ">bac",
 
 text(res.acm$quali.sup$coord[c(1:5,7:9,11:24,26:28,30:31), 1:2]*1.2,
      labels=modasup,
-     cex=0.8, col="blue", font=3)
+     cex=0.8, col="blue", font=2)
 
 # Mieux axe 2-3: cadre vide
 
@@ -591,7 +581,62 @@ table(enq.final$clust)
 
 ## Caractérisations des clusters:
 
-# Cluster / sexe
+# ACM avec projection des clusters
+
+acm3 <- subset(enq.final, select=c(E2_Typologie_utilisateurs, E3_Typologie_utilisateurs, E4_Typologie_utilisateurs, E5_Typologie_utilisateurs,
+                                  E7_Typologie_utilisateurs, E8_Typologie_utilisateurs, clust))
+
+acm3 <- as.data.frame(lapply(acm3, factor))
+
+res.acm3 <- MCA(acm3, quali.sup=c(7), ncp=3, graph=T)
+
+
+# Contribution moyenne
+seuil <- 100/nrow(res.acm3$var$contrib)
+
+modatot <- which(res.acm3$var$contrib[, 1]>seuil 
+                 | res.acm3$var$contrib[, 2]>seuil
+                 | res.acm3$var$contrib[, 3]>seuil)
+modatot
+
+moda12 <- which(res.acm3$var$contrib[, 1]>seuil 
+                | res.acm3$var$contrib[, 2]>seuil)
+
+# axe 1-2: cadre vide
+
+plot(res.acm3$var$coord[modatot, 1:2]*1.2, type="n",
+     xlab=paste0("Axe 1 (", round(res.acm$eig[1,2], 1), "%)"),
+     ylab=paste0("Axe 2 (", round(res.acm$eig[2,2], 1), "%)"),
+     main="Premier plan factoriel",
+     cex.main=1, cex.axis=0.8, cex.lab=0.7, font.lab=3, 
+     asp=1)
+abline(h=0, v=0, col="grey", lty=3, lwd=1)
+
+# Points et etiquettes
+points(res.acm3$var$coord[modatot, 1:2],
+       col="black",
+       pch=c(15, 15, 16, 16, 17, 18, 5, 5, 6, 6))
+
+etiquettes2 <- c("Smartphone: Non ou peu", "Smartphone: régulier", "Mobile: Non ou peu", "Mobile: régulier",
+                 "Tablettes: régulier", "Télé: Non ou peu", "Ordi portable: Non ou peu", "Ordi portable: régulier",
+                 "Ordi fixe: Non ou peu", "Ordi fixe: régulier")
+col <- c(1,2,1,2,2,1,1,2,1,2)
+
+# Projection etiquettes
+
+text(res.acm3$var$coord[modatot,1:2], labels=etiquettes2, 
+     col=col, cex=1, pos=c(1, 1, 1, 1, 1, 1, 1, 2, 1, 1))
+
+# Variables supplementaires
+
+print(res.acm3$quali.sup$coord[, 1:2])
+modasup=c("cluster_1","cluster_2","cluster_3","cluster_4")
+
+text(res.acm$quali.sup$coord[c(1:4), 1:2]*1.2,
+     labels=modasup,
+     cex=0.8, col="blue", font=2)
+
+## Cluster / sexe
 
 table (enq.final$clust, enq.final$D13_re)
 round(prop.table(table(enq.final$clust, enq.final$D13_re), margin = 1)*100, 3)
@@ -602,3 +647,49 @@ round(prop.table(table(enq.final$clust, enq.final$D13_re), margin = 2)*100, 3)
 table (enq.final$clust, enq.final$D1_tr)
 round(prop.table(table(enq.final$clust, enq.final$D1_tr), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D1_tr), margin = 2)*100, 3)
+
+#### Code Paulus
+
+# Cluster / CSP
+
+table (enq.final$clust, enq.final$D8_re)
+round(prop.table(table(enq.final$clust, enq.final$D8_re), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D8_re), margin = 2)*100, 3)
+
+# Cluster / aire urbaine recodée
+
+table (enq.final$clust, enq.final$UU_re_2)
+round(prop.table(table(enq.final$clust, enq.final$UU_re_2), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$UU_re_2), margin = 2)*100, 3)
+round(prop.table(table(enq.final$UU_re_2))*100,3)
+
+# Cluster / revenu en tranches
+
+table (enq.final$clust, enq.final$D12_re2)
+round(prop.table(table(enq.final$clust, enq.final$D12_re2), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D12_re2), margin = 2)*100, 3)
+
+# Cluster / composition du ménage
+
+table (enq.final$clust, enq.final$D6_re2)
+round(prop.table(table(enq.final$clust, enq.final$D6_re2), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D6_re2), margin = 2)*100, 3)
+
+# Cluster / Activité du conjoin
+
+table (enq.final$clust, enq.final$D7_re2)
+round(prop.table(table(enq.final$clust, enq.final$D7_re2), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D7_re2), margin = 2)*100, 3)
+
+# Cluster / activité
+
+table (enq.final$clust, enq.final$D4_re2)
+round(prop.table(table(enq.final$clust, enq.final$D4_re2), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D4_re2), margin = 2)*100, 3)
+
+# Cluster / niveau d'études
+
+table (enq.final$clust, enq.final$D3_re2)
+round(prop.table(table(enq.final$clust, enq.final$D3_re2), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D3_re2), margin = 2)*100, 3)
+

@@ -347,6 +347,10 @@ round(prop.table(table(enq.final$E8_Typologie_utilisateurs))*100,3)
 
 ## Recodages
 
+# Sexe
+
+table(enq.final$D13_re)
+
 # Age en tranches
 
 enq.final$D1_tr[enq.final$D1_re < 25] <- "moins de 25 ans"
@@ -355,6 +359,7 @@ enq.final$D1_tr[enq.final$D1_re %in% c(36:45)] <- "36-45 ans"
 enq.final$D1_tr[enq.final$D1_re %in% c(46:55)] <- "46-55 ans"
 enq.final$D1_tr[enq.final$D1_re %in% c(56:65)] <- "56-65 ans"
 enq.final$D1_tr[enq.final$D1_re > 65] <- "plus de 65 ans"
+summary(enq.final$D1_tr)
 table(enq.final$D1_tr)
 
 # Diplome simplifié
@@ -364,6 +369,7 @@ enq.final$D3_re2[as.character(enq.final$D3_re) %in% c("Aucun diplôme", "BEPC, b
 enq.final$D3_re2[as.character(enq.final$D3_re) == "Baccalauréat, BP"] <- "Bac"
 enq.final$D3_re2[as.character(enq.final$D3_re) %in% c("Deug, DUT, BTS, diplômes des professions sociales ou de la santé","Licence, Bac+3","Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.")] <- "Supérieur au bac"
 enq.final$D3_re2[as.character(enq.final$D3_re) == "Refus"] <- NA
+summary(enq.final$D3_re2)
 table(enq.final$D3_re2)
 
 # Diplome du conjoin simplifié:
@@ -373,9 +379,10 @@ enq.final$D3_re2[as.character(enq.final$D3_bis_re) %in% c("Aucun diplôme", "BEP
 enq.final$D3_re2[as.character(enq.final$D3_bis_re) == "Baccalauréat, BP"] <- "Bac"
 enq.final$D3_re2[as.character(enq.final$D3_bis_re) %in% c("Deug, DUT, BTS, diplômes des professions sociales ou de la santé","Licence, Bac+3","Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.")] <- "Supérieur au bac"
 enq.final$D3_re2[as.character(enq.final$D3_bis_re) == "Refus"] <- NA
+summary(enq.final$D3_re2)
 table(enq.final$D3_re2)
 
-# profession
+# activité (utilité? plutot utiliser la CSP?)
 
 table(enq.final$D4_re)
 enq.final$D4_re2[as.character(enq.final$D4_re) %in% c("Etudiant avec emploi", "Etudiant sans emploi")] <- "Etudiant"
@@ -384,6 +391,7 @@ enq.final$D4_re2[as.character(enq.final$D4_re) == "A la retraite"] <- "retraite"
 enq.final$D4_re2[as.character(enq.final$D4_re) == "En recherche d'emploi"] <- "recherche emploi"
 enq.final$D4_re2[as.character(enq.final$D4_re) == "Au foyer"] <- "Au foyer"
 enq.final$D4_re2[as.character(enq.final$D4_re) == "Autre (voir D4_other_re)"] <- NA
+summary(enq.final$D4_re2)
 table(enq.final$D4_re2)
 
 # activité du conjoint - utilité?
@@ -395,16 +403,38 @@ enq.final$D7_re2[as.character(enq.final$D7_re) == "A la retraite"] <- "retraite"
 enq.final$D7_re2[as.character(enq.final$D7_re) == "En recherche d’emploi"] <- "recherche emploi"
 enq.final$D7_re2[as.character(enq.final$D7_re) == "Au foyer"] <- "Au foyer"
 enq.final$D7_re2[as.character(enq.final$D7_re) == "Autre (voir D4_other_re)"] <- NA
+summary(enq.final$D7_re2)
 table(enq.final$D7_re2)
 
-# Composition 
+# Composition du menage aggregée
 
 table(enq.final$D6_re)
+enq.final$D6_re2[as.character(enq.final$D6_re) == "Vous uniquement"] <- "Seul"
+enq.final$D6_re2[as.character(enq.final$D6_re) %in% c("Vous et votre conjoint(e), avec un ou plusieurs enfant(s)", "Vous et un ou plusieurs enfant(s)")] <- "Parent(s) avec enfants"
+enq.final$D6_re2[as.character(enq.final$D6_re) %in% c("Autre (voir D6_other_re)","Vos parents et éventuels frères et sœurs")] <- "Autres"
+enq.final$D6_re2[as.character(enq.final$D6_re) == "Vous et votre conjoint(e) (sans enfant)"] <- "Couples sans enfants"
+summary(enq.final$D6_re2)
+table(enq.final$D6_re2)
+
+# Revenu tranche aggrégées (5 niveaux):
+
+table(enq.final$D12_re)
+enq.final$D12_re2 <- as.character(enq.final$D12_re)
+enq.final$D12_re2[as.character(enq.final$D12_re) %in% c("De 0 à 1 100€ /mois  (soit 0 à 14 000 € par an)", "De 1 100 à 1 400€ /mois  (soit 14 000 à 17 000 € par an)")] <- "moins de 1400"
+enq.final$D12_re2[as.character(enq.final$D12_re) %in% c("De 1 400 à 1 700€ /mois  (soit 17 000 à 21 000 € par an)", "De 1 700 à 2 000€ /mois  (soit 21 000 à 25 000 € par an)")] <- "1400-2000"
+enq.final$D12_re2[as.character(enq.final$D12_re) %in% c("De 2 000 à 2 500€ /mois  (soit 25 000 à 30 000 € par an)", "De 2 500 à 2 900€ /mois  (soit 30 000 à 35 000 € par an)")] <- "2000-2900"
+enq.final$D12_re2[as.character(enq.final$D12_re) %in% c("De 2 900 à 3 400€ /mois  (soit 35 000 à 41 000 € par an)", "De 3 400 à 4 100€ /mois  (soit 41 000 à 50 000 € par an)")] <- "2900-4100"
+enq.final$D12_re2[as.character(enq.final$D12_re) %in% c("De 4 100 à 5 300€ /mois  (soit 50 000 à 63 000 € par an)", "5 300€ et plus /mois  (soit 63 000 € et plus par an)")] <- "plus de 4100"
+summary(enq.final$D12_re2)
+table(enq.final$D12_re2)
 
 
-# Revenu tranche aggrégées:
 
-enq.final$D6_re2[as.character(enq.final$D6_re) %in% c("Vos parents et éventuels frères et sœurs", "Etudiant sans emploi")] <- "étudiants"
+# Type de commune:
+
+
+# CSP
+
 
 ## ACM
 
@@ -414,7 +444,7 @@ library(GDAtools)
 # Substet (sans E6: pas assez d'individus en utilisateurs réguliers, pas fondamental de toutes manières)
 
 acm <- subset(enq.final, select=c(E2_Typologie_utilisateurs, E3_Typologie_utilisateurs, E4_Typologie_utilisateurs, E5_Typologie_utilisateurs,
-                                  E7_Typologie_utilisateurs, E8_Typologie_utilisateurs, D1, D2, D3, D4, D5, D6, D7, D8 , D9, D10, D11, D12, D13))
+                                  E7_Typologie_utilisateurs, E8_Typologie_utilisateurs))
 
 acm <- as.data.frame(lapply(acm, factor))
 
@@ -500,7 +530,7 @@ etiquettes2 <- c("Smartphone: Non ou peu", "Smartphone: régulier", "Mobile: Non
                  "Ordi fixe: Non ou peu", "Ordi fixe: régulier")
 col <- c(1,2,1,2,2,1,1,2,1,2)
 
-# etiquettes
+# Projection etiquettes
 
 text(res.acm$var$coord[modatot,1:2], labels=etiquettes2, 
      col=col, cex=1, pos=c(1, 1, 1, 1, 1, 1, 1, 2, 1, 1))

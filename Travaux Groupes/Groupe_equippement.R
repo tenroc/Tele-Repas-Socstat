@@ -354,13 +354,12 @@ table(enq.final$D13_re)
 # Age en tranches
 
 enq.final$D1_tr[enq.final$D1_re < 25] <- "moins de 25 ans"
-enq.final$D1_tr[enq.final$D1_re %in% c(25:35)] <- "25-35 ans"
-enq.final$D1_tr[enq.final$D1_re %in% c(36:45)] <- "36-45 ans"
-enq.final$D1_tr[enq.final$D1_re %in% c(46:55)] <- "46-55 ans"
-enq.final$D1_tr[enq.final$D1_re %in% c(56:65)] <- "56-65 ans"
+enq.final$D1_tr[enq.final$D1_re %in% c(25:45)] <- "25-45 ans"
+enq.final$D1_tr[enq.final$D1_re %in% c(45:65)] <- "46-65 ans"
 enq.final$D1_tr[enq.final$D1_re > 65] <- "plus de 65 ans"
 summary(enq.final$D1_tr)
 table(enq.final$D1_tr)
+
 
 # Diplome simplifié
 
@@ -430,25 +429,34 @@ table(enq.final$D12_re2)
 
 
 
-# Type de commune:
+# Unité urbaine: <- Que faire des 0?
 
+table(enq.final$UU_re)
+enq.final$UU_re_2 <- enq.final$UU_re
+enq.final$UU_re_2[enq.final$UU_re %in% c(1,2)] <- "moins de 10 000 hab"
+enq.final$UU_re_2[enq.final$UU_re %in% c(3,4,5)] <- "10 000 - 100 000 hab"
+enq.final$UU_re_2[enq.final$UU_re %in% c(6,7,8)] <- "plus de 100 000 hab et Paris"
+enq.final$UU_re_2[enq.final$UU_re == 0] <- NA
+summary(enq.final$UU_re_2)
+table(enq.final$UU_re_2)
 
-# CSP
+# CSP <- 431 NA?
 
+table(enq.final$D8_re)
+summary(enq.final$D8_re)
 
 ## ACM
 
 library(FactoMineR)
-library(GDAtools)
 
 # Substet (sans E6: pas assez d'individus en utilisateurs réguliers, pas fondamental de toutes manières)
 
 acm <- subset(enq.final, select=c(E2_Typologie_utilisateurs, E3_Typologie_utilisateurs, E4_Typologie_utilisateurs, E5_Typologie_utilisateurs,
-                                  E7_Typologie_utilisateurs, E8_Typologie_utilisateurs))
+                                  E7_Typologie_utilisateurs, E8_Typologie_utilisateurs, D1_tr, D3_re2, D4_re2, D6_re2, D12_re2, UU_re_2, D13_re))
 
 acm <- as.data.frame(lapply(acm, factor))
 
-res.acm <- MCA(acm, quali.sup=, ncp=3, graph=T)
+res.acm <- MCA(acm, quali.sup=c(7:13), ncp=3, graph=T)
 
 # Axes à conserver:
 
@@ -535,6 +543,18 @@ col <- c(1,2,1,2,2,1,1,2,1,2)
 text(res.acm$var$coord[modatot,1:2], labels=etiquettes2, 
      col=col, cex=1, pos=c(1, 1, 1, 1, 1, 1, 1, 2, 1, 1))
 
+# Variables supplementaires
+
+print(res.acm$quali.sup$coord[, 1:2])
+modasup=c("25-45 ans", "46-65 ans", "<25 ans", ">65 ans", "Bac", "<bac", ">bac", 
+          "activite_foyer", "activite_emploi", "activite_etudiant", "activite_recherche_emploi","activite_retraite",
+          "menage_autre","menage_couples_sans_enfants","menage_parent(s)_enfants","menage_seul","1400-2000€","2000-2900€",
+          "2900-4100€","<1400€",">1400€","10 000- 100 000 hab","<10 000 hab",">100 000 hab","Femme","Homme")
+
+text(res.acm$quali.sup$coord[c(1:5,7:9,11:24,26:28,30:31), 1:2]*1.2,
+     labels=modasup,
+     cex=0.8, col="blue", font=3)
+
 # Mieux axe 2-3: cadre vide
 
 plot(res.acm$var$coord[modatot, 2:3]*1.2, type="n", 
@@ -553,3 +573,32 @@ points(res.acm$var$coord[modatot, 2:3],
 
 text(res.acm$var$coord[modatot,2:3], labels=etiquettes2,
      col=col, cex=1, pos=c(4,1,1,3,1,2,4,3,1,4))
+
+## Classification ascendante hiérarchique
+
+acm2 <- subset(enq.final, select=c(id_r, E2_Typologie_utilisateurs, E3_Typologie_utilisateurs, E4_Typologie_utilisateurs, E5_Typologie_utilisateurs,
+                                  E7_Typologie_utilisateurs, E8_Typologie_utilisateurs))
+
+acm2 <- as.data.frame(lapply(acm2, factor))
+
+res.acm2 <- MCA(acm2, quali.sup=1, ncp=3, graph=T)
+
+classif_equippements <- HCPC(res.acm2, nb.clust =4)
+summary(classif_equippements)
+cluster <- subset(classif_equippements$data.clust, select=c(id_r,clust))
+enq.final <- merge(enq.final, cluster, by="id_r")
+table(enq.final$clust)
+
+## Caractérisations des clusters:
+
+# Cluster / sexe
+
+table (enq.final$clust, enq.final$D13_re)
+round(prop.table(table(enq.final$clust, enq.final$D13_re), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D13_re), margin = 2)*100, 3)
+
+# Cluster / age en tranches
+
+table (enq.final$clust, enq.final$D1_tr)
+round(prop.table(table(enq.final$clust, enq.final$D1_tr), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D1_tr), margin = 2)*100, 3)

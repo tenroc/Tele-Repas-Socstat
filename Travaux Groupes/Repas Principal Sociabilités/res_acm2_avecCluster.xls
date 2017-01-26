@@ -1,0 +1,41 @@
+					A7_re					A3_re					
+	A11_3_re					Non	Oui	Sum			11 à 20 min	Plus de 20min	Moins de 10 min	Sum	
+	Non sélectionné	Oui	Sum		1	5	95	100		1	21	74	5	100	
+1	96	4	100		2	1	99	100		2	29	70	0	99	
+2	14	86	100		3	2	98	100		3	43	48	9	100	
+3	100	0	100		4	0	100	100		4	60	40	0	100	
+4	1	99	100		5	16	84	100		5	51	22	27	100	
+5	4	96	100		6	97	3	100		6	0	3	97	100	
+6	62	38	100												
+A11-1-re					age_calage										
+	Non sélectionné	Oui	Sum			18-24	25-39	40-54	55-64	65-79	80 et plus	Sum			
+1	1	99	100		1	4	22	39	25	8	2	100			
+2	48	52	100		2	5	28	35	21	8	2	99			
+3	90	10	100		3	3	20	35	29	7	5	99			
+4	100	0	100		4	8	27	24	29	8	4	100			
+5	96	4	100		5	12	35	34	12	5	1	99			
+6	88	12	100		6	9	34	16	28	9	3	99			
+D13_re					D6										
+	Femme	Homme	Sum			Autre (voir D6_other_re)	Vos parents et éventuels frères et sours	Vous et un ou plusieurs enfant(s)	Vous et votre conjoint(e) (sans enfant)	Vous et votre conjoint(e), avec un ou plusieurs enfant(s)	Vous uniquement	Sum			
+1	67	33	100		1	0	3	8	35	51	3	100			
+2	61	39	100		2	1	7	7	42	41	3	101			
+3	53	47	100		3	1	7	8	18	41	25	100			
+4	58	42	100		4	1	5	5	9	12	68	100			
+5	72	28	100		5	5	7	18	11	18	42	101			
+6	41	59	100		6	0	9	6	28	31	25	99			
+					D8_re										
+						Agriculteurs exploitants	Artisans, commerçants	Cadres	Employés	Ouvriers	Professions intermédiaires	Sum			
+					1	0	8	18	23	25	25	99			
+					2	2	4	23	26	20	26	101			
+					3	3	0	21	34	31	10	99			
+					4	0	0	29	57	14	0	100			
+					5	0	0	29	0	14	57	100			
+					6	0	0	25	25	25	25	100			
+					D3_re										
+						Aucun diplôme	Bac+4 ou plus : Master, maîtrise, DEA, école d'ingénieur, doctorat etc.	Baccalauréat, BP	BEPC, brevet	CAP, BEP	Certificat d'études primaires	Deug, DUT, BTS, diplômes des professions sociales ou de la santé	Licence, Bac+3	Refus	Sum
+					1	3	15	22	7	19	3	16	15	1	101
+					2	4	12	23	7	21	5	20	9	0	101
+					3	3	16	20	10	28	5	7	7	3	99
+					4	4	12	27	4	13	6	19	14	1	100
+					5	5	19	16	5	20	1	22	9	1	98
+					6	6	19	19	6	31	0	6	9	3	99

@@ -641,39 +641,44 @@ text(res.acm$quali.sup$coord[c(1:4), 1:2]*1.2,
 table (enq.final$clust, enq.final$D13_re)
 round(prop.table(table(enq.final$clust, enq.final$D13_re), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D13_re), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D13_re)) # Non significatif
 
 # Cluster / age en tranches
 
 table (enq.final$clust, enq.final$D1_tr)
 round(prop.table(table(enq.final$clust, enq.final$D1_tr), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D1_tr), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D1_tr)) # Significati à 1%
 
 #### Code Paulus
 
 # Cluster / CSP
 
-table (enq.final$clust, enq.final$D8_re)
-round(prop.table(table(enq.final$clust, enq.final$D8_re), margin = 1)*100, 3)
-round(prop.table(table(enq.final$clust, enq.final$D8_re), margin = 2)*100, 3)
+table (enq.final$clust, enq.final$D5_re)
+round(prop.table(table(enq.final$clust, enq.final$D5_re), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$D5_re), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D5_re)) # Trop de catégories
 
 # Cluster / aire urbaine recodée
 
 table (enq.final$clust, enq.final$UU_re_2)
 round(prop.table(table(enq.final$clust, enq.final$UU_re_2), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$UU_re_2), margin = 2)*100, 3)
-round(prop.table(table(enq.final$UU_re_2))*100,3)
+a <- chisq.test(table (enq.final$clust, enq.final$UU_re_2)) # Non significatif
 
 # Cluster / revenu en tranches
 
 table (enq.final$clust, enq.final$D12_re2)
 round(prop.table(table(enq.final$clust, enq.final$D12_re2), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D12_re2), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D12_re2)) # Trop de catégories mais semble significatif
 
 # Cluster / composition du ménage
 
 table (enq.final$clust, enq.final$D6_re2)
 round(prop.table(table(enq.final$clust, enq.final$D6_re2), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D6_re2), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D6_re2)) # Significatif à 1%
 
 # Cluster / Activité du conjoin
 
@@ -686,10 +691,65 @@ round(prop.table(table(enq.final$clust, enq.final$D7_re2), margin = 2)*100, 3)
 table (enq.final$clust, enq.final$D4_re2)
 round(prop.table(table(enq.final$clust, enq.final$D4_re2), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D4_re2), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D4_re2)) # Trop de catégories mais semble significatif
 
 # Cluster / niveau d'études
 
 table (enq.final$clust, enq.final$D3_re2)
 round(prop.table(table(enq.final$clust, enq.final$D3_re2), margin = 1)*100, 3)
 round(prop.table(table(enq.final$clust, enq.final$D3_re2), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$D3_re2)) # Significatif à 5%
+
+## Cluster / equippement:
+
+# Cluster / smartphones
+
+table (enq.final$clust, enq.final$E2_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E2_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E2_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E2_Typologie_utilisateurs)) # Significatif à 1%
+
+# Cluster / mobiles
+
+table (enq.final$clust, enq.final$E3_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E3_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E3_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E2_Typologie_utilisateurs)) # Significatif à 1%
+
+# Cluster /tablettes
+
+table (enq.final$clust, enq.final$E4_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E4_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E4_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E4_Typologie_utilisateurs)) # Significatif à 1%
+
+# Cluster / télévisions
+
+table (enq.final$clust, enq.final$E5_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E5_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E5_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E5_Typologie_utilisateurs)) # significatif à 1%
+
+# Cluster / consoles
+
+
+table (enq.final$clust, enq.final$E6_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E6_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E6_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E6_Typologie_utilisateurs)) # Pas assez d'effectifs
+
+
+# Cluster / Ordinateurs portables
+
+table (enq.final$clust, enq.final$E7_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E7_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E7_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E7_Typologie_utilisateurs)) # significatif à 1%
+
+# Cluster /ordinateurs fixes
+
+table (enq.final$clust, enq.final$E8_Typologie_utilisateurs)
+round(prop.table(table(enq.final$clust, enq.final$E8_Typologie_utilisateurs), margin = 1)*100, 3)
+round(prop.table(table(enq.final$clust, enq.final$E8_Typologie_utilisateurs), margin = 2)*100, 3)
+a <- chisq.test(table (enq.final$clust, enq.final$E8_Typologie_utilisateurs)) # Significatif à 1%
 

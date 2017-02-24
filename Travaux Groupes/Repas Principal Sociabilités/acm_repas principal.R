@@ -57,7 +57,7 @@ levels(e$D6_re)[c(1,2)]<-"Autre"
 #trop de NAS dans la CSP
 which(is.na(e$D8_re))
 #définition du jeu de données pour l'ACM avec les variables recodées
-jeu <- subset(e,select=c(id_r,A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
+jeu <- subset(e,select=c(A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
                          A11_3_re,A8_acm,A9_re,A10_acm,A3_re,
                          HA3_re,age_calage,D13_re,D6_re))
 
@@ -69,7 +69,7 @@ str(jeu)
 #attention on a seulement 428 observations quand on enlève les NAs 
 #les gens de cette ACM sont seulement ceux qui ont répondu être avec quelquu'n
 dev.off()
-res.acm <- MCA(jeu,quali.sup=13:16, ncp=3, graph=T)
+res.acm <- MCA(jeu,quali.sup=12:15, ncp=3, graph=T)
 
 summary(res.acm)
 valprop.acm <- res.acm$eig[1:10,]
@@ -126,7 +126,7 @@ jeu$cluster<- as.factor(as.character(res.hcpc$data.clust$clust))
 summary(jeu$cluster)
 str(jeu)
 dev.off()
-res.acm.Avecgroupes <- MCA(jeu,quali.sup=13:17,graph=T)
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
 
 #récupérer les résultats de l'ACM dans un fichier :
 dim1_act <- cbind(res.acm.Avecgroupes$var$contrib[,1], res.acm.Avecgroupes$var$coord[,1], res.acm.Avecgroupes$var$cos2[,1])
@@ -179,6 +179,10 @@ points(res.acm.Avecgroupes$ind$coord[,1:2], col=as.numeric(jeu$cluster), pch=3)
 legend("topright", legend=levels(jeu$cluster), bty="o", 
        text.col=1:6, col=1:6, pch=19, cex=0.8)
 
+
+#a revoir
+#créer un fichier enq final avec une variable cluster
+#attention ce n'est pas la même taille de fichier
 enq.final2<-merge(enq.final,jeu,by="id_r")
 enq.final.cluster<-enq.final2
 write.csv2(enq.final.cluster, file="./Travaux Groupes/Repas Principal Sociabilités/enq-final-cluster.xls")

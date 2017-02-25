@@ -9,7 +9,7 @@ library(FactoMineR)
 library(GDAtools)
 str(enq.final)
 
-#sélection d'un échantillon de l'enquête avec les variables souhaitées
+#s?lection d'un ?chantillon de l'enqu?te avec les variables souhait?es
 e <- subset(enq.final,select=c(id_r,A12_re,A14_re,A13_1_re,A13_3_re,A13_4_re,A13_5_re,
                                A15_re,A16_re,A7_re,HA3_re,
                                A11_1_re,A11_2_re,A11_3_re,A11_4_re
@@ -18,10 +18,10 @@ e <- subset(enq.final,select=c(id_r,A12_re,A14_re,A13_1_re,A13_3_re,A13_4_re,A13
 
 
 
-#recodage des modalités rares pour l'acm 
+#recodage des modalites rares pour l'acm 
 
-#gros problème sur la variable A4_re, je sais pas ce qu'il s'est passé dans le recodage
-#mais y a que 50personnes qui ont répondu
+#gros probleme sur la variable A4_re, je sais pas ce qu'il s'est passe dans le recodage
+#mais y a que 50personnes qui ont repondu
 #Recodage a8
 t<-prop.table(table(e$A8_re))*100
 t
@@ -37,7 +37,7 @@ t
 e$A10_acm <-e$A10_re
 levels(e$A10_acm)[c(1,2,4,5,6)]<-"Autre"
 levels(e$A10_acm)
-#Problème avec A4_re
+#Probl?me avec A4_re
 table(enq.final$A4_re)
 #Recodage A3
 levels(e$A3_re)[c(2,3,5)]<-"Plus de 20min"
@@ -53,10 +53,10 @@ table(e$D6_re)
 levels(e$D6_re)[c(1,2)]<-"Autre"
 
 
-#trop de modalités rares dans A14_re
+#trop de modalit?s rares dans A14_re
 #trop de NAS dans la CSP
 which(is.na(e$D8_re))
-#définition du jeu de données pour l'ACM avec les variables recodées
+#definition du jeu de donnees pour l'ACM avec les variables recodees
 jeu <- subset(e,select=c(A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
                          A11_3_re,A8_acm,A9_re,A10_acm,A3_re,
                          HA3_re,age_calage,D13_re,D6_re))
@@ -66,8 +66,8 @@ jeu<-na.exclude(jeu)
 
 str(jeu) 
 
-#attention on a seulement 428 observations quand on enlève les NAs 
-#les gens de cette ACM sont seulement ceux qui ont répondu être avec quelquu'n
+#attention on a seulement 428 observations quand on enl?ve les NAs 
+#les gens de cette ACM sont seulement ceux qui ont r?pondu ?tre avec quelquu'n
 dev.off()
 res.acm <- MCA(jeu,quali.sup=12:15, ncp=3, graph=T)
 
@@ -79,8 +79,8 @@ barplot(res.acm$eig[1:10,2], main="Histogramme des valeurs propres", names.arg=1
         col="orange")
 #on ne retient que deux axes
 
-# Contribution moyenne - quelles sont les modalités qui contribuent 
-#                         à la construction des axes ?
+# Contribution moyenne - quelles sont les modalites qui contribuent 
+#                         a la construction des axes ?
 seuil <- 100/nrow(res.acm$var$contrib)
 seuil
 modatot <- which(res.acm$var$contrib[, 1]>seuil 
@@ -100,12 +100,12 @@ dim2
 
 res <- round(cbind(dim1, dim2),3)
 res
-write.infile(res, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2.xls", sep="\t")
+write.infile(res, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2.xls", sep="\t")
 rownames(res)
 
 varact <- res[modatot,] # res.acm pour toutes les modalites contributives
 varact
-write.infile(varact, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2_varact.xls", sep="\t")
+write.infile(varact, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2_varact.xls", sep="\t")
 
 summary(varact)
 nrow(varact)
@@ -119,7 +119,7 @@ plot.MCA(res.acm, invisible=c("ind"),
          autoLab="yes", unselect=1,
          selectMod=modatot)
 
-
+# Classification ascendante hierarchique
 
 res.hcpc <- HCPC(res.acm,6)
 jeu$cluster<- as.factor(as.character(res.hcpc$data.clust$clust))
@@ -128,7 +128,7 @@ str(jeu)
 dev.off()
 res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
 
-#récupérer les résultats de l'ACM dans un fichier :
+#recuperer les resultats de l'ACM dans un fichier :
 dim1_act <- cbind(res.acm.Avecgroupes$var$contrib[,1], res.acm.Avecgroupes$var$coord[,1], res.acm.Avecgroupes$var$cos2[,1])
 dim1_sup <- cbind(0,res.acm.Avecgroupes$quali.sup$coord[,1], res.acm.Avecgroupes$quali.sup$cos2[,1])
 dim1<-rbind(dim1_act,dim1_sup)
@@ -143,10 +143,10 @@ dim2
 
 res2 <- round(cbind(dim1, dim2),3)
 res2
-write.infile(res2, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2_avecCluster.xls", sep="\t")
+write.infile(res2, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2_avecCluster.xls", sep="\t")
 varact <- res2[modatot,] # res.acm pour toutes les modalites contributives
 varact
-write.infile(varact, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2_varact_avecCluster.xls", sep="\t")
+write.infile(varact, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2_varact_avecCluster.xls", sep="\t")
 
 
 
@@ -154,7 +154,7 @@ plot.MCA(res.acm.Avecgroupes, invisible=c("ind"),
          title="Nuage des modalites actives Plan 1-2", axes=c(1,2), 
          autoLab="yes", unselect=1,
          selectMod=modatot)
-# Représenter le nuage des individus
+# Representer le nuage des individus
 dev.off()
 plot(res.acm.Avecgroupes$var$coord[modatot, 1:2]*1.2, type="n", 
      xlab=paste0("Axe 1 (", round(res.acm$eig[1,2], 1), "%)"), 
@@ -180,18 +180,45 @@ legend("topright", legend=levels(jeu$cluster), bty="o",
        text.col=1:6, col=1:6, pch=19, cex=0.8)
 
 
+######## Sarah: j'ai mis mon code dans la section suivante, si Ã§a te vas on peut l'intÃ©grer a la partie Classif hierarchique
+
+# On a besoin de la variable id_r pour le merge
+
+jeu_2 <- subset(e,select=c(id_r, A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
+                         A11_3_re,A8_acm,A9_re,A10_acm,A3_re))
+jeu_2<-na.exclude(jeu_2)
+
+res.acm2 <- MCA(jeu_2,quali.sup=1, ncp=3, graph=T)
+
+res.hcpc2 <- HCPC(res.acm2,6)
+
+cluster_jeu2 <- subset(res.hcpc2$data.clust, select=c(id_r,clust))
+enq.final <- merge(enq.final, cluster_jeu2, by="id_r", all=T)
+table(enq.final$clust)
+is.na(enq.final$clust)
+enq.final$clust <- NULL
+
+jeu_2$cluster<- as.factor(as.character(res.hcpc2$data.clust$clust))
+summary(jeu_2$cluster)
+str(jeu_2)
+dev.off()
+
+
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
+
+
 #a revoir
-#créer un fichier enq final avec une variable cluster
-#attention ce n'est pas la même taille de fichier
+#cr?er un fichier enq final avec une variable cluster
+#attention ce n'est pas la m?me taille de fichier
 enq.final2<-merge(enq.final,jeu,by="id_r")
 enq.final.cluster<-enq.final2
-write.csv2(enq.final.cluster, file="./Travaux Groupes/Repas Principal Sociabilités/enq-final-cluster.xls")
+write.csv2(enq.final.cluster, file="./Travaux Groupes/Repas Principal Sociabilit?s/enq-final-cluster.xls")
 
 
 levels(enq.final.cluster$A3_re.x)[c(2,3,5)]<-"Plus de 20min"
 table(enq.final.cluster$A3_re.x)
 
-t<-table(enq.final.cluster$,enq.final.cluster$age_calage.x)
+t<-table(enq.final.cluster$enq.final.cluster$age_calage.x)
 t
 t<-round(prop.table(t,1),2)*100
 t

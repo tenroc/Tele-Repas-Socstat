@@ -61,6 +61,7 @@ jeu <- subset(e,select=c(A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
                          A11_3_re,A8_acm,A9_re,A10_acm,A3_re,
                          HA3_re,age_calage,D13_re,D6_re))
 
+
 #variables omises :  A15_re , A3_re,
 jeu<-na.exclude(jeu)
 
@@ -179,6 +180,7 @@ points(res.acm.Avecgroupes$ind$coord[,1:2], col=as.numeric(jeu$cluster), pch=3)
 legend("topright", legend=levels(jeu$cluster), bty="o", 
        text.col=1:6, col=1:6, pch=19, cex=0.8)
 
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
 
 ######## Sarah: j'ai mis mon code dans la section suivante, si ça te vas on peut l'intégrer a la partie Classif hierarchique
 
@@ -188,32 +190,40 @@ jeu_2 <- subset(e,select=c(id_r, A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_r
                          A11_3_re,A8_acm,A9_re,A10_acm,A3_re))
 jeu_2<-na.exclude(jeu_2)
 
+
 res.acm2 <- MCA(jeu_2,quali.sup=1, ncp=3, graph=T)
 
 res.hcpc2 <- HCPC(res.acm2,6)
 
 cluster_jeu2 <- subset(res.hcpc2$data.clust, select=c(id_r,clust))
-enq.final <- merge(enq.final, cluster_jeu2, by="id_r", all=T)
-table(enq.final$clust)
-is.na(enq.final$clust)
-enq.final$clust <- NULL
-
-jeu_2$cluster<- as.factor(as.character(res.hcpc2$data.clust$clust))
-summary(jeu_2$cluster)
-str(jeu_2)
-dev.off()
+enq.final2 <- merge(enq.final, cluster_jeu2, by="id_r", all=T)
+table(enq.final2$clust,useNA="ifany")
+is.na(enq.final2$clust)
+str(enq.final2)
+enq.final2$X.2<-NULL
+enq.final2$X.1<-NULL
+enq.final2$X<-NULL
 
 
-res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
+
+#ou ça :
+#jeu_3 <- subset(e,select=c(id_r, A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
+#                           A11_3_re,A8_acm,A9_re,A10_acm,A3_re))
+#jeu_3<-na.exclude(jeu_3)
+
+#jeu_3$cluster <- jeu$cluster
+#enq.final3 <- merge(enq.final, jeu_3, by="id_r", all=T)
+#table(enq.final3$cluster, useNA="ifany")
 
 
-#a revoir
-#cr?er un fichier enq final avec une variable cluster
-#attention ce n'est pas la m?me taille de fichier
-enq.final2<-merge(enq.final,jeu,by="id_r")
-enq.final.cluster<-enq.final2
-write.csv2(enq.final.cluster, file="./Travaux Groupes/Repas Principal Sociabilit?s/enq-final-cluster.xls")
 
+
+
+#creer un fichier enq final avec une variable cluster
+
+write.csv2(enq.final2, file="./DATA_BDD-RECONCILIE/enq final_05.csv")
+
+#caractérisation des groupes
 
 levels(enq.final.cluster$A3_re.x)[c(2,3,5)]<-"Plus de 20min"
 table(enq.final.cluster$A3_re.x)

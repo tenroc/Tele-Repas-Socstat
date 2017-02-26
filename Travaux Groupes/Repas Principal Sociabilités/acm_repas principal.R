@@ -276,7 +276,7 @@ dim2
 
 res2 <- round(cbind(dim1, dim2),3)
 res2
-write.infile(res2, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2_avec4Cluster.xls", sep="\t")
+write.infile(res2, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2_avec4Cluster.xls", sep="\t")
 
 
 

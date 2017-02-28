@@ -9,16 +9,27 @@ library(FactoMineR)
 library(GDAtools)
 str(enq.final)
 
+#Recodage Ecran 
+enq.final$tecran[enq.final$r3_1_re == "Oui"] <-  "Tele"
+enq.final$tecran[enq.final$r3_2_re == "Oui"] <-  "Autres écrans"
+enq.final$tecran[enq.final$r3_3_re == "Oui"] <-  "Autres écrans"
+enq.final$tecran[enq.final$r3_4_re == "Oui"] <-  "Autres écrans"
+enq.final$tecran[enq.final$r3_5_re == "Oui"] <-  "Autres écrans"
+enq.final$tecran[enq.final$tecran %in% NA] <-  "Pas d'écrans"
+table(enq.final$tecran)
+
 #s?lection d'un ?chantillon de l'enqu?te avec les variables souhait?es
 e <- subset(enq.final,select=c(id_r,A12_re,A14_re,A13_1_re,A13_3_re,A13_4_re,A13_5_re,
                                A15_re,A16_re,A7_re,HA3_re,
                                A11_1_re,A11_2_re,A11_3_re,A11_4_re
                                ,A3_re,A4_re,A8_re,A9_re,A10_re,D13_re,
-                               D1_re,D3_re,D6_re,D9_re, age_calage,D13_re,D6_re,D8_re,weight))
+                               D1_re,D3_re,D6_re,D9_re, age_calage,D13_re,D6_re,D8_re,
+                               fromage, salade, pate, tomate, fruit, jambon, poulet, riz, pdt, pizza,
+                               tecran, dummy.panel))
 
 
-
-#recodage des modalites rares pour l'acm 
+# #recodage des modalites rares pour l'acm  -------------------------------
+---------------------------------------------------------------------------
 
 #gros probleme sur la variable A4_re, je sais pas ce qu'il s'est passe dans le recodage
 #mais y a que 50personnes qui ont repondu
@@ -52,14 +63,27 @@ table(e$age_calage)
 table(e$D6_re)
 levels(e$D6_re)[c(1,2)]<-"Autre"
 
+#recodage des modalités NAS pour les mots fréquents
+table(e$fromage, useNA = "ifany")
+e$fromage2[which((e$fromage)=="fromage")]<-"fromage"
+e$fromage<-e$fromage2
+e$fromage2<-NULL
+str(e)
 
 #trop de modalit?s rares dans A14_re
 #trop de NAS dans la CSP
 which(is.na(e$D8_re))
-#definition du jeu de donnees pour l'ACM avec les variables recodees
+
+-----------------------------------------------------------------------------
+
+# #definition du jeu de donnees pour l'ACM avec les variables reco --------
+
+----------------------------------------------------------------------------
 jeu <- subset(e,select=c(A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
                          A11_3_re,A8_acm,A9_re,A10_acm,A3_re,
-                         HA3_re,age_calage,D13_re,D6_re))
+                         HA3_re,age_calage,D13_re,D6_re,
+                         fromage, salade, pate, tomate, fruit, jambon, poulet, riz, pdt, pizza,
+                         tecran, dummy.panel))
 
 
 #variables omises :  A15_re , A3_re,

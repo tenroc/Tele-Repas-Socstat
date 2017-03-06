@@ -36,6 +36,23 @@ D6_re_Vous et un ou plusieurs enfant(s)	0	0.298	0.008	0	-0.185	0.003
 D6_re_Vous et votre conjoint(e) (sans enfant)	0	-0.394	0.06	0	-0.054	0.001	
 D6_re_Vous et votre conjoint(e), avec un ou plusieurs enfant(s)	0	-0.395	0.086	0	0.182	0.018	
 D6_re_Vous uniquement	0	0.95	0.234	0	-0.162	0.007	
+Autres écrans	0	0.74	0.072	0	-0.728	0.07	
+Pas d'écrans	0	-0.279	0.058	0	0.946	0.672	
+Tele	0	0.074	0.005	0	-0.706	0.416	
+fromage	0	-0.298	0.024	0	-0.133	0.005	
+non_fromage	0	0.081	0.024	0	0.036	0.005	
+non_salade	0	0.088	0.027	0	0.021	0.002	
+salade	0	-0.306	0.027	0	-0.075	0.002	
+non_pate	0	0.039	0.01	0	0.003	0	
+pate	0	-0.244	0.01	0	-0.018	0	
+non_tomate	0	0.024	0.004	0	0.024	0.004	
+tomate	0	-0.18	0.004	0	-0.176	0.004	
+fruit	0	0.089	0.001	0	0.092	0.001	
+non_fruit	0	-0.009	0.001	0	-0.01	0.001	
+jambon	0	-0.051	0	0	-0.265	0.007	
+non_jambon	0	0.005	0	0	0.028	0.007	
+EnqueteTel	0	-0.201	0.024	0	0.023	0	
+EnquetePanel	0	0.12	0.024	0	-0.014	0	
 1	0	-0.776	0.592	0	-0.134	0.018	
 2	0	0.157	0.005	0	1.468	0.402	
 3	0	0.764	0.207	0	-0.836	0.248	

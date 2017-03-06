@@ -1,6 +1,6 @@
 rm(list=ls())
 setwd(chemin)
-enq.final <- read.csv2("./DATA_BDD-RECONCILIE/enq final_04.csv", encoding="UTF-8")
+enq.final <- read.csv("./DATA_BDD-RECONCILIE/enq_final_07.csv")
 
 #chargement des packages 
 library(questionr)
@@ -9,7 +9,7 @@ library(FactoMineR)
 library(GDAtools)
 str(enq.final)
 
-#Recodage Ecran 
+#Recodage Ecran par le groupe Ecran
 enq.final$tecran[enq.final$r3_1_re == "Oui"] <-  "Tele"
 enq.final$tecran[enq.final$r3_2_re == "Oui"] <-  "Autres écrans"
 enq.final$tecran[enq.final$r3_3_re == "Oui"] <-  "Autres écrans"
@@ -63,27 +63,31 @@ table(e$age_calage)
 table(e$D6_re)
 levels(e$D6_re)[c(1,2)]<-"Autre"
 
-#recodage des modalités NAS pour les mots fréquents
-table(e$fromage, useNA = "ifany")
-e$fromage2[which((e$fromage)=="fromage")]<-"fromage"
-e$fromage<-e$fromage2
-e$fromage2<-NULL
-str(e)
+#conversion
+e$tecran<-factor((e$tecran))
+class(e$tecran)
+
+class(e$dummy.panel)
+e$dummy.panel<-factor(e$dummy.panel)
+table(e$dummy.panel)
+levels(e$dummy.panel)<-c("EnqueteTel","EnquetePanel")
 
 #trop de modalit?s rares dans A14_re
-#trop de NAS dans la CSP
-which(is.na(e$D8_re))
+#trop de NAS dans la CSP pour pouvoir l'utiliser
+table(e$D8_re, useNA="ifany")
 
 -----------------------------------------------------------------------------
 
 # #definition du jeu de donnees pour l'ACM avec les variables reco --------
 
 ----------------------------------------------------------------------------
+  
 jeu <- subset(e,select=c(A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
                          A11_3_re,A8_acm,A9_re,A10_acm,A3_re,
                          HA3_re,age_calage,D13_re,D6_re,
-                         fromage, salade, pate, tomate, fruit, jambon, poulet, riz, pdt, pizza,
-                         tecran, dummy.panel))
+                         tecran, fromage, salade, pate, tomate, fruit, jambon, 
+                        dummy.panel))
+
 
 
 #variables omises :  A15_re , A3_re,
@@ -91,16 +95,19 @@ jeu<-na.exclude(jeu)
 
 str(jeu) 
 
-#attention on a seulement 428 observations quand on enl?ve les NAs 
+table(jeu$A7_re)
+table(jeu$A3_re)
+#attention on a seulement 611 observations quand on enl?ve les NAs 
 #les gens de cette ACM sont seulement ceux qui ont r?pondu ?tre avec quelquu'n
-dev.off()
-res.acm <- MCA(jeu,quali.sup=12:15, ncp=3, graph=T)
+
+
+res.acm <- MCA(jeu,quali.sup=12:23, ncp=3, graph=T)
 
 summary(res.acm)
 valprop.acm <- res.acm$eig[1:10,]
 valprop.acm
 barplot(res.acm$eig[1:10,2], main="Histogramme des valeurs propres", names.arg=1:10,        
-        xlab="Axes", ylab="Pourcentage d'inertie", cex.axis=0.8, font.lab=3, ylim=c(0, 18),
+        xlab="Axes", ylab="Pourcentage d'inertie", cex.axis=0.8, font.lab=3, ylim=c(0, 25),
         col="orange")
 #on ne retient que deux axes
 
@@ -125,12 +132,12 @@ dim2
 
 res <- round(cbind(dim1, dim2),3)
 res
-write.infile(res, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2.xls", sep="\t")
+write.infile(res, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2.xls", sep="\t")
 rownames(res)
 
 varact <- res[modatot,] # res.acm pour toutes les modalites contributives
 varact
-write.infile(varact, file="./Travaux Groupes/Repas Principal Sociabilit?s/res_acm2_varact.xls", sep="\t")
+write.infile(varact, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2_varact.xls", sep="\t")
 
 summary(varact)
 nrow(varact)
@@ -144,14 +151,14 @@ plot.MCA(res.acm, invisible=c("ind"),
          autoLab="yes", unselect=1,
          selectMod=modatot)
 
-# Classification ascendante hierarchique
+# Classification ascendante hierarchique en 6 groupes
 
 res.hcpc <- HCPC(res.acm,6)
 jeu$cluster<- as.factor(as.character(res.hcpc$data.clust$clust))
 summary(jeu$cluster)
 str(jeu)
 dev.off()
-res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:23,graph=T)
 
 #recuperer les resultats de l'ACM dans un fichier :
 dim1_act <- cbind(res.acm.Avecgroupes$var$contrib[,1], res.acm.Avecgroupes$var$coord[,1], res.acm.Avecgroupes$var$cos2[,1])
@@ -204,7 +211,7 @@ points(res.acm.Avecgroupes$ind$coord[,1:2], col=as.numeric(jeu$cluster), pch=3)
 legend("topright", legend=levels(jeu$cluster), bty="o", 
        text.col=1:6, col=1:6, pch=19, cex=0.8)
 
-res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:23,graph=T)
 
 ######## Sarah: j'ai mis mon code dans la section suivante, si ça te vas on peut l'intégrer a la partie Classif hierarchique
 
@@ -282,7 +289,7 @@ summary(jeu$cluster)
 
 str(jeu)
 dev.off()
-res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:24,graph=T)
 
 
 #recuperer les resultats de l'ACM dans un fichier :
@@ -308,7 +315,70 @@ plot.MCA(res.acm.Avecgroupes, invisible=c("ind"),
          title="Nuage des modalites actives Plan 1-2", axes=c(1,2), 
          autoLab="yes", unselect=1,
          selectMod=)
-res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:16,graph=T)
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:23,graph=T)
+# Representer le nuage des individus
+dev.off()
+plot(res.acm.Avecgroupes$var$coord[, 1:2]*1.2, type="n", 
+     xlab=paste0("Axe 1 (", round(res.acm$eig[1,2], 1), "%)"), 
+     ylab=paste0("Axe 2 (", round(res.acm$eig[2,2], 1), "%)"), 
+     main="Premier plan factoriel", 
+     cex.main=1, cex.axis=0.8, cex.lab=0.7, font.lab=3, 
+     asp=1)
+abline(h=0, v=0, col="grey", lty=3, lwd=1)
+
+points(res.acm.Avecgroupes$ind$coord[, 1:2], col = 1, pch = 3)
+
+# Habiller le nuage de points selon les groupes
+plot(res.acm.Avecgroupes$var$coord[, 1:2]*1.2, type="n", 
+     xlab=paste0("Axe 1 (", round(res.acm.Avecgroupes$eig[1,2], 1), "%)"), ylab=paste0("Axe 2 (", round(res.acm.Avecgroupes$eig[2,2], 1), "%)"), 
+     main="Premier plan factoriel", 
+     cex.main=1, cex.axis=0.8, cex.lab=0.7, font.lab=3, 
+     asp=1)
+abline(h=0, v=0, col="grey", lty=3, lwd=1)
+
+
+points(res.acm.Avecgroupes$ind$coord[,1:2], col=as.numeric(jeu$cluster), pch=3)
+legend("topright", legend=levels(jeu$cluster), bty="o", 
+       text.col=1:6, col=1:6, pch=19, cex=0.8)
+
+
+# CAH - essai avec 5 groupes ----------------------------------------------
+
+# Classification ascendante hierarchique
+
+res.hcpc <- HCPC(res.acm,5)
+jeu$cluster<- as.factor(as.character(res.hcpc$data.clust$clust))
+summary(jeu$cluster)
+
+str(jeu)
+dev.off()
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:24,graph=T)
+
+
+#recuperer les resultats de l'ACM dans un fichier :
+dim1_act <- cbind(res.acm.Avecgroupes$var$contrib[,1], res.acm.Avecgroupes$var$coord[,1], res.acm.Avecgroupes$var$cos2[,1])
+dim1_sup <- cbind(0,res.acm.Avecgroupes$quali.sup$coord[,1], res.acm.Avecgroupes$quali.sup$cos2[,1])
+dim1<-rbind(dim1_act,dim1_sup)
+colnames(dim1) <- c("dim1_contrib","dim1_coord","dim1_cos2")
+dim1
+
+dim2_act <- cbind(res.acm.Avecgroupes$var$contrib[,2], res.acm.Avecgroupes$var$coord[,2], res.acm.Avecgroupes$var$cos2[,2])
+dim2_sup <- cbind(0,res.acm.Avecgroupes$quali.sup$coord[,2], res.acm.Avecgroupes$quali.sup$cos2[,2])
+dim2<-rbind(dim2_act,dim2_sup)
+colnames(dim2) <- c("dim2_contrib","dim2_coord","dim2_cos2")
+dim2
+
+res2 <- round(cbind(dim1, dim2),3)
+res2
+write.infile(res2, file="./Travaux Groupes/Repas Principal Sociabilités/res_acm2_avec5Cluster.xls", sep="\t")
+
+
+
+plot.MCA(res.acm.Avecgroupes, invisible=c("ind"), 
+         title="Nuage des modalites actives Plan 1-2", axes=c(1,2), 
+         autoLab="yes", unselect=1,
+         selectMod=)
+res.acm.Avecgroupes <- MCA(jeu,quali.sup=12:24,graph=T)
 # Representer le nuage des individus
 dev.off()
 plot(res.acm.Avecgroupes$var$coord[, 1:2]*1.2, type="n", 
@@ -336,30 +406,29 @@ legend("topright", legend=levels(jeu$cluster), bty="o",
 
 
 
-
-# ecriture fichier --------------------------------------------------------
+# ecriture fichier enquete avec variables groupes --------------------------------------------------------
 
 jeu_3 <- subset(e,select=c(id_r, A11_1_re,A11_2_re,A7_re,A12_re,A13_4_re,A13_5_re,
                            A11_3_re,A8_acm,A9_re,A10_acm,A3_re))
 jeu_3<-na.exclude(jeu_3)
 
 dev.off()
-res.acm2 <- MCA(jeu_2,quali.sup=1, ncp=3, graph=T)
+res.acm2 <- MCA(jeu_3,quali.sup=1, ncp=3, graph=T)
 
 res.hcpc_1 <- HCPC(res.acm2,4)
-res.hcpc_2 <- HCPC(res.acm2,6)
+res.hcpc_2 <- HCPC(res.acm2,5)
 
 cluster_jeu3 <- subset(res.hcpc_1$data.clust, select=c(id_r,clust))
 cluster_jeu3<-cbind(cluster_jeu3,res.hcpc_2$data.clust$clust)
-cluster_jeu3$`res.hcpc_2$data.clust$clust`->cluster_jeu3$clust6
+cluster_jeu3$`res.hcpc_2$data.clust$clust`->cluster_jeu3$clust5
 cluster_jeu3$clust->cluster_jeu3$clust4
 cluster_jeu3$`res.hcpc_2$data.clust$clust`<-NULL
 cluster_jeu3$clust<-NULL
-table(cluster_jeu3$clust6,useNA = "ifany")
+table(cluster_jeu3$clust5,useNA = "ifany")
 table(cluster_jeu3$clust4,useNA = "ifany")
 
 enq.final3 <- merge(enq.final, cluster_jeu3, by="id_r", all=T)
-table(enq.final3$clust6,useNA="ifany")
+table(enq.final3$clust5,useNA="ifany")
 table(enq.final3$clust4,useNA="ifany")
 
 str(enq.final3)

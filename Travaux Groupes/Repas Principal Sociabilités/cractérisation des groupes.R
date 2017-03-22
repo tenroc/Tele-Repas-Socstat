@@ -1,12 +1,9 @@
 rm(list=ls())
 setwd(chemin)
-enq.final <- read.csv("./DATA_BDD-RECONCILIE/enq_final_07.csv")
-table(enq.final$clust4, useNA = "ifany")
+enq.final <- read.csv2("./DATA_BDD-RECONCILIE/enq final_08.csv", header=T)
+table(enq.final$clust5, useNA = "ifany")
 
-t<-table(enq.final$clust4, enq.final$D13_re)
-
-
-
+#FONCTION de tableau croisés
 tab.crois <-function(colonne,ligne,enligne=T,chi=F){
   tab.f<-table(ligne, colonne)
   tab.m<-addmargins(tab.f)
@@ -46,20 +43,25 @@ tab.crois <-function(colonne,ligne,enligne=T,chi=F){
 
 
 library(questionr)
-t<- tab.crois(enq.final$D13_re,enq.final$clust4)
+t<- tab.crois(enq.final$D13_re,enq.final$clust5,chi=T)
 t
 copie(t)
 
-t<- tab.crois(enq.final$age_calage,enq.final$clust4)
+t<- tab.crois(enq.final$age_calage,enq.final$clust5, chi=T)
 t
 copie(t)
 
-t<- tab.crois(enq.final$,enq.final$clust4)
+t<- tab.crois(enq.final$HA3_re,enq.final$clust5)
 t
 copie(t)
 
+t<- tab.crois(enq.final$A13_2_re,enq.final$clust5)
+t
+copie(t)
 
-
+t<- tab.crois(enq.final$dummy.panel,enq.final$clust5)
+t
+copie(t)
 
 
 

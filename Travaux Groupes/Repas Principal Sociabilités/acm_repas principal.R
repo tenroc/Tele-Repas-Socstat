@@ -428,6 +428,11 @@ table(cluster_jeu3$clust5,useNA = "ifany")
 table(cluster_jeu3$clust4,useNA = "ifany")
 
 enq.final3 <- merge(enq.final, cluster_jeu3, by="id_r", all=T)
+enq.final3$clust4<-enq.final3$clust4.x
+enq.final3$clust4.x<-NULL
+enq.final3$clust4.y<-NULL
+
+table(enq.final3$clust6, useNA = "ifany")
 table(enq.final3$clust5,useNA="ifany")
 table(enq.final3$clust4,useNA="ifany")
 
@@ -440,4 +445,4 @@ enq.final3$X<-NULL
 
 #creer un fichier enq final_06 avec une variable cluster
 
-write.csv2(enq.final3, file="./DATA_BDD-RECONCILIE/enq final_06.csv")
+write.csv2(enq.final3, file="./DATA_BDD-RECONCILIE/enq final_08.csv")

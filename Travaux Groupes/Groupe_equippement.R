@@ -716,7 +716,7 @@ a <- chisq.test(table (enq.final$cluster_equippement, enq.final$E2_Typologie_uti
 table (enq.final$cluster_equippement, enq.final$E3_Typologie_utilisateurs)
 round(prop.table(table(enq.final$cluster_equippement, enq.final$E3_Typologie_utilisateurs), margin = 1)*100, 3)
 round(prop.table(table(enq.final$cluster_equippement, enq.final$E3_Typologie_utilisateurs), margin = 2)*100, 3)
-a <- chisq.test(table (enq.final$cluster_equippement, enq.final$E2_Typologie_utilisateurs)) # Significatif à 1%
+a <- chisq.test(table (enq.final$cluster_equippement, enq.final$E3_Typologie_utilisateurs)) # Significatif à 1%
 
 # cluster_equippement /tablettes
 

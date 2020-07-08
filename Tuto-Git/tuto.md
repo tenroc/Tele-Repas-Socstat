@@ -35,7 +35,8 @@ Liste de ressources pour trouver un client git:
 
 Gitcola est un client graphique pour Git. Avant toute chose, il vous faut cloner votre dépot (hébergé sur un serveur git, tel que github ou bitbucket). Cliquez sur cloner, puis collez l'adresse de votre dépôt.
 
-![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/gitco_2.png)
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/gitco_2.png) 
+
 Ce qui dois apparaître à l'écran doit a peu près ressembler à ça:
 
 ![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/gitco_1.png)
@@ -55,7 +56,7 @@ En règle générale: vous commencez, avant de travailler, par un "Pull", vous m
 
 **Gitcola**
 
-Gitkraken vous affiche en temps réel à la fois les fichiers locaux qui ont étés modifiés depuis votre dernier commit, et les fichiers dans le dépôt qui ont été modifiés depuis votre dernier pull.
+Gitcola vous affiche en temps réel à la fois les fichiers locaux qui ont étés modifiés depuis votre dernier commit, et les fichiers dans le dépôt qui ont été modifiés depuis votre dernier pull.
 La modification par deux contributeurs différents d'un même bout de script peut créer un conflit, il est parfois plus prudent d'effectuer les changements désirés sur une branche différente de la branche principale, qui pourra être reversée dans la branche principale par la suite. De même, il est toujours conseillé d'effectuer un Pull avant d'effectuer un Push.
 
 Les changements que vous effectuez sont signifiés de la manière suivante:

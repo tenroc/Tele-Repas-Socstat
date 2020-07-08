@@ -72,13 +72,16 @@ Pour effectuer une action:
 
 - Le bouton commit vous permet de créer un commit, après que vous ayez sélectionné des modifications à intégrer dans le commit (les fameux "pré-commits") et renseigné un titre.
 - Actions -> Tirer (Pull) va synchroniser votre dossier local avec le serveur.
-- Actions -> Pousser va synchroniser le serveur avec vos commits locaux (on ne peut pas reverser de modifications dans le dépôt sans passer par l'étape commit).
+- Actions -> Pousser va synchroniser le serveur avec vos commits locaux (on ne peut pas verser de modifications dans le dépôt sans passer par l'étape commit).
+- Après avoir cliqué sur push / pull, une fenêtre s'ouvre pour vous demander dans / depuis quelle branche vous voulez verser / télécharger vos commits (par défault origin / master), suite à quoi gitcola vous demande vos identifiants + mot de passe pour accéder au dépôt:
+
+![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/gitco_4.png)
 
 Affichage -> DAG vous permet de visualiser l'historique des commits (qui a modifié quoi, quand?) et des branches.
 
 ![ScreenShot](https://github.com/tenroc/Tele-Repas-Socstat/blob/master/Tuto-Git/screenshots/gitco_6.png)
 
-Y sont représentés un historique, avec noms et commentaires, de tous les changements effectués sur le code. Y apparaissent aussi toutes les branches ouvertes et mergés de l'arborescence. Vous ne pouvez travailler que sur une branche à la fois, et vos fichiers locaux seront automatiquement adaptés en conséquence lorsque vous faites "Pull".
+Y sont représentés un historique, avec noms et commentaires, de tous les changements effectués sur le code. Y apparaissent aussi toutes les branches ouvertes et fusionnées de l'arborescence. Vous ne pouvez travailler que sur une branche à la fois, et vos fichiers locaux seront automatiquement adaptés en conséquence lorsque vous faites "Pull".
 
 Sur la fenêtre du DAG apparaissent:
 
